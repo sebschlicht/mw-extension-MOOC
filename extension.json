@@ -1,0 +1,53 @@
+{
+	"name": "MOOC",
+	"version": "0.1.0",
+	"author": [
+		"Rene Pickhardt, Sebastian Schlicht"
+	],
+	"url": "https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC",
+	"descriptionmsg": "mooc-desc",
+	"license-name": "GPL v2",
+	"type": "specialpage",
+	"AutoloadClasses": {
+		"MOOCHooks": "MOOC.hooks.php",
+		"SpecialHelloWorld": "specials/SpecialHelloWorld.php"
+	},
+	"config": {
+		"MOOCEnableFoo": true
+	},
+	"ExtensionMessagesFiles": {
+		"MOOCAlias": "MOOC.i18n.alias.php"
+	},
+	"Hooks": {
+		
+		"ParserFirstCallInit": [
+			"MOOCHooks::onParserFirstCallInit"
+		]
+	},
+	"MessagesDirs": {
+		"MOOC": [
+			"i18n"
+		]
+	},
+	"ResourceModules": {
+		"ext.mooc.foo": {
+			"scripts": [
+				"modules/ext.mooc.js",
+				"modules/ext.mooc.foo.js"
+			],
+			"styles": [
+				"modules/ext.mooc.foo.css"
+			],
+			"messages": [],
+			"dependencies": []
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteExtPath": "MOOC"
+	},
+	"SpecialPages": {
+		"HelloWorld": "SpecialHelloWorld"
+	},
+	"manifest_version": 1
+}

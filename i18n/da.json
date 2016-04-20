@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hylle"
+		]
+	},
+	"mooc-desc": "Dette er et eksempel på en udvidelse",
+	"mooc-i18n-welcome": "Velkommen til lokaliseringsdelen af MOOC udvidelsen."
+}

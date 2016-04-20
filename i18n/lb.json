@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Robby"
+		]
+	},
+	"mooc-desc": "Dëst ass e Beispill vun enger Erweiderung",
+	"mooc-i18n-welcome": "Wëllkomm beim Lokalisatiounsfichier vun der MOOC Erweiderung",
+	"mooc-helloworld": "Hallo Welt!",
+	"helloworld": "HelloWorld"
+}

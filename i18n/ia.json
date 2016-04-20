@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"mooc-desc": "Isto es un extension de exemplo",
+	"mooc-i18n-welcome": "Benvenite al file de localisation del extension \"MOOC\" (modello).",
+	"helloworld": "HalloMundo"
+}

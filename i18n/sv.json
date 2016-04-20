@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jopparn",
+			"LittleGun",
+			"Rockyfelle"
+		]
+	},
+	"mooc-desc": "Detta är ett exempel-tillägg",
+	"mooc-i18n-welcome": "Välkommen till mooc-tilläggets lokaliseringsfil.",
+	"mooc-helloworld": "Hello world!",
+	"helloworld": "Hej världen"
+}

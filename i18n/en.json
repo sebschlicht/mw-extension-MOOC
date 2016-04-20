@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"mooc-desc": "Allows to create and maintain Massive Open Online Courses.",
+	"mooc-i18n-welcome": "Welcome to the localization file of the MOOC extension.",
+	"mooc-helloworld": "Hello world!",
+	"mooc-helloworld-intro": "Welcome to the \"Hello world\" special page of the MOOC extension.",
+	"helloworld": "Hello world"
+}

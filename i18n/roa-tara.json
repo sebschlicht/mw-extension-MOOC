@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Joetaras"
+		]
+	},
+	"mooc-desc": "Queste jè 'n'estenzione de esembie",
+	"mooc-i18n-welcome": "Bovègne jndr'à 'u file de localizzazzione de l'estenzione MOOC.",
+	"mooc-helloworld": "Cià munne!",
+	"mooc-helloworld-intro": "Bovègne jndr'à pàgena speciale \"Cià munne\" pe l'estenzione MOOC.",
+	"helloworld": "Cià munne"
+}

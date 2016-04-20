@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Gomoko",
+			"TomT0m"
+		]
+	},
+	"mooc-desc": "Voici un exemple d'extension",
+	"mooc-i18n-welcome": "Bienvenue dans le fichier de localisation de l'extension passepartout.",
+	"mooc-helloworld": "Bonjour, le monde!",
+	"mooc-helloworld-intro": "Bienvenue sur la page spéciale \"Hello world\" de l'extension MOOC.",
+	"helloworld": "HelloWorld"
+}

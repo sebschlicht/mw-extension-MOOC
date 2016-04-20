@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"AvatarTeam",
+			"SPQRobin"
+		]
+	},
+	"mooc-desc": "Dit is een voorbeeld van de uitbreiding",
+	"mooc-i18n-welcome": "Welkom bij het lokalisatiebestand van de mooc-uitbreiding.",
+	"helloworld": "HelloWorld"
+}

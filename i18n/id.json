@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Farras"
+		]
+	},
+	"mooc-desc": "Ini adalah contoh ekstensi",
+	"mooc-i18n-welcome": "Selamat datang di berkas lokalisasi ekstensi MOOC."
+}

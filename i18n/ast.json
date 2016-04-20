@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Xuacu"
+		]
+	},
+	"mooc-desc": "Esta ye una estensión d'exemplu",
+	"mooc-i18n-welcome": "Bienveníu al ficheru de llocalización de la estensión MOOC.",
+	"mooc-helloworld": "¡Bones, mundu!",
+	"mooc-helloworld-intro": "Bienllegaos a la páxina especial «Bones, mundu» de la estensión MOOC.",
+	"helloworld": "HolaMundu"
+}

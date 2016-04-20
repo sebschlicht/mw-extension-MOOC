@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Armando-Martin",
+			"Macofe"
+		]
+	},
+	"mooc-desc": "Esta es una extensión de ejemplo",
+	"mooc-i18n-welcome": "Bienvenido al archivo de localización de la extensión de MOOC.",
+	"mooc-helloworld": "Hola mundo",
+	"mooc-helloworld-intro": "Bienvenidos a la página especial \"Hola mundo\" de la extensión MOOC.",
+	"helloworld": "HolaMundo"
+}
