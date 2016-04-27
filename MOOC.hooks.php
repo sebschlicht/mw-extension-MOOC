@@ -4,21 +4,32 @@
  *
  * @file
  * @ingroup Extensions
+ * 
+ * @author Rene Pickhardt (User:renepick)
+ * @license GPLv3
  */
 
 class MOOCHooks {
+	
 
 	public static function onParserFirstCallInit( Parser &$parser ) {
-		$parser->setFunctionHook( 'something', 'MOOCHooks::doSomething' );
+		//register funciton for Magic Keyword MOOC
+		$parser->setFunctionHook( 'MOOC', 'MOOCHooks::parseMooc' );
 	}
-
-	public static function doSomething( Parser &$parser )
+	
+	/**
+	 * If Magic Keyword {{#MOOC: }} is detected on a page exchagne CSS and potentially java script
+	 * @param Parser $parser
+	 */
+	public static function parseMooc( Parser &$parser )
 	{
-		// Called in MW text like this: {{#something: }}
-
-		// For named parameters like {{#something: foo=bar | apple=orange | banana }}
-		// See: https://www.mediawiki.org/wiki/Manual:Parser_functions#Named_parameters
-
-		return "This text will be shown when calling this in MW text.";
+		global $wgOut;
+		
+		$out = $parser->getOutput();
+		global $MOOCFilesDir;
+		$out->addHeadItem('<link rel="stylesheet" href="/w/extensions/MOOC/MOOC.css" type="text/css" media="screen" />');
+		
+		
+		return "";//$out->getText();
 	}
 }
