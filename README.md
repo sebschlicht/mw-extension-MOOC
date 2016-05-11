@@ -1,22 +1,10 @@
 # MOOC
 Allows to create and maintain Massive Open Online Courses.
 
-## Features
+## Links
 
- * [Special page](https://www.mediawiki.org/wiki/Manual:Special_pages) (specials/SpecialHelloWorld.php)
- * [Parser hook](https://www.mediawiki.org/wiki/Manual:Parser_functions) (MOOC/MOOC.hooks.php)
- * [Gerrit integration](https://www.mediawiki.org/wiki/Gerrit) (.gitreview)
-
-## Development on Linux (OS X anyone?)
-To take advantage of this automation, use the Makefile: `make help`. To start,
-run `make install` and follow the instructions.
-
-## Development on Windows
-Since you cannot use the `Makefile` on Windows, do the following:
-
-  # Install nodejs, npm, and PHP composer
-  # Change to the extension's directory
-  # npm install
-  # composer install
-
-Once set up, running `npm test` and `composer test` will run automated code checks.
+ * [Extension Page](https://www.mediawiki.org/wiki/Extension:MOOC)
+ * [Phabricator Page](https://phabricator.wikimedia.org/diffusion/1892/repository/master/)
+ * [Gerrit Page](https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC)
+ * [Extension Prototype Page (Wikiversity)](https://en.wikiversity.org/wiki/Wikiversity:MOOC_Interface)
+ * [Extension Prototype Demo (Wikiversity)](https://en.wikiversity.org/wiki/Web_Science/Part1:_Foundations_of_the_web/Ethernet)
