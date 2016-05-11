@@ -30,18 +30,11 @@
 		]
 	},
 	"ResourceModules": {
-		"ext.mooc.foo": {
-			"scripts": [
-				"modules/ext.mooc.js",
-				"modules/ext.mooc.foo.js"
-			],
-			"styles": [
-				"modules/ext.mooc.foo.css"
-			],
-			"messages": [],
-			"dependencies": []
-		}
-	},
+                "ext.mooc": {
+                        "position": "top",
+                        "styles": "resources/ext.mooc.css"
+                }
+        },
 	"ResourceFileModulePaths": {
 		"localBasePath": "",
 		"remoteExtPath": "MOOC"

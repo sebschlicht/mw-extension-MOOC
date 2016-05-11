@@ -28,6 +28,7 @@ class MOOCHooks {
 	{		
 		global $wgHooks;
 		$wgHooks['OutputPageBeforeHTML'][] = 'MOOCHooks::renderMoocPage';
+		$parser->getOutput()->addModuleStyles( 'ext.mooc' );
 	}
 	
 	/**
