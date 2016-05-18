@@ -41,14 +41,20 @@ class MOOCHooks {
 	 */
 	public function renderMoocPage (&$out, &$text) {	
 		// inspired by https://www.mediawiki.org/wiki/Extension:BrettCrumbs
-		global $wgTitle, $action ;
+		// cancel if action unsupported
+		global $action;
 		if ( $action == 'edit' ) return true;
 		if ( $action == 'history' ) return true;
-		if ( $wgTitle->getPrefixedText() == 'Main Page' ) return true;
-		if ( strpos ( $wgTitle->getPrefixedText(), 'User:' ) === 0 ) return true;
-		if ( strpos ( $wgTitle->getPrefixedText(), 'Special:' ) === 0 ) return true;
-		if ( strpos ( $wgTitle->getPrefixedText(), 'File:' ) === 0 ) return true;
-	
+		
+		// cancel if on main page or namespace unsupported
+		$title = $out->getTitle();
+		if ($title->isMainPage() ||
+			$title->inNamespace(NS_FILE) ||
+			$title->inNamespace(NS_USER) ||
+			$title->inNamespace(NS_SPECIAL)) {
+			return true;
+		}
+		
 		$dom = new DOMDocument;
 		$dom->loadHTML($text);
 		$sections = $dom->getElementsByTagName('h2');
