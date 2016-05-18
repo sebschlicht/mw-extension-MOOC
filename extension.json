@@ -32,7 +32,7 @@
 	"ResourceModules": {
                 "ext.mooc": {
                         "position": "top",
-                        "styles": "resources/ext.mooc.css"
+                        "styles": "resources/ext.mooc.less"
                 }
         },
 	"ResourceFileModulePaths": {
