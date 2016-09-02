@@ -36,42 +36,60 @@ class HTMLGenerator {
     }
 
     public function buildSections() {
-        $sections = [];
+        $sections = $this->createElement('div', [
+            'id' => 'sections'
+        ]);
+        
         $h2s = $this->dom->getElementsByTagName('h2');
         foreach ($h2s as $h2) {
-            // build section content
-            $sectionContent = $this->createElement('div', [
-                'class' => 'content'
-            ]);
+            // TODO filter top-level h2 (parent is #mw-content-text)
+            $sections->nodeValue .= $h2->firstChild->nodeValue . '<br>';
+            
             $element = $h2->nextSibling;
-            while ($element !== null) {
-                if ($element->nodeName === 'h2') {
-                    break;
-                }
-                // TODO move element to new destination
-                if ($element->parent) {
-                    $element->parent->removeChild($element);
-                }
-                $sectionContent->appendChild($element);
+            while ($element !== null && $element->nodeName !== 'h2') {
                 $element = $element->nextSibling;
             }
+        }
+        
+        if ($h2s->length > 0) {
+            $element = $h2s->item(1); // TODO find more fail safe way to skip TOC
+            $section = null;
+            $sectionContent = null;
             
-            // build section header
-            $sectionHeader = $this->createElement('div', [
-                'class' => 'header'
-            ]);
-            if ($h2->parent) {
-                $h2->parent->removeChild($h2);
+            while ($element !== null) {
+                switch ($element->nodeName) {
+                    case 'h2':
+                        $sectionHeading = $element;
+                        $element = $element->nextSibling;
+                        
+                        // start new section
+                        $section = $this->createElement('div', 
+                            [
+                                'class' => 'section'
+                            ]);
+                        $sections->appendChild($section);
+                        // header
+                        $sectionHeader = $this->createElement('div', 
+                            [
+                                'class' => 'header'
+                            ]);
+                        $sectionHeader->appendChild($sectionHeading);
+                        $section->appendChild($sectionHeader);
+                        // content
+                        $sectionContent = $this->createElement('div', 
+                            [
+                                'class' => 'content'
+                            ]);
+                        $section->appendChild($sectionContent);
+                        break;
+                    
+                    default:
+                        $contentItem = $element;
+                        $element = $element->nextSibling;
+                        $sectionContent->appendChild($contentItem);
+                        break;
+                }
             }
-            $sectionHeader->appendChild($h2);
-            
-            // build section
-            $section = $this->createElement('div', [
-                'class' => 'section'
-            ]);
-            $section->appendChild($sectionHeader);
-            $section->appendChild($sectionContent);
-            array_push($sections, $section);
         }
         return $sections;
     }

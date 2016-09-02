@@ -78,13 +78,8 @@ class MoocItemRenderer {
                 'class' => 'col-xs-12 col-sm-9'
             ]);
         
-        // build sections
-        $moocSections = $this->htmlGen->createElement('div', [
-            'id' => 'sections'
-        ]);
-        foreach ($this->htmlGen->buildSections() as $section) {
-            $moocSections->appendChild($section);
-        }
+        // build and inject sections
+        $moocSections = $this->htmlGen->buildSections();
         $moocContent->appendChild($moocSections);
         
         // TODO move existing content into
