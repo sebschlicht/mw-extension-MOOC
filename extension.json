@@ -10,7 +10,11 @@
 	"type": "specialpage",
 	"AutoloadClasses": {
 		"MOOCHooks": "MOOC.hooks.php",
-		"SpecialHelloWorld": "specials/SpecialHelloWorld.php"
+		"Item": "includes/model/Item.php",
+		"Mooc": "includes/model/Mooc.php",
+		"HTMLGenerator": "includes/rendering/HTMLGenerator.php",
+		"MoocItemRenderer": "includes/rendering/MoocItemRenderer.php",
+		"SpecialHelloWorld": "specials/SpecialHelloWorld.php",
 	},
 	"config": {
 		"MOOCEnableFoo": true

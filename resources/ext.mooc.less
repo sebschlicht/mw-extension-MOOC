@@ -11,3 +11,20 @@
 .mooc-section {
   background-color: @cSectionBg;
 }
+
+#mooc-navigation-bar {
+  float: right;
+  #mooc-navigation {
+  	border: 1px solid @cSectionBg;
+    a {
+      display: block;
+    }
+  }
+}
+
+/* disable TOC */
+// TODO figure out how to delete TOC!
+.toc,
+#toc {
+  display: none !important;
+}
