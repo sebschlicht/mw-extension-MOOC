@@ -19,3 +19,6 @@ hs_err_pid*
 
 # Backup Files #
 *~
+
+# Generated CSS Files #
+*.css
