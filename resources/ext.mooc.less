@@ -5,12 +5,18 @@
  * @website https://www.mediawiki.org/wiki/Extension:MOOC
  */
 
+// IMPORTS
+@import "elements.less";
+
 // COLORS
 @cSectionBg: #CCC;
 
-.mooc-section {
-  background-color: @cSectionBg;
-}
+// sections
+@cSectionBorder: #E0E0E0;
+@cSectionHeader: #000;
+@cSectionHeaderBgAlternative: #F5F5F5;
+@cSectionHeaderBgBottom: #FFF;
+@cSectionHeaderBgTop: #EAEAEA;
 
 #mooc-navigation-bar {
   float: right;
@@ -19,6 +25,45 @@
     a {
       display: block;
     }
+  }
+}
+
+#mooc-sections {
+  .section {
+    border: 1px solid @cSectionBorder;
+    overflow: hidden;
+
+    .header {
+      padding: 5px 20px;
+      color: @cSectionHeader;
+      border-bottom: 1px solid @cSectionBorder;
+      .gradient(@cSectionHeaderBgAlternative, @cSectionHeaderBgTop, @cSectionHeaderBgBottom);
+      .box-shadow(0 0 0 1px rgba(155, 155, 155, .3), 1px 0 0 0 rgba(255, 255, 255, .9) inset, 0 2px 2px rgba(0, 0, 0, .1));
+      cursor: pointer;
+
+      .icon {
+        float: left;
+        margin-right: 7px;
+        padding-top: 4px;
+      }
+      h2 {
+        display: inline-block;
+        margin-top: 5px;
+
+        .mw-editsection {
+          // TODO hide
+        }
+      }
+    }
+    .content {
+      margin: 0;
+      padding: 20px;
+      .box-shadow(0 0 0 1px rgba(0, 0, 0, .2));
+      overflow: hidden;
+    }
+  }
+  .section:first-child {
+  	border-top: none;
   }
 }
 
