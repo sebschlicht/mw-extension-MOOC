@@ -44,7 +44,7 @@ class MOOCHooks {
      * @param
      *            HTML String $text
      */
-    public function renderMoocPage(&$out, &$text) {
+    public static function renderMoocPage(&$out, &$text) {
         // inspired by https://www.mediawiki.org/wiki/Extension:BrettCrumbs
         // cancel if action unsupported
         global $action;
@@ -64,6 +64,10 @@ class MOOCHooks {
         // TODO add Bootstrap extension as dependency?
         // FIXME looks like the default font-size has decreased with Bootstrap
         $out->addStyle('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+        
+        // TODO does not seem to work
+        // disable TOC
+        $out->enableTOC(false);
         
         /*
          * TODO WARNING: DOM manipulations theirselves are NOT parsed by the MediaWiki.
