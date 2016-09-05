@@ -37,57 +37,50 @@ class HTMLGenerator {
 
     public function buildSections() {
         $sections = $this->createElement('div', [
-            'id' => 'sections'
+            'id' => 'mooc-sections'
         ]);
         
-        $h2s = $this->dom->getElementsByTagName('h2');
-        foreach ($h2s as $h2) {
-            // TODO filter top-level h2 (parent is #mw-content-text)
-            $sections->nodeValue .= $h2->firstChild->nodeValue . '<br>';
-            
-            $element = $h2->nextSibling;
-            while ($element !== null && $element->nodeName !== 'h2') {
-                $element = $element->nextSibling;
-            }
-        }
+        $contentRoot = $this->dom->getElementById('mw-content-text');
+        $headers = $this->dom->getElementsByTagName('h2');
+        $numHeaders = $headers->length;
         
-        if ($h2s->length > 0) {
-            $element = $h2s->item(1); // TODO find more fail safe way to skip TOC
-            $section = null;
-            $sectionContent = null;
+        for ($i = $numHeaders - 1; $i >= 0; $i --) {
+            $header = $headers->item($i);
             
-            while ($element !== null) {
-                switch ($element->nodeName) {
-                    case 'h2':
-                        $sectionHeading = $element;
-                        $element = $element->nextSibling;
-                        
-                        // start new section
-                        $section = $this->createElement('div', 
-                            [
-                                'class' => 'section'
-                            ]);
-                        $sections->appendChild($section);
-                        // header
-                        $sectionHeader = $this->createElement('div', 
-                            [
-                                'class' => 'header'
-                            ]);
-                        $sectionHeader->appendChild($sectionHeading);
-                        $section->appendChild($sectionHeader);
-                        // content
-                        $sectionContent = $this->createElement('div', 
-                            [
-                                'class' => 'content'
-                            ]);
-                        $section->appendChild($sectionContent);
-                        break;
-                    
-                    default:
-                        $contentItem = $element;
-                        $element = $element->nextSibling;
-                        $sectionContent->appendChild($contentItem);
-                        break;
+            // skip non-top-level sections
+            $parent = $header->parentNode;
+            if ($parent === null || $parent->nodeName !== 'body') {
+                continue;
+            }
+            
+            // create section (prepending as iterating reversely)
+            $section = $this->createElement('div', [
+                'class' => 'section'
+            ]);
+            $sectionHeader = $this->createElement('div', [
+                'class' => 'header'
+            ]);
+            $sectionContent = $this->createElement('div', [
+                'class' => 'content'
+            ]);
+            $sections->insertBefore($section, $sections->firstChild);
+            $section->appendChild($sectionHeader);
+            $section->appendChild($sectionContent);
+            
+            // move section header
+            $element = $header->nextSibling;
+            $sectionHeader->appendChild($header);
+            // TODO remove textual edit-link
+            // TODO insert edit image button
+            
+            // move section content
+            while ($element != null) {
+                if ($element->nodeName !== 'h2') {
+                    $temp = $element;
+                    $element = $element->nextSibling;
+                    $sectionContent->appendChild($element);
+                } else {
+                    break;
                 }
             }
         }
