@@ -1,16 +1,16 @@
 <?php
 
 /**
- * MOOC item that is part of a specific MOOC.
+ * Header of a MOOC item that is part of the current MOOC.
  *
  * @file
  * @ingroup Extensions
  *
  * @author Sebastian Schlicht, jablab.de
  * @copyright © 2016 Sebastian Schlicht
- * @license GNU General Public Licence 3.0
+ * @license GNU General Public Licence 2.0
  */
-class Item {
+class MoocItemHeader {
 
     private $title;
 
@@ -58,7 +58,7 @@ class Item {
     }
 
     public static function newFromTitle($title) {
-        $item = new Item();
+        $item = new MoocItemHeader();
         $item->setTitle($title);
         return $item;
     }

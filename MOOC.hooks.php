@@ -28,6 +28,7 @@ class MOOCHooks {
      */
     public static function parseMooc(Parser &$parser, $frame, $args) {
         global $wgHooks;
+        // TODO maybe we have to hook in earlier, sth. like `OutputPageBeforeWikiText`
         $wgHooks['OutputPageBeforeHTML'][] = 'MOOCHooks::renderMoocPage';
         $parser->getOutput()->addModuleStyles('ext.mooc');
         $parser->disableCache();
@@ -45,6 +46,8 @@ class MOOCHooks {
      *            HTML String $text
      */
     public static function renderMoocPage(&$out, &$text) {
+        $tStart = microtime(true);
+        
         // inspired by https://www.mediawiki.org/wiki/Extension:BrettCrumbs
         // cancel if action unsupported
         global $action;
@@ -63,7 +66,7 @@ class MOOCHooks {
         
         // TODO add Bootstrap extension as dependency?
         // FIXME looks like the default font-size has decreased with Bootstrap
-        $out->addStyle('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+        // $out->addStyle('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
         
         // TODO does not seem to work
         // disable TOC
@@ -76,6 +79,7 @@ class MOOCHooks {
          */
         $renderer = new MoocItemRenderer($out, $text);
         $text = $renderer->render();
+        echo 'parsing took: ' . (microtime(true) - $tStart) . " ms<br>\n";
         return true;
     }
 }

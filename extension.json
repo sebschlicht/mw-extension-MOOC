@@ -10,10 +10,12 @@
 	"type": "specialpage",
 	"AutoloadClasses": {
 		"MOOCHooks": "MOOC.hooks.php",
-		"Item": "includes/model/Item.php",
 		"Mooc": "includes/model/Mooc.php",
+		"MoocItemHeader": "includes/model/MoocItemHeader.php",
+		"PreviewItemHeader": "includes/model/PreviewItemHeader.php",
 		"HTMLGenerator": "includes/rendering/HTMLGenerator.php",
 		"MoocItemRenderer": "includes/rendering/MoocItemRenderer.php",
+		"MoocStructureProvider": "includes/MoocStructureProvider.php",
 		"SpecialHelloWorld": "specials/SpecialHelloWorld.php"
 	},
 	"config": {
@@ -23,7 +25,6 @@
 		"MOOCAlias": "MOOC.i18n.alias.php"
 	},
 	"Hooks": {
-		
 		"ParserFirstCallInit": [
 			"MOOCHooks::onParserFirstCallInit"
 		]
@@ -36,7 +37,10 @@
 	"ResourceModules": {
                 "ext.mooc": {
                         "position": "top",
-                        "styles": "resources/ext.mooc.less"
+                        "styles": [
+                        	"resources/bootstrap.min.css",
+                        	"resources/ext.mooc.less"
+                        ]
                 }
         },
 	"ResourceFileModulePaths": {

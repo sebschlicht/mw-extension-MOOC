@@ -1,20 +1,21 @@
 <?php
 
-/**
- * Try parsing the following code structure and display ith with nice css.ß
- * __MOOC__
- * == Lesson1 ==
- * === unit a ===
- * === unit b ===
+/*
+ * Try parsing the following code structure and display it with nice CSS.
  *
+ * <code>
+ * {{#MOOC: base=path/to/mooc/base }}
+ * == Learning goals ==
+ * # ...
+ * # ...
  *
- * == Lesson 2 ==
- * === unit x ===
- * === unit y ===
+ * == Video ==
+ * [[File:...|800px]]
  *
- * == Lesson 3 ==
+ * == Units ==
  * === unit 1 ===
  * === unit 2 ===
+ * </code>
  */
 if (function_exists('wfLoadExtension')) {
     wfLoadExtension('MOOC');
@@ -22,11 +23,6 @@ if (function_exists('wfLoadExtension')) {
     $wgMessagesDirs['MOOC'] = __DIR__ . '/i18n';
     $wgExtensionMessagesFiles['MOOCAlias'] = __DIR__ . '/MOOC.i18n.alias.php';
     $wgExtensionMessagesFiles['MOOCMagic'] = __DIR__ . '/MOOC.i18n.magic.php';
-    
-    // TODO remove on release
-    // disable caching
-    $wgMainCacheType = CACHE_NONE;
-    $wgCacheDirectory = false;
     
     $wgMOOCSectionNames = [
         'learning-goals',
@@ -39,8 +35,32 @@ if (function_exists('wfLoadExtension')) {
     ];
     $wgMOOCSections = [
         'learning-goals' => [
-            'title' => 'Learning goals',
+            'title' => 'Learning Goals',
             'icon' => 'Wikiversity-Mooc-Icon-Learning-goals.svg'
+        ],
+        'video' => [
+            'title' => 'Video',
+            'icon' => 'Wikiversity-Mooc-Icon-Video.svg'
+        ],
+        'script' => [
+            'title' => 'Script',
+            'icon' => 'Wikiversity-Mooc-Icon-Script.svg'
+        ],
+        'quiz' => [
+            'title' => 'Quiz',
+            'icon' => 'Wikiversity-Mooc-Icon-Quiz.svg'
+        ],
+        'further-reading' => [
+            'title' => 'Further Reading',
+            'icon' => 'Wikiversity-Mooc-Icon-Further-readings.svg'
+        ],
+        'lessons' => [
+            'title' => 'Lessons',
+            'icon' => 'Wikiversity-Mooc-Icon-Associated-units.svg'
+        ],
+        'units' => [
+            'title' => 'Units',
+            'icon' => 'Wikiversity-Mooc-Icon-Associated-units.svg'
         ]
     ];
     $wgMOOCClasses = [
