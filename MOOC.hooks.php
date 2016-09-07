@@ -12,7 +12,7 @@
 class MOOCHooks {
 
     /**
-     * registeres parser function for magic keywords.
+     * Registers parser function for magic keywords.
      *
      * @param Parser $parser            
      */
@@ -22,9 +22,11 @@ class MOOCHooks {
     }
 
     /**
-     * If Magic Keyword {{#MOOC: }} is detected on a page register renderMoocPage function
+     * If the *Magic Keyword* <code>{{#MOOC: }}</code> is detected on a page register the <code>renderMoocPage</code>
+     * hook.
      *
-     * @param Parser $parser            
+     * @param Parser $parser
+     *            parser
      */
     public static function parseMooc(Parser &$parser, $frame, $args) {
         global $wgHooks;
@@ -35,15 +37,20 @@ class MOOCHooks {
     }
 
     /**
-     * Currently enriches h2 with a css class to demonstrate our planned workflow / dataflow to enrich html for MOOC
-     * pages
+     * Renders a wiki page as a MOOC item.
      *
-     * currently the reason to use outputPageBeforeHTML hook is that we needed the html text. is there another more
-     * suitable hook?
+     * This includes the manipulation of the DOM tree, namely:
+     * <ul>
+     * <li>rebuild the body structure to limit the content width</li>
+     * <li>inject a MOOC navigation into the free space gained</li>
+     * <li>split the page into sections (by <code>h2</code> tags)</li>
+     * <li>enrich the sections with headers</li>
+     * </ul>
      *
-     * @param OutputPage $out            
-     * @param
-     *            HTML String $text
+     * @param OutputPage $out
+     *            output page
+     * @param string $text
+     *            page HTML that has been generated so far
      */
     public static function renderMoocPage(&$out, &$text) {
         $tStart = microtime(true);
@@ -65,17 +72,16 @@ class MOOCHooks {
         global $wgMOOCClasses, $wgMOOCSectionNames, $wgMOOCSections;
         
         // TODO add Bootstrap extension as dependency?
-        // FIXME looks like the default font-size has decreased with Bootstrap
+        // WARNING: font-size decreases unrecoverably when adding Bootstrap via CDN after extension CSS loaded
         // $out->addStyle('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
         
-        // TODO does not seem to work
-        // disable TOC
+        // TODO does not work, has to be done by an earlier hook
         $out->enableTOC(false);
         
         /*
          * TODO WARNING: DOM manipulations theirselves are NOT parsed by the MediaWiki.
          * If manipulations should be parsed, such as links that may be redlinks aso., they have to be parsed manually.
-         * This can be done using an OutputPage object.
+         * This can be done using OutputPage.
          */
         $renderer = new MoocItemRenderer($out, $text);
         $text = $renderer->render();
