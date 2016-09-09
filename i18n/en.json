@@ -1,10 +1,19 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": ["sebschlicht"]
 	},
 	"mooc-desc": "Allows to create and maintain Massive Open Online Courses.",
 	"mooc-i18n-welcome": "Welcome to the localization file of the MOOC extension.",
 	"mooc-helloworld": "Hello world!",
 	"mooc-helloworld-intro": "Welcome to the \"Hello world\" special page of the MOOC extension.",
-	"helloworld": "Hello world"
+	"helloworld": "Hello world",
+	"mwe-mooc-edit-section-button-title": "edit $1",
+	"_mwe-mooc-comment-section-names": "// SECTION NAMES AS USED WITHIN SENTENCE",
+	"mwe-mooc-section-learning-goals": "learning goals",
+	"mwe-mooc-section-video": "video",
+	"mwe-mooc-section-script": "script",
+	"mwe-mooc-section-quiz": "quiz",
+	"mwe-mooc-section-further-reading": "further reading",
+	"mwe-mooc-section-lessons": "lessons",
+	"mwe-mooc-section-units": "units"
 }

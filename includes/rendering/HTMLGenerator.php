@@ -81,7 +81,7 @@ class HTMLGenerator {
                 
                 // insert section edit button
                 $hrefEditSection = $header->lastChild->firstChild->nextSibling->getAttribute('href');
-                $sectionEditButton = $this->createSectionEditButton($sectionName, $hrefEditSection);
+                $sectionEditButton = $this->createSectionEditButton($sectionKey, $hrefEditSection);
                 $header->removeChild($header->lastChild);
                 $nActions->appendChild($sectionEditButton);
                 
@@ -108,13 +108,16 @@ class HTMLGenerator {
         return $sections;
     }
 
-    private function createSectionEditButton($sectionName, $href) {
+    private function createSectionEditButton($sectionKey, $href) {
         $nWrapper = $this->createElement('div', [
             'class' => 'btn-edit'
         ]);
-        $title = 'edit ' . strtolower($sectionName);
+        $iSectionName = $this->loadMessage('section-' . $sectionKey);
+        $iTitle = $this->loadMessage('edit-section-button-title', $iSectionName);
+        // wfMessage('mwe-mooc-edit-section-button-title', $iSectionName)->parse();
+        
         // workaround: set link manually via href attribute to allow MW API links
-        $wikiText = '[[File:Wikiversity-Mooc-Icon-Edit.svg|32x32px|link=Mooc|' . $title . ']]';
+        $wikiText = '[[File:Wikiversity-Mooc-Icon-Edit.svg|32x32px|link=Main|' . $iTitle . ']]';
         $nEditBtn = $this->parseWikiText($wikiText);
         $nEditBtn = $nWrapper->appendChild($nEditBtn);
         $nEditBtn->setAttribute('href', $href);
@@ -151,5 +154,11 @@ class HTMLGenerator {
             }
         }
         return null;
+    }
+
+    private function loadMessage($key, ...$params) {
+        $key = 'mwe-mooc-' . $key;
+        $wfMessage = wfMessage($key, $params)->inLanguage('de');
+        return $wfMessage->text();
     }
 }
