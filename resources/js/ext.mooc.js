@@ -5,6 +5,9 @@
   $('#mooc-sections .section .header .modal-box-bg').on('click', closeModalBoxes);
   $('#mooc-sections .section .header .modal-box button.close').on('click', closeModalBoxes);
   $('#mooc-sections .section .header .modal-box button.btn-cancel').on('click', closeModalBoxes);
+  $('#mooc-sections .section').each(function(index, element) {
+    initSection($(element));
+  });
   
   $(document).keydown(function(e){
     e = e || window.event;
@@ -41,6 +44,27 @@
     $modal.fadeOut(200);
   }
   
+  function initSection($section) {
+    // TODO make large sections collapsable
+    // collapse sections with .default-collapsed
+    if ($section.hasClass('default-collapsed')) {
+      collapseSection($section);
+    }
+  }
+  function collapseSection($section) {
+    var $content = $section.children('.content');
+    
+    // calculate effective content height
+    var maxHeight = $content.css('max-height');
+    $content.css('max-height', 'none');
+    var height = $content.outerHeight();
+    $content.css('max-height', maxHeight);
+    
+    console.log(height);
+    if (height > 180) {
+      $section.addClass('collapsed');
+    }
+  }
   function showActions() {
     $(this).children('.header').children('.actions').fadeIn();
   }

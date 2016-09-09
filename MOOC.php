@@ -36,31 +36,38 @@ if (function_exists('wfLoadExtension')) {
     $wgMOOCSections = [
         'learning-goals' => [
             'title' => 'Learning Goals',
-            'icon' => 'Wikiversity-Mooc-Icon-Learning-goals.svg'
+            'icon' => 'Wikiversity-Mooc-Icon-Learning-goals.svg',
+            'collapsed' => false
         ],
         'video' => [
             'title' => 'Video',
-            'icon' => 'Wikiversity-Mooc-Icon-Video.svg'
+            'icon' => 'Wikiversity-Mooc-Icon-Video.svg',
+            'collapsed' => true
         ],
         'script' => [
             'title' => 'Script',
-            'icon' => 'Wikiversity-Mooc-Icon-Script.svg'
+            'icon' => 'Wikiversity-Mooc-Icon-Script.svg',
+            'collapsed' => true
         ],
         'quiz' => [
             'title' => 'Quiz',
-            'icon' => 'Wikiversity-Mooc-Icon-Quiz.svg'
+            'icon' => 'Wikiversity-Mooc-Icon-Quiz.svg',
+            'collapsed' => true
         ],
         'further-reading' => [
             'title' => 'Further Reading',
-            'icon' => 'Wikiversity-Mooc-Icon-Further-readings.svg'
+            'icon' => 'Wikiversity-Mooc-Icon-Further-readings.svg',
+            'collapsed' => false
         ],
         'lessons' => [
             'title' => 'Lessons',
-            'icon' => 'Wikiversity-Mooc-Icon-Associated-units.svg'
+            'icon' => 'Wikiversity-Mooc-Icon-Associated-units.svg',
+            'collapsed' => false
         ],
         'units' => [
             'title' => 'Units',
-            'icon' => 'Wikiversity-Mooc-Icon-Associated-units.svg'
+            'icon' => 'Wikiversity-Mooc-Icon-Associated-units.svg',
+            'collapsed' => false
         ]
     ];
     $wgMOOCClasses = [

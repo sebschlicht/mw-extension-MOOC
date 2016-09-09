@@ -74,6 +74,10 @@ class HTMLGenerator {
             // set section id if known
             if ($sectionKey !== null) {
                 $section->setAttribute('id', 'mooc-' . $sectionKey);
+                $collapseSection = $wgMOOCSections[$sectionKey]['collapsed'];
+                if ($collapseSection) {
+                    $section->setAttribute('class', $section->getAttribute('class') . ' default-collapsed');
+                }
             }
             
             // move section header
