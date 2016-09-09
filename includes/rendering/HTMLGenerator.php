@@ -53,12 +53,14 @@ class HTMLGenerator {
             }
             
             // create section (prepending as iterating reversely)
+            $sectionName = $this->getSectionName($header);
+            $sectionKey = $this->getSectionConfig($sectionName);
+            $hrefEditSection = $header->lastChild->firstChild->nextSibling->getAttribute('href');
+            
             $section = $this->createElement('div', [
                 'class' => 'section'
             ]);
-            $sectionHeader = $this->createElement('div', [
-                'class' => 'header'
-            ]);
+            $sectionHeader = $this->createSectionHeader($sectionKey, $hrefEditSection);
             $sectionContent = $this->createElement('div', [
                 'class' => 'content'
             ]);
@@ -66,28 +68,12 @@ class HTMLGenerator {
             $section->appendChild($sectionHeader);
             $section->appendChild($sectionContent);
             
-            // inject section header controls
-            $sectionName = $this->getSectionName($header);
-            $sectionKey = $this->getSectionConfig($sectionName);
+            // remove edit section link from heading
+            $header->removeChild($header->lastChild);
+            
+            // set section id if known
             if ($sectionKey !== null) {
-                $sectionConfig = $wgMOOCSections[$sectionKey];
-                $section->setAttribute('id', $sectionKey);
-                
-                // inject action buttons
-                $nActions = $this->createElement('div', [
-                    'class' => 'actions'
-                ]);
-                $sectionHeader->appendChild($nActions);
-                
-                // insert section edit button
-                $hrefEditSection = $header->lastChild->firstChild->nextSibling->getAttribute('href');
-                $sectionEditButton = $this->createSectionEditButton($sectionKey, $hrefEditSection);
-                $header->removeChild($header->lastChild);
-                $nActions->appendChild($sectionEditButton);
-                
-                // insert section header icon
-                $sectionIcon = $this->createHeaderIcon($sectionConfig['icon']);
-                $sectionHeader->appendChild($sectionIcon);
+                $section->setAttribute('id', 'mooc-' . $sectionKey);
             }
             
             // move section header
@@ -157,13 +143,44 @@ class HTMLGenerator {
         return $this->createLink($item->getTitle(), $item->getName());
     }
 
+    private function createSectionHeader($sectionKey, $hrefEditSection) {
+        global $wgMOOCSections;
+        
+        $sectionHeader = $this->createElement('div', [
+            'class' => 'header'
+        ]);
+        
+        // inject controls
+        if ($sectionKey !== null) {
+            $sectionConfig = $wgMOOCSections[$sectionKey];
+            
+            // inject action buttons
+            $nActions = $this->createElement('div', [
+                'class' => 'actions'
+            ]);
+            $sectionHeader->appendChild($nActions);
+            
+            // insert section edit button
+            // TODO make this work even when sectionKey null
+            $sectionEditButton = $this->createSectionEditButton($sectionKey, $hrefEditSection);
+            $nActions->appendChild($sectionEditButton);
+            
+            // insert modal edit box
+            $sectionHeader->appendChild($this->createEditBox($sectionKey));
+            
+            // insert section header icon
+            $sectionIcon = $this->createHeaderIcon($sectionConfig['icon']);
+            $sectionHeader->appendChild($sectionIcon);
+        }
+        return $sectionHeader;
+    }
+
     private function createSectionEditButton($sectionKey, $href) {
         $nWrapper = $this->createElement('div', [
             'class' => 'btn-edit'
         ]);
         $iSectionName = $this->loadMessage('section-' . $sectionKey);
         $iTitle = $this->loadMessage('edit-section-button-title', $iSectionName);
-        // wfMessage('mwe-mooc-edit-section-button-title', $iSectionName)->parse();
         
         // workaround: set link manually via href attribute to allow MW API links
         $wikiText = '[[File:Wikiversity-Mooc-Icon-Edit.svg|32x32px|link=Main|' . $iTitle . ']]';
@@ -183,10 +200,48 @@ class HTMLGenerator {
         return $nWrapper;
     }
 
-    private function parseWikiText($wikiText) {
-        $node = $this->dom->createDocumentFragment();
-        $node->appendXML($this->outputPage->parseInline($wikiText));
-        return $node;
+    private function createEditBox($sectionKey) {
+        global $wgMOOCSections;
+        $sectionConfig = $wgMOOCSections[$sectionKey];
+        
+        // build modal box wrapper
+        $nWrapper = $this->createModalBox('edit-' . $sectionKey);
+        $nBox = $nWrapper->lastChild;
+        
+        // fill modal box with control elements
+        $nTitle = $this->createElement('label', [
+            'for' => 'modal-box-content-' . $sectionKey
+        ]);
+        $nTitle->nodeValue = $this->loadMessage('section-' . $sectionKey . '-title');
+        $nBox->appendChild($nTitle);
+        
+        $nTextfield = $this->createElement('textarea', 
+            [
+                'id' => 'modal-box-content-' . $sectionKey,
+                'class' => 'form-control',
+                'autofocus' => 'autofocus'
+            ]);
+        $nBox->appendChild($nTextfield);
+        
+        return $nWrapper;
+    }
+
+    private function createModalBox($id) {
+        // TODO move to JS when able to use mw.message to reduce page size for non-JS users
+        $nWrapper = $this->createElement('div', [
+            'class' => 'modal-box-wrapper'
+        ]);
+        $nBg = $this->createElement('div', [
+            'class' => 'modal-box-bg'
+        ]);
+        $nWrapper->appendChild($nBg);
+        $nBox = $this->createElement('div', 
+            [
+                'id' => 'modal-box-' . $id,
+                'class' => 'modal-box form-group'
+            ]);
+        $nWrapper->appendChild($nBox);
+        return $nWrapper;
     }
 
     public function getSectionName($node) {
@@ -209,5 +264,11 @@ class HTMLGenerator {
         $key = 'mwe-mooc-' . $key;
         $wfMessage = wfMessage($key, $params);
         return $wfMessage->text();
+    }
+
+    private function parseWikiText($wikiText) {
+        $node = $this->dom->createDocumentFragment();
+        $node->appendXML($this->outputPage->parseInline($wikiText));
+        return $node;
     }
 }

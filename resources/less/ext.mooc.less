@@ -52,6 +52,37 @@
       .box-shadow(0 0 0 1px rgba(0, 0, 0, .2));
       overflow: hidden;
     }
+    .modal-box-wrapper {
+      display: none;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      padding: 40px;
+      cursor: default;
+      z-index: 1000;
+      
+      .modal-box-bg {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: #050404;
+        opacity: .87;
+      }
+      .modal-box {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 25px 20px;
+        margin: 0;
+        background-color: #FFF;
+        overflow: auto;
+        .rounded(10px);
+      }
+    }
   }
   .section:first-child {
   	border-top: none;
@@ -80,6 +111,11 @@
 .toc,
 #toc {
   display: none !important;
+}
+
+// fix CSS z-index BUG of MW
+#bodyContent {
+  z-index: 1000;
 }
 
 // adapt font-size set by Bootstrap

@@ -13,6 +13,8 @@
 	"mooc-helloworld": "Page title of the HelloWorld special page.\n{{Identical|Hello World}}",
 	"mooc-helloworld-intro": "Text displayed on the HelloWorld SpecialPage.",
 	"helloworld": "Text of the link to the HelloWorld special page on SpecialPages.\n{{Identical|Hello World}}",
+	"mwe-mooc-navigation-title": "Title of the navigation.",
+	"mwe-mooc-section-learning-goals-title": "Title of the learning goals section.",
 	"mwe-mooc-section-learning-goals": "Name of the learning goals section when used within a sentence.",
 	"mwe-mooc-section-video": "Name of the video section when used within a sentence.",
 	"mwe-mooc-section-script": "Name of the script section when used within a sentence.",

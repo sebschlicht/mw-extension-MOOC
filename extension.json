@@ -36,6 +36,9 @@
 	},
 	"ResourceModules": {
                 "ext.mooc": {
+                		"dependencies": [
+				        	"mediawiki.jqueryMsg"
+				        ],
                         "position": "top",
                         "scripts": [
                         	"resources/js/ext.mooc.js"
