@@ -158,8 +158,7 @@ class HTMLGenerator {
 
     private function loadMessage($key, ...$params) {
         $key = 'mwe-mooc-' . $key;
-        // FIXME remove forced language when figured out how to make uselang/automatic detection work
-        $wfMessage = wfMessage($key, $params)->inLanguage('de');
+        $wfMessage = wfMessage($key, $params);
         return $wfMessage->text();
     }
 }
