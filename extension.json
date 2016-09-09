@@ -37,9 +37,12 @@
 	"ResourceModules": {
                 "ext.mooc": {
                         "position": "top",
+                        "scripts": [
+                        	"resources/js/ext.mooc.js"
+                        ],
                         "styles": [
                         	"resources/bootstrap.min.css",
-                        	"resources/ext.mooc.less"
+                        	"resources/less/ext.mooc.less"
                         ]
                 }
         },
