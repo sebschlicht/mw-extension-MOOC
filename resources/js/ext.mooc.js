@@ -3,6 +3,8 @@
   // register UI event hooks
   $('#mooc-sections .section .header .actions .btn-edit').on('click', openModalBox);
   $('#mooc-sections .section .header .modal-box-bg').on('click', closeModalBoxes);
+  $('#mooc-sections .section .header .modal-box button.close').on('click', closeModalBoxes);
+  $('#mooc-sections .section .header .modal-box button.btn-cancel').on('click', closeModalBoxes);
   
   $(document).keydown(function(e){
     e = e || window.event;
@@ -26,7 +28,7 @@
   
   function openModalBox() {
     var $modal = $(this).parent().siblings('.modal-box-wrapper');
-    $modal.fadeIn();
+    $modal.fadeIn(200);
     $modal.find('textarea').focus();
     return false;
   }
@@ -36,7 +38,7 @@
   }
   function closeModalBox($modal) {
     $modal.find('textarea').blur();
-    $modal.fadeOut();
+    $modal.fadeOut(200);
   }
   
   function showActions() {

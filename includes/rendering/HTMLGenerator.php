@@ -209,12 +209,29 @@ class HTMLGenerator {
         $nBox = $nWrapper->lastChild;
         
         // fill modal box with control elements
+        // * button to close
+        $nButtonClose = $this->createElement('button', 
+            [
+                'class' => 'close',
+                'type' => 'button',
+                'aria-label' => 'Close'
+            ]);
+        $nSpanClose = $this->createElement('span', [
+            'aria-hidden' => 'true'
+        ]);
+        $nSpanClose->nodeValue = '&times;';
+        $nButtonClose->appendChild($nSpanClose);
+        $nBox->appendChild($nButtonClose);
+        
+        // * title to determine data being edited
+        $title = ucfirst($this->loadMessage('section-' . $sectionKey));
         $nTitle = $this->createElement('label', [
             'for' => 'modal-box-content-' . $sectionKey
         ]);
-        $nTitle->nodeValue = $this->loadMessage('section-' . $sectionKey . '-title');
+        $nTitle->nodeValue = $title . ':';
         $nBox->appendChild($nTitle);
         
+        // * text field to edit data
         $nTextfield = $this->createElement('textarea', 
             [
                 'id' => 'modal-box-content-' . $sectionKey,
@@ -222,6 +239,24 @@ class HTMLGenerator {
                 'autofocus' => 'autofocus'
             ]);
         $nBox->appendChild($nTextfield);
+        
+        // * button to "submit form"
+        $nButtonSubmit = $this->createElement('button', 
+            [
+                'class' => 'btn btn-primary btn-save',
+                'type' => 'button'
+            ]);
+        $nButtonSubmit->nodeValue = $this->loadMessage('button-save-edit');
+        $nBox->appendChild($nButtonSubmit);
+        
+        // * button to cancel
+        $nButtonCancel = $this->createElement('button', 
+            [
+                'class' => 'btn btn-default btn-cancel',
+                'type' => 'button'
+            ]);
+        $nButtonCancel->nodeValue = $this->loadMessage('button-cancel');
+        $nBox->appendChild($nButtonCancel);
         
         return $nWrapper;
     }
