@@ -4,7 +4,9 @@
   $('#mooc-sections .section .header .actions .btn-edit').on('click', openModalBox);
   
   $('#mooc-sections .section .header .actions').hide();
-  $('#mooc-sections .section').on('mouseenter', toggleActions).on('mouseleave', toggleActions);
+  $('#mooc-sections .section')
+    .on('mouseenter', toggleActions)
+    .on('mouseleave', toggleActions);
   
   function openModalBox() {
     return false;

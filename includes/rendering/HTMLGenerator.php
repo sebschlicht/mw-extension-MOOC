@@ -86,7 +86,7 @@ class HTMLGenerator {
                 $nActions->appendChild($sectionEditButton);
                 
                 // insert section header icon
-                $sectionIcon = $this->createSectionHeaderIcon($sectionConfig['icon']);
+                $sectionIcon = $this->createHeaderIcon($sectionConfig['icon']);
                 $sectionHeader->appendChild($sectionIcon);
             }
             
@@ -108,6 +108,55 @@ class HTMLGenerator {
         return $sections;
     }
 
+    public function createNavigation($mooc) {
+        $navigation = $this->createElement('div', [
+            'id' => 'mooc-navigation'
+        ]);
+        
+        $header = $this->createElement('div', [
+            'class' => 'header'
+        ]);
+        $navigation->appendChild($header);
+        $headerIcon = $this->createHeaderIcon('Wikiversity-Mooc-Icon-Navigation.svg');
+        $header->appendChild($headerIcon);
+        $headerHeading = $this->createElement('h2', []);
+        $header->appendChild($headerHeading);
+        $headerText = $this->createElement('span', [
+            'class' => 'mw-headline'
+        ]);
+        $headerText->nodeValue = $this->loadMessage('navigation-title');
+        $headerHeading->appendChild($headerText);
+        
+        // TODO ALL lessons have to be top-level
+        $nLessons = $this->createElement('ul', [
+            'class' => 'content'
+        ]);
+        $nLesson = $this->createNavigationItem($mooc);
+        $nLessons->appendChild($nLesson);
+        $navigation->appendChild($nLessons);
+        
+        return $navigation;
+    }
+
+    private function createNavigationItem($item) {
+        $nItem = $this->createElement('li', []);
+        $nItem->appendChild($this->createNavigationLink($item));
+        
+        if ($item->hasChildren()) {
+            $nChildren = $this->createElement('ul', []);
+            foreach ($item->getChildren() as $child) {
+                $nChild = $this->createNavigationItem($child);
+                $nChildren->appendChild($nChild);
+            }
+            $nItem->appendChild($nChildren);
+        }
+        return $nItem;
+    }
+
+    private function createNavigationLink($item) {
+        return $this->createLink($item->getTitle(), $item->getName());
+    }
+
     private function createSectionEditButton($sectionKey, $href) {
         $nWrapper = $this->createElement('div', [
             'class' => 'btn-edit'
@@ -124,7 +173,7 @@ class HTMLGenerator {
         return $nWrapper;
     }
 
-    private function createSectionHeaderIcon($icon) {
+    private function createHeaderIcon($icon) {
         $nWrapper = $this->createElement('div', [
             'class' => 'icon'
         ]);

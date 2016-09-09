@@ -1,5 +1,3 @@
-// compress: false, strictMath: true, out: ext.mooc.css
-
 /**
  * @author Sebastian Schlicht (User:sebschlicht), Rene Pickhardt (User:renepick)
  * @website https://www.mediawiki.org/wiki/Extension:MOOC
@@ -17,16 +15,6 @@
 @cSectionHeaderBgAlternative: #F5F5F5;
 @cSectionHeaderBgBottom: #FFF;
 @cSectionHeaderBgTop: #EAEAEA;
-
-#mooc-navigation-bar {
-  float: right;
-  #mooc-navigation {
-  	border: 1px solid @cSectionBg;
-    a {
-      display: block;
-    }
-  }
-}
 
 #mooc-sections {
   .section {
@@ -67,6 +55,23 @@
   }
   .section:first-child {
   	border-top: none;
+  }
+}
+#mooc-navigation-bar {
+  float: right;
+  
+  #mooc-navigation {
+    #mooc-sections .section;
+    
+    .header {
+      cursor: default;
+    }
+    .content {
+      list-style: none;
+    }
+    a {
+      display: block;
+    }
   }
 }
 

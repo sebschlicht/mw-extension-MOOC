@@ -31,7 +31,7 @@ class MoocItemRenderer {
                 'id' => 'mooc-navigation-bar',
                 'class' => 'col-xs-12 col-sm-3'
             ]);
-        $moocNavigationBar->appendChild($this->createNavigation());
+        $moocNavigationBar->appendChild($this->htmlGen->createNavigation($this->mooc));
         $moocRow->appendChild($moocNavigationBar);
         
         // inject enriched content
@@ -60,38 +60,5 @@ class MoocItemRenderer {
     private function loadMoocStructure($item, $base) {
         $structureProvider = new MoocStructureProvider();
         return $structureProvider->loadMoocStructure($item->getTitle(), $base);
-    }
-
-    private function createNavigation() {
-        $navigation = $this->htmlGen->createElement('div', [
-            'id' => 'mooc-navigation'
-        ]);
-        
-        // TODO ALL lessons have to be top-level
-        $nLessons = $this->htmlGen->createElement('ul', []);
-        $nLesson = $this->createNavigationItem($this->mooc);
-        $nLessons->appendChild($nLesson);
-        $navigation->appendChild($nLessons);
-        
-        return $navigation;
-    }
-
-    private function createNavigationItem($item) {
-        $nItem = $this->htmlGen->createElement('li', []);
-        $nItem->appendChild($this->createNavigationLink($item));
-        
-        if ($item->hasChildren()) {
-            $nChildren = $this->htmlGen->createElement('ul', []);
-            foreach ($item->getChildren() as $child) {
-                $nChild = $this->createNavigationItem($child);
-                $nChildren->appendChild($nChild);
-            }
-            $nItem->appendChild($nChildren);
-        }
-        return $nItem;
-    }
-
-    private function createNavigationLink($item) {
-        return $this->htmlGen->createLink($item->getTitle(), $item->getName());
     }
 }
