@@ -1,9 +1,17 @@
-console.log('JS loading...');
-(function (mw, $) {
-  console.log('JS enabled!');
-  $('.section .header .actions .btn-edit').on('click', openModalBox);
+( function ( mw, $ ) {
   
-  function openModalBox(button) {
-    return true;
+  // register UI event hooks
+  $('#mooc-sections .section .header .actions .btn-edit').on('click', openModalBox);
+  
+  $('#mooc-sections .section .header .actions').hide();
+  $('#mooc-sections .section').on('mouseenter', toggleActions).on('mouseleave', toggleActions);
+  
+  function openModalBox() {
+    return false;
   }
-}(mediaWiki, jQuery));
+  
+  function toggleActions() {
+    $(this).children('.header').children('.actions').fadeToggle();
+  }
+  
+}( mediaWiki, jQuery ) );
