@@ -32,6 +32,8 @@ class MOOCHooks {
         global $wgHooks;
         // TODO maybe we have to hook in earlier, sth. like `OutputPageBeforeWikiText`
         $wgHooks['OutputPageBeforeHTML'][] = 'MOOCHooks::renderMoocPage';
+        // $parser->getOutput()->addModules('ext.mooc');
+        $parser->getOutput()->addModuleScripts('ext.mooc');
         $parser->getOutput()->addModuleStyles('ext.mooc');
         $parser->disableCache();
     }
