@@ -8,6 +8,7 @@
 
 // COLORS
 @cSectionBg: #CCC;
+@cNavigationBarBg: #FFF;
 
 // sections
 @cSectionBorder: #E0E0E0;
@@ -15,6 +16,9 @@
 @cSectionHeaderBgAlternative: #F5F5F5;
 @cSectionHeaderBgBottom: #FFF;
 @cSectionHeaderBgTop: #EAEAEA;
+
+// DIMENSIONS
+@hCollapsedSection: 200px; // warning: when altering this value, update ext.mooc.js:hCollapsedSection as well
 
 #mooc-sections {
   .section {
@@ -48,10 +52,30 @@
       }
     }
     .content {
+      position: relative;
       margin: 0;
       padding: 20px;
+      .transition(.3s, ease-out 0s, max-height);
       .box-shadow(0 0 0 1px rgba(0, 0, 0, .2));
       overflow: hidden;
+    }
+    .expander {
+      display: none;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 120px;
+      cursor: pointer;
+      .gradient(#FFF, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+      .transition(.3s, ease-in);
+      
+      text-align: center;
+      padding-top: 70px;
+      font-size: 150%;
+      color: grey;
+      text-transform: uppercase;
+      .user-select();
     }
     .modal-box-wrapper {
       display: none;
@@ -90,36 +114,47 @@
   }
   .section.default-collapsed {
     .content {
-      max-height: 180px;
+      max-height: @hCollapsedSection; // just to avoid visual noise until JS loaded
     }
   }
   .section.collapsed {
-    &:after {
-      content: '';
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      height: 120px;
-      .gradient(#FFF, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    .content {
+      .transition(.3s, ease-in, max-height);
     }
   }
 }
 #mooc-navigation-bar {
-  float: right;
+  position: absolute;
+  right: 0;
   
   #mooc-navigation {
     #mooc-sections .section;
     
     .header {
+      position: relative;
+      top: 0;
+      width: 100%;
       cursor: default;
+      z-index: 1;
+    }
+    .fixed.header {
+      position: fixed;
     }
     .content {
+      position: relative;
       list-style: none;
+      overflow: hidden;
+      background: @cNavigationBarBg;
     }
     a {
       display: block;
     }
+  }
+  #mooc-navigation.fixed {
+    position: fixed;
+  }
+  #mooc-navigation.trailing {
+    position: fixed;
   }
 }
 

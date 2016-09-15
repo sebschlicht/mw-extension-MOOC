@@ -18,5 +18,6 @@
 	"mwe-mooc-section-lessons": "lessons",
 	"mwe-mooc-section-units": "units",
 	"mwe-mooc-button-save-edit": "Save",
-	"mwe-mooc-button-cancel": "Cancel"
+	"mwe-mooc-button-cancel": "Cancel",
+	"mwe-mooc-button-expand-section": "Click to expand"
 }

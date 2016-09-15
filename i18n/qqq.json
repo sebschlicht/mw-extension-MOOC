@@ -22,5 +22,6 @@
 	"mwe-mooc-section-lessons": "Name of the lessons section when used within a sentence.",
 	"mwe-mooc-section-units": "Name of the units section when used within a sentence.",
 	"mwe-mooc-button-save-edit": "Label of the button that saves the edits made to a section.",
-	"mwe-mooc-button-cancel": "Label of the button that cancels the current action."
+	"mwe-mooc-button-cancel": "Label of the button that cancels the current action.",
+	"mwe-mooc-button-expand-section": "Label of the button that expands the section."
 }

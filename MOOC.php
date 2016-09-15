@@ -24,6 +24,8 @@ if (function_exists('wfLoadExtension')) {
     $wgExtensionMessagesFiles['MOOCAlias'] = __DIR__ . '/MOOC.i18n.alias.php';
     $wgExtensionMessagesFiles['MOOCMagic'] = __DIR__ . '/MOOC.i18n.magic.php';
     
+    // TODO get out how to include jquery.ui.effects (includes easing) other than shipping
+    
     $wgMOOCSectionNames = [
         'learning-goals',
         'video',

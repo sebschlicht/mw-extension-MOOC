@@ -94,6 +94,13 @@ class HTMLGenerator {
                     break;
                 }
             }
+            
+            // add expander
+            $expander = $this->createElement('div', [
+                'class' => 'expander'
+            ]);
+            $expander->nodeValue = $this->loadMessage('button-expand-section');
+            $section->appendChild($expander);
         }
         return $sections;
     }
@@ -121,8 +128,10 @@ class HTMLGenerator {
         $nLessons = $this->createElement('ul', [
             'class' => 'content'
         ]);
-        $nLesson = $this->createNavigationItem($mooc);
-        $nLessons->appendChild($nLesson);
+        for ($i = 0; $i < 9; $i ++) {
+            $nLesson = $this->createNavigationItem($mooc);
+            $nLessons->appendChild($nLesson);
+        }
         $navigation->appendChild($nLessons);
         
         return $navigation;
