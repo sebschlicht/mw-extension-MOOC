@@ -54,21 +54,21 @@
   }
   
   function initSection($section) {
-    // make section collapsible
-    if (isSectionCollapsible($section)) {
+    // make section collapsable
+    if (isSectionCollapsable($section)) {
       enableSectionCollapseUI($section);
     }
     
     // collapse sections with .default-collapsed
     if ($section.hasClass('default-collapsed')) {
       // if collapsible
-      if (isSectionCollapsible($section)) {
+      if (isSectionCollapsable($section)) {
         collapseSection($section);
       }
       $section.removeClass('default-collapsed');
     }
   }
-  function isSectionCollapsible($section) {
+  function isSectionCollapsable($section) {
     if ($section.hasClass('collapsed')) {
       return true;
     }
@@ -99,6 +99,8 @@
     enableSectionExpandUI($section);
   }
   function enableSectionCollapseUI($section) {
+    $section.removeClass('expandable');
+    $section.addClass('collapsable');
     var $header = $section.children('.header');
     $header.off('click').on('click', collapseClickedSection);
   }
@@ -127,6 +129,8 @@
     enableSectionCollapseUI($section);
   }
   function enableSectionExpandUI($section) {
+    $section.removeClass('collapsable');
+    $section.addClass('expandable');
     var $header = $section.children('.header');
     $header.off('click').on('click', expandClickedSection);
     var $expander = $section.children('.expander');
