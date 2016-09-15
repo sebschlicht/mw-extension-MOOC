@@ -159,7 +159,6 @@
         if (!isNavigationHeaderFixed) {// fix navigation header
           fixNavBarHeader($navigationHeader);
         }
-        // TODO
         if (y + h >= maxY + marginBottom) {// bottom reached, disable scrolling
           if (!isNavigationTrailing) {
             preventNavBarScrolling($navigation, marginBottom);
@@ -192,7 +191,6 @@
   function fixNavBar($navigation) {
     $navigation.removeClass('trailing');
     $navigation.css('width', $navigation.outerWidth());
-    $navigation.css('bottom', '');
     $navigation.css('top', 0);
     $navigation.addClass('fixed');
   }
@@ -208,5 +206,11 @@
     $navigation.css('width', '');
     $navigation.css('bottom', '');
   }
+  // repair navigation bar when window is resized
+  $(window).resize(function() {
+    resetNavBarHeader($navigationHeader);
+    resetNavBar($navigation);
+    $(window).scroll();
+  });
   
 }( mediaWiki, jQuery ) );
