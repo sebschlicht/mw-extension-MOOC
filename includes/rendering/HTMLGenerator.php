@@ -74,6 +74,7 @@ class HTMLGenerator {
             // set section id if known
             if ($sectionKey !== null) {
                 $section->setAttribute('id', 'mooc-' . $sectionKey);
+                $this->setSectionName($header, $sectionKey);
                 $collapseSection = $wgMOOCSections[$sectionKey]['collapsed'];
                 if ($collapseSection) {
                     $section->setAttribute('class', $section->getAttribute('class') . ' default-collapsed');
@@ -296,6 +297,12 @@ class HTMLGenerator {
         $headline = $node->firstChild;
         // TODO ensure this is correct via testing
         return $headline->nodeValue;
+    }
+
+    private function setSectionName($node, $sectionKey) {
+        $headline = $node->firstChild;
+        $sectionTitle = ucfirst($this->loadMessage('section-' . $sectionKey));
+        $headline->nodeValue = $sectionTitle;
     }
 
     private function getSectionConfig($sectionName) {
