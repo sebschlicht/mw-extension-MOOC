@@ -22,3 +22,6 @@ hs_err_pid*
 
 # Generated CSS Files #
 *.css
+
+# Other Editor Files #
+.brackets.json
