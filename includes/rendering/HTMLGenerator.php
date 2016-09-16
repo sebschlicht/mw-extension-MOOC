@@ -129,7 +129,7 @@ class HTMLGenerator {
         $nLessons = $this->createElement('ul', [
             'class' => 'content'
         ]);
-        for ($i = 0; $i < 9; $i ++) {
+        for ($i = 0; $i < 3; $i ++) {
             $nLesson = $this->createNavigationItem($mooc);
             $nLessons->appendChild($nLesson);
         }

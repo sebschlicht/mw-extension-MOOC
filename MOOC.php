@@ -39,7 +39,7 @@ if (function_exists('wfLoadExtension')) {
         'learning-goals' => [
             'title' => 'Learning Goals',
             'icon' => 'Wikiversity-Mooc-Icon-Learning-goals.svg',
-            'collapsed' => false
+            'collapsed' => true
         ],
         'video' => [
             'title' => 'Video',

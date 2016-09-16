@@ -217,4 +217,37 @@
     $(window).scroll();
   });
   
+  var $mwContent = $('#content.mw-body');
+  var contentMarginLeft = $mwContent.css('margin-left');
+  var $mwNavigation = $('#mw-navigation');
+  var $mwPageBase = $('#mw-page-base');
+  
+  var $mwNavButton = $('<img>').addClass('btn-toggle-mw-nav');
+  $mwNavButton.attr('src', '/mediawiki-vagrant.png');
+  $mwNavButton.on('click', mwNavigationButtonClicked);
+  $mwNavButton.insertBefore($mwNavigation);
+  hideMwNavigation($mwNavigation);
+  
+  function mwNavigationButtonClicked() {
+    if ($mwNavigation.hasClass('hidden')) {
+      showMwNavigation($mwNavigation);
+    } else {
+      hideMwNavigation($mwNavigation);
+    }
+  }
+  function hideMwNavigation($mwNavigation) {
+    $mwContent.stop().animate({
+      'margin-left': 0
+    });
+    $mwPageBase.slideUp();
+    $mwNavigation.addClass('hidden');
+  }
+  function showMwNavigation($mwNavigation) {
+    $mwContent.stop().animate({
+      'margin-left': contentMarginLeft
+    });
+    $mwPageBase.slideDown();
+    $mwNavigation.removeClass('hidden');
+  }
+  
 }( mediaWiki, jQuery ) );

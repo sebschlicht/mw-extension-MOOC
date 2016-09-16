@@ -87,7 +87,7 @@ class MOOCHooks {
          */
         $renderer = new MoocItemRenderer($out, $text);
         $text = $renderer->render();
-        echo 'parsing took: ' . (microtime(true) - $tStart) . " ms<br>\n";
+        // echo 'parsing took: ' . (microtime(true) - $tStart) . " ms<br>\n";
         return true;
     }
 }
