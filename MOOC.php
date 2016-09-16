@@ -39,12 +39,12 @@ if (function_exists('wfLoadExtension')) {
         'learning-goals' => [
             'title' => 'Learning Goals',
             'icon' => 'Wikiversity-Mooc-Icon-Learning-goals.svg',
-            'collapsed' => true
+            'collapsed' => false
         ],
         'video' => [
             'title' => 'Video',
             'icon' => 'Wikiversity-Mooc-Icon-Video.svg',
-            'collapsed' => true
+            'collapsed' => false
         ],
         'script' => [
             'title' => 'Script',

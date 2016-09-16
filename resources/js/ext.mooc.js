@@ -33,7 +33,6 @@
   var $navigationBar = $('#mooc-navigation-bar');
   var $navigation = $navigationBar.find('#mooc-navigation');
   var $navigationHeader = $navigation.find('.header');
-  var rootTop = $navigation.offset().top;
   var marginBottom = 30;
   
   // TODO load modal box content
@@ -148,6 +147,7 @@
   $(window).scroll(function() {
     var y = $(window).scrollTop();
     var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    var rootTop = $navigationBar.offset().top;
     var maxY = rootTop + $navigation.outerHeight();
     
     var isNavigationFixed = $navigation.hasClass('fixed');
