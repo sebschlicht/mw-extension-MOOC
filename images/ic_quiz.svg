@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="32px"
+   version="1.1"
+   viewBox="0 0 32 32"
+   width="32px"
+   id="svg8077"
+   inkscape:version="0.48.4 r9943 custom"
+   sodipodi:docname="Wikiversity-Mooc-Icon-Quiz.svg">
+  <metadata
+     id="metadata8090">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1392"
+     id="namedview8088"
+     showgrid="false"
+     inkscape:zoom="2.6074562"
+     inkscape:cx="19.032845"
+     inkscape:cy="16"
+     inkscape:window-x="1920"
+     inkscape:window-y="22"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg8077" />
+  <desc
+     id="desc8081" />
+  <defs
+     id="defs8083" />
+  <g
+     style="fill:#929292;fill-rule:evenodd;stroke:none"
+     id="icon-69-document-text">
+    <path
+       inkscape:connector-curvature="0"
+       id="document-text"
+       d="M 19,3 9.0085302,3 C 7.8992496,3 7,3.8983383 7,5.0073299 L 7,27.99267 C 7,29.101288 7.8909254,30 8.9974219,30 L 24.002578,30 C 25.105724,30 26,29.109075 26,28.002578 L 26,11 21.005919,11 C 19.898081,11 19,10.113294 19,9.0018986 z m 1,0 0,5.9970707 C 20,9.5509732 20.450975,10 20.990778,10 L 26,10 z"
+       sodipodi:nodetypes="csssssscsscccssc" />
+  </g>
+  <g
+     transform="matrix(0.77977103,0,0,0.75701334,4.5851834,2.5696007)"
+     style="font-size:22.0333252px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Open Sans;-inkscape-font-specification:Open Sans Bold"
+     id="text8094">
+    <path
+       d="m 13.383772,23.053742 0,-0.796126 c -3e-6,-0.688535 0.147029,-1.287422 0.441097,-1.796663 0.294061,-0.509225 0.831983,-1.050734 1.613769,-1.624527 0.753086,-0.537913 1.247975,-0.975423 1.484667,-1.312532 0.243852,-0.337087 0.365781,-0.713633 0.365788,-1.129638 -7e-6,-0.466188 -0.172142,-0.821217 -0.516406,-1.065088 -0.344277,-0.243845 -0.824821,-0.365774 -1.441634,-0.365787 -1.075849,1.3e-5 -2.302313,0.351455 -3.679393,1.054329 l -1.172672,-2.356103 c 1.599423,-0.896523 3.295671,-1.344792 5.088751,-1.344808 1.477489,1.6e-5 2.65016,0.355045 3.518017,1.065088 0.875012,0.710072 1.312522,1.656816 1.312532,2.840233 -10e-6,0.788965 -0.179318,1.470334 -0.537923,2.044108 -0.358625,0.573794 -1.039993,1.2193 -2.044108,1.936522 -0.688548,0.509242 -1.126058,0.896546 -1.312532,1.161914 -0.179313,0.265382 -0.268967,0.613238 -0.268961,1.043571 l 0,0.645507 -2.850992,0 m -0.344271,3.679393 c -2e-6,-0.602471 0.161375,-1.057912 0.484131,-1.366324 0.32275,-0.308406 0.792536,-0.46261 1.409358,-0.462614 0.595297,4e-6 1.054324,0.157794 1.377083,0.473372 0.32992,0.315584 0.494883,0.767439 0.494889,1.355566 -6e-6,0.566613 -0.164969,1.014882 -0.494889,1.344808 -0.329932,0.322753 -0.788959,0.48413 -1.377083,0.48413 -0.602477,0 -1.068677,-0.15779 -1.398599,-0.473372 -0.329929,-0.322753 -0.494892,-0.774608 -0.49489,-1.355566"
+       id="path5441"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
