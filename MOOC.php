@@ -23,6 +23,7 @@ if (function_exists('wfLoadExtension')) {
     $wgMessagesDirs['MOOC'] = __DIR__ . '/i18n';
     $wgExtensionMessagesFiles['MOOCAlias'] = __DIR__ . '/MOOC.i18n.alias.php';
     $wgExtensionMessagesFiles['MOOCMagic'] = __DIR__ . '/MOOC.i18n.magic.php';
+    $wgExtensionMessagesFiles['MOOCNamespaces'] = dirname(__FILE__) . '/MOOC.namespaces.php';
     
     // TODO get out how to include jquery.ui.effects (includes easing) other than shipping
     
@@ -72,10 +73,12 @@ if (function_exists('wfLoadExtension')) {
             'collapsed' => false
         ]
     ];
-    $wgMOOCClasses = [
-        'section' => 'mooc-section',
-        'section-markers' => 'mooc-section-markers'
-    ];
+    
+    global $wgScriptPath;
+    $wgExtensionAssetsPath = $wgScriptPath . '/extensions';
+    $wgMOOCAssetsPath = $wgExtensionAssetsPath . '/MOOC';
+    $wgMOOCImagePath = $wgMOOCAssetsPath . "/images/";
+    
     return true;
 } else {
     die('This version of the MOOC extension requires MediaWiki 1.25+');
