@@ -13,12 +13,14 @@
  */
 class MoocContent extends JsonContent {
 
+    const CONTENT_MODEL_MOOC_ITEM = 'mooc-item';
+
     /**
      *
      * @param string $text
      *            MOOC Item JSON
      */
-    public function __construct($text, $modelId = 'CONTENT_MODEL_MOOC_ITEM') {
+    public function __construct($text, $modelId = MoocContent::CONTENT_MODEL_MOOC_ITEM) {
         parent::__construct($text, $modelId);
     }
 

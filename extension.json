@@ -16,6 +16,8 @@
     "HTMLGenerator": "includes/rendering/HTMLGenerator.php",
     "MoocItemRenderer": "includes/rendering/MoocItemRenderer.php",
     "MoocStructureProvider": "includes/MoocStructureProvider.php",
+    "MoocContentStructureProvider":
+    "includes/MoocContentStructureProvider.php",
     "SpecialHelloWorld": "specials/SpecialHelloWorld.php",
     "MoocItem": "includes/model/MoocItem.php",
     "MoocContent": "includes/content/MoocContent.php",
@@ -26,7 +28,7 @@
     "MOOCEnableFoo": true
   },
   "ContentHandlers": {
-    "CONTENT_MODEL_MOOC_ITEM": "MoocContentHandler"
+    "mooc-item": "MoocContentHandler"
   },
   "ExtensionMessagesFiles": {
     "MOOCAlias": "MOOC.i18n.alias.php"
@@ -46,7 +48,7 @@
       "id": 1338,
       "constant": "NS_MOOC",
       "name": "Mooc",
-      "defaultcontentmodel": "CONTENT_MODEL_MOOC_ITEM"
+      "defaultcontentmodel": "mooc-item"
     },
     {
       "id": 1339,

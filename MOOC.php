@@ -1,30 +1,18 @@
 <?php
 
-/*
- * Try parsing the following code structure and display it with nice CSS.
- *
- * <code>
- * {{#MOOC: base=path/to/mooc/base }}
- * == Learning goals ==
- * # ...
- * # ...
- *
- * == Video ==
- * [[File:...|800px]]
- *
- * == Units ==
- * === unit 1 ===
- * === unit 2 ===
- * </code>
+/**
+ * MOOC extension
  */
 if (function_exists('wfLoadExtension')) {
     wfLoadExtension('MOOC');
+    
     // Keep i18n globals so mergeMessageFileList.php doesn't break
     $wgMessagesDirs['MOOC'] = __DIR__ . '/i18n';
     $wgExtensionMessagesFiles['MOOCAlias'] = __DIR__ . '/MOOC.i18n.alias.php';
     $wgExtensionMessagesFiles['MOOCMagic'] = __DIR__ . '/MOOC.i18n.magic.php';
     $wgExtensionMessagesFiles['MOOCNamespaces'] = dirname(__FILE__) . '/MOOC.namespaces.php';
     
+    // TODO how to include boostrap other than shipping => composer?!
     // TODO get out how to include jquery.ui.effects (includes easing) other than shipping
     
     $wgMOOCSectionNames = [

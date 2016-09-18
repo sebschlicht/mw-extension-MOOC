@@ -28,7 +28,7 @@
  */
 class MoocContentHandler extends CodeContentHandler {
 
-    public function __construct($modelId = 'CONTENT_MODEL_MOOC_ITEM') {
+    public function __construct($modelId = MoocContent::CONTENT_MODEL_MOOC_ITEM) {
         parent::__construct($modelId, [
             'CONTENT_FORMAT_JSON'
         ]);
