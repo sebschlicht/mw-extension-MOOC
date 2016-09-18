@@ -19,9 +19,9 @@ class MoocItem {
 
     protected $video;
 
-    protected $script;
+    protected $scriptTitle;
 
-    protected $quiz;
+    protected $quizTitle;
 
     protected $furtherReading;
 
@@ -29,8 +29,8 @@ class MoocItem {
         $this->title = $title;
         $this->learningGoals = $moocContentJson['learning-goals'];
         $this->video = $moocContentJson['video'];
-        $this->script = $moocContentJson['script'];
-        $this->quiz = $moocContentJson['quiz'];
+        $this->scriptTitle = Title::newFromText($title . '/script');
+        $this->quizTitle = Title::newFromText($title . '/quiz');
         $this->furtherReading = $moocContentJson['furtherReading'];
     }
 
@@ -46,14 +46,26 @@ class MoocItem {
         return $this->video;
     }
 
-    public function getScript() {
-        return $this->script;
+    /**
+     *
+     * @return Title title of the script associated with this item
+     */
+    public function getScriptTitle() {
+        return $this->scriptTitle;
     }
 
-    public function getQuiz() {
-        return $this->quiz;
+    /**
+     *
+     * @return Title title of the quiz associated with this item
+     */
+    public function getQuizTitle() {
+        return $this->quizTitle;
     }
 
+    /**
+     *
+     * @return Array
+     */
     public function getFurtherReading() {
         return $this->furtherReading;
     }

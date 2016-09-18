@@ -29,12 +29,19 @@ class MoocContent extends JsonContent {
     public function isValid() {
         if (parent::isValid()) {
             $json = parent::getJsonData();
-            if (! $json['video']) {
+            $item = new MoocItem('', $json);
+            
+            if (! $item->getVideo()) {
                 return false;
             }
-            if (! $json['learning-goals']) {
+            if (! is_array($item->getLearningGoals())) {
                 return false;
             }
+            if (! is_array($item->getFurtherReading())) {
+                return false;
+            }
+            // TODO can each item have children?
+            // TODO different content types for mooc, lesson and unit?
             return true;
         }
         return false;
