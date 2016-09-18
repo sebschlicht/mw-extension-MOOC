@@ -1,62 +1,82 @@
 {
-	"name": "MOOC",
-	"version": "0.1.0",
-	"author": [
-		"Rene Pickhardt, Sebastian Schlicht"
-	],
-	"url": "https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC",
-	"descriptionmsg": "mooc-desc",
-	"license-name": "GPL v2",
-	"type": "specialpage",
-	"AutoloadClasses": {
-		"MOOCHooks": "MOOC.hooks.php",
-		"Mooc": "includes/model/Mooc.php",
-		"MoocItemHeader": "includes/model/MoocItemHeader.php",
-		"PreviewItemHeader": "includes/model/PreviewItemHeader.php",
-		"HTMLGenerator": "includes/rendering/HTMLGenerator.php",
-		"MoocItemRenderer": "includes/rendering/MoocItemRenderer.php",
-		"MoocStructureProvider": "includes/MoocStructureProvider.php",
-		"SpecialHelloWorld": "specials/SpecialHelloWorld.php"
-	},
-	"config": {
-		"MOOCEnableFoo": true
-	},
-	"ExtensionMessagesFiles": {
-		"MOOCAlias": "MOOC.i18n.alias.php"
-	},
-	"Hooks": {
-		"ParserFirstCallInit": [
-			"MOOCHooks::onParserFirstCallInit"
-		]
-	},
-	"MessagesDirs": {
-		"MOOC": [
-			"i18n"
-		]
-	},
-	"ResourceModules": {
-                "ext.mooc": {
-                		"dependencies": [
-				        	"mediawiki.jqueryMsg",
-				        	"jquery.ui.core"
-				        ],
-                        "position": "top",
-                        "scripts": [
-                        	"resources/js/ext.mooc.js",
-                        	"resources/js/jquery-ui.min.js"
-                        ],
-                        "styles": [
-                        	"resources/bootstrap.min.css",
-                        	"resources/less/ext.mooc.less"
-                        ]
-                }
-        },
-	"ResourceFileModulePaths": {
-		"localBasePath": "",
-		"remoteExtPath": "MOOC"
-	},
-	"SpecialPages": {
-		"HelloWorld": "SpecialHelloWorld"
-	},
-	"manifest_version": 1
+  "name": "MOOC",
+  "version": "0.1.0",
+  "author": [
+    "Rene Pickhardt, Sebastian Schlicht"
+  ],
+  "url": "https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC",
+  "descriptionmsg": "mooc-desc",
+  "license-name": "GPL v2",
+  "type": "specialpage",
+  "AutoloadClasses": {
+    "MOOCHooks": "MOOC.hooks.php",
+    "Mooc": "includes/model/Mooc.php",
+    "MoocItemHeader": "includes/model/MoocItemHeader.php",
+    "PreviewItemHeader": "includes/model/PreviewItemHeader.php",
+    "HTMLGenerator": "includes/rendering/HTMLGenerator.php",
+    "MoocItemRenderer": "includes/rendering/MoocItemRenderer.php",
+    "MoocStructureProvider": "includes/MoocStructureProvider.php",
+    "SpecialHelloWorld": "specials/SpecialHelloWorld.php",
+    "MoocItem": "includes/model/MoocItem.php",
+    "MoocContent": "includes/content/MoocContent.php",
+    "MoocContentHandler": "includes/content/MoocContentHandler.php",
+    "MoocContentRenderer": "includes/rendering/MoocContentRenderer.php"
+  },
+  "config": {
+    "MOOCEnableFoo": true
+  },
+  "ContentHandlers": {
+    "CONTENT_MODEL_MOOC_ITEM": "MoocContentHandler"
+  },
+  "ExtensionMessagesFiles": {
+    "MOOCAlias": "MOOC.i18n.alias.php"
+  },
+  "Hooks": {
+    "ParserFirstCallInit": [
+      "MOOCHooks::onParserFirstCallInit"
+    ]
+  },
+  "MessagesDirs": {
+    "MOOC": [
+      "i18n"
+    ]
+  },
+  "namespaces": [
+    {
+      "id": 1338,
+      "constant": "NS_MOOC",
+      "name": "Mooc",
+      "defaultcontentmodel": "CONTENT_MODEL_MOOC_ITEM"
+    },
+    {
+      "id": 1339,
+      "constant": "NS_MOOC_TALK",
+      "name": "Mooc_talk"
+    }
+  ],
+  "ResourceModules": {
+    "ext.mooc": {
+      "dependencies": [
+        "mediawiki.jqueryMsg",
+        "jquery.ui.core"
+      ],
+      "position": "top",
+      "scripts": [
+        "resources/js/ext.mooc.js",
+        "resources/js/jquery-ui.min.js"
+      ],
+      "styles": [
+        "resources/bootstrap.min.css",
+        "resources/less/ext.mooc.less"
+      ]
+    }
+  },
+  "ResourceFileModulePaths": {
+    "localBasePath": "",
+    "remoteExtPath": "MOOC"
+  },
+  "SpecialPages": {
+    "HelloWorld": "SpecialHelloWorld"
+  },
+  "manifest_version": 1
 }
