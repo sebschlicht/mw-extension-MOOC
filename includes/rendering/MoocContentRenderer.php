@@ -158,9 +158,25 @@ class MoocContentRenderer {
         $this->out->addHTML('</div>');
         
         // content
-        // TODO
+        $this->out->addHTML('<ul class="content">');
+        $this->addNavigationItem($baseHeader);
+        $this->out->addHTML('</ul>');
         
         $this->out->addHTML('</div>');
+    }
+
+    protected function addNavigationItem($itemHeader) {
+        $this->out->addHTML('<li>');
+        // TODO add link for meta
+        $this->out->addWikiText('[[' . $itemHeader->getTitle() . '|' . $itemHeader->getName() . ']]');
+        if ($itemHeader->hasChildren()) {
+            $this->out->addHTML('<ul>');
+            foreach ($itemHeader->getChildren() as $childHeader) {
+                $this->addNavigationItem($childHeader);
+            }
+            $this->out->addHTML('</ul>');
+        }
+        $this->out->addHTML('</li>');
     }
 
     private function loadStructure($item) {
