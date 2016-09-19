@@ -10,17 +10,13 @@ class MoocContentStructureProvider {
     private static function loadMoocStructureFromTitle($title) {
         // TODO more performant to select all sub pages in one query and filter later on
         $itemHeader = MoocItemHeader::newFromTitle($title);
-        echo 'item: ' . $title . ", ";
         
         $text = MoocContentStructureProvider::loadPageText($title);
         $contentModel = new MoocContent($text);
         $json = $contentModel->getJsonData();
-        var_dump($json);
-        $item = new MoocItem($json);
-        var_dump($item);
+        $item = new MoocItem($title, $json);
         
         $children = [];
-        echo 'children: ' . count($item->getChildren()) . "<br>\n";
         foreach ($item->getChildren() as $childName) {
             $childTitle = Title::newFromText($title . '/' . $childName);
             $childStructure = MoocContentStructureProvider::loadMoocStructureFromTitle($childTitle);
