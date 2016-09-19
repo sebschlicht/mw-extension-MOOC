@@ -37,7 +37,7 @@ class MoocItem {
         $this->video = $moocContentJson['video'];
         $this->scriptTitle = Title::newFromText($title . '/script');
         $this->quizTitle = Title::newFromText($title . '/quiz');
-        $this->furtherReading = $moocContentJson['furtherReading'];
+        $this->furtherReading = $moocContentJson['further-reading'];
         $this->children = $moocContentJson['children'];
     }
 
