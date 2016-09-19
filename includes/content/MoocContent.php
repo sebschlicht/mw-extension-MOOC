@@ -33,7 +33,7 @@ class MoocContent extends JsonContent {
             $json = parent::getJsonData();
             $item = new MoocItem('', $json);
             
-            if (! $item->getVideo()) {
+            if (! isset($item->getVideo())) {
                 return false;
             }
             if (! is_array($item->getLearningGoals())) {
