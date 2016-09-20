@@ -9,7 +9,6 @@ if (function_exists('wfLoadExtension')) {
     // Keep i18n globals so mergeMessageFileList.php doesn't break
     $wgMessagesDirs['MOOC'] = __DIR__ . '/i18n';
     $wgExtensionMessagesFiles['MOOCAlias'] = __DIR__ . '/MOOC.i18n.alias.php';
-    $wgExtensionMessagesFiles['MOOCMagic'] = __DIR__ . '/MOOC.i18n.magic.php';
     $wgExtensionMessagesFiles['MOOCNamespaces'] = dirname(__FILE__) . '/MOOC.namespaces.php';
     
     // TODO how to include boostrap other than shipping => composer?!
