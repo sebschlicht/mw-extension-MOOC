@@ -1,7 +1,7 @@
 <?php
 
 /**
- * MOOC Item Content Model
+ * MOOC item content model
  *
  * @file
  *
@@ -26,7 +26,7 @@ class MoocContent extends JsonContent {
 
     /**
      *
-     * @return bool Whether content is valid.
+     * @return bool whether content is valid
      */
     public function isValid() {
         if (parent::isValid()) {
@@ -42,7 +42,9 @@ class MoocContent extends JsonContent {
             if (! is_array($item->getFurtherReading())) {
                 return false;
             }
-            // TODO can each item have children?
+            if (! is_array($item->getChildren())) {
+                return false;
+            }
             // TODO different content types for mooc, lesson and unit?
             return true;
         }
@@ -50,7 +52,7 @@ class MoocContent extends JsonContent {
     }
 
     /**
-     * Set the HTML and add the appropriate styles.
+     * Sets the HTML and add the appropriate styles.
      *
      * @param Title $title            
      * @param int $revId            
@@ -70,10 +72,10 @@ class MoocContent extends JsonContent {
             $renderer->render($item);
             
             $output->setEnableOOUI(true);
-            $output->setEnableTOC(false);
+            $output->setTOCEnabled(false);
             
             $output->setText($renderer->getHTML());
-            // $output->addModuleScripts('ext.mooc');
+            $output->addModuleScripts('ext.mooc');
             $output->addModuleStyles('ext.mooc');
         } else {
             $output->setText('');
