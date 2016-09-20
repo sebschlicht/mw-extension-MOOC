@@ -2,17 +2,17 @@
 
 class MoocContentRenderer {
 
+    private $parserOutput;
+
     private $out;
 
     private $item;
 
-    public function __construct($item) {
+    public function __construct(&$parserOutput, $item) {
+        $this->parserOutput = $parserOutput;
         $this->item = $item;
         $this->out = new OutputPage();
         $this->out->enableTOC(false);
-        
-        // FIXME enable caching
-        $this->out->enableClientCache(false);
     }
 
     public function render() {
@@ -37,6 +37,8 @@ class MoocContentRenderer {
         
         $this->out->addHTML('</div>');
         $this->out->addHTML('</div>');
+        
+        $this->parserOutput->addCategory($this->item->getBaseTitle());
     }
 
     private function addLearningGoalsSection($item) {
@@ -167,8 +169,11 @@ class MoocContentRenderer {
 
     protected function addNavigationItem($itemHeader) {
         $this->out->addHTML('<li>');
-        // TODO add link for meta
         $this->out->addWikiText('[[' . $itemHeader->getTitle() . '|' . $itemHeader->getName() . ']]');
+        // register link for interwiki meta data
+        $this->parserOutput->addLink($itemHeader->getTitle());
+        
+        // add menu items for children - if any
         if ($itemHeader->hasChildren()) {
             $this->out->addHTML('<ul>');
             foreach ($itemHeader->getChildren() as $childHeader) {

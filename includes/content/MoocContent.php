@@ -66,8 +66,11 @@ class MoocContent extends JsonContent {
             $json = parent::getJsonData();
             $item = new MoocItem($title, $json);
             
-            $renderer = new MoocContentRenderer($item);
+            $renderer = new MoocContentRenderer($output, $item);
             $renderer->render($item);
+            
+            $output->setEnableOOUI(true);
+            $output->setEnableTOC(false);
             
             $output->setText($renderer->getHTML());
             // $output->addModuleScripts('ext.mooc');
