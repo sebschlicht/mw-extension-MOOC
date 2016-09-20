@@ -5,11 +5,22 @@
  * @file
  * @ingroup Extensions
  */
-
 $specialPageAliases = [];
 
-/** English (English) */
+/**
+ * English (English)
+ */
 $specialPageAliases['en'] = [
-	'HelloWorld' => [ 'HelloWorld' ],
+    'Mooc' => [
+        'Course'
+    ]
 ];
 
+/**
+ * German (Deutsch)
+ */
+$specialPageAliases['de'] = [
+    'Mooc' => [
+        'Kurs'
+    ]
+];
