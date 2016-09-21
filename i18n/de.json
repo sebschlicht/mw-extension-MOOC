@@ -1,25 +1,20 @@
 {
 	"@metadata": {
-		"authors": [
-			"sebschlicht"
-		]
+		"authors": ["sebschlicht"]
 	},
 	"mooc-desc": "Veranschaulicht beispielhaft eine einfache MediaWiki-Erweiterung",
 	"mooc-i18n-welcome": "Willkommen bei der Lokalisierungs- und Internationalisierungsdatei der Programmerweiterung MOOC.",
-	"mooc-helloworld": "Hallo Welt!",
-	"mooc-helloworld-intro": "Willkommen auf der Spezialseite „Hallo Welt“ der Erweiterung „MOOC“.",
-	"helloworld": "Hallo Welt",
-	"mwe-mooc-navigation-title": "Navigation",
-	"mwe-mooc-edit-section-button-title": "$1 bearbeiten",
-	"_mwe-mooc-comment-section-names": "// SECTION NAMES AS USED WITHIN SENTENCE",
-	"mwe-mooc-section-learning-goals": "Lernziele",
-	"mwe-mooc-section-video": "Video",
-	"mwe-mooc-section-script": "Skript",
-	"mwe-mooc-section-quiz": "Quiz",
-	"mwe-mooc-section-further-reading": "Lesestoff",
-	"mwe-mooc-section-lessons": "Lektionen",
-	"mwe-mooc-section-units": "Lerneinheiten",
-	"mwe-mooc-button-save-edit": "Speichern",
-	"mwe-mooc-button-cancel": "Abbrechen",
-	"mwe-mooc-button-expand-section": "Hier klicken zum Ausklappen"
+	"mooc-navigation-title": "Navigation",
+	"mooc-edit-section-button-title": "$1 bearbeiten",
+	"_mooc-comment-section-names": "// SECTION NAMES AS USED WITHIN SENTENCE",
+	"mooc-section-learning-goals": "Lernziele",
+	"mooc-section-video": "Video",
+	"mooc-section-script": "Skript",
+	"mooc-section-quiz": "Quiz",
+	"mooc-section-further-reading": "Lesestoff",
+	"mooc-section-lessons": "Lektionen",
+	"mooc-section-units": "Lerneinheiten",
+	"mooc-button-save-edit": "Speichern",
+	"mooc-button-cancel": "Abbrechen",
+	"mooc-button-expand-section": "Hier klicken zum Ausklappen"
 }

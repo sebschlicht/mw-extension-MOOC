@@ -189,7 +189,7 @@ class MoocContentRenderer {
     }
 
     private function loadMessage($key, ...$params) {
-        $key = 'mwe-mooc-' . $key;
+        $key = 'mooc-' . $key;
         $wfMessage = wfMessage($key, $params);
         return $wfMessage->text();
     }
