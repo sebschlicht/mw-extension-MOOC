@@ -217,6 +217,7 @@
     $(window).scroll();
   });
   
+  // hide MW UI
   var $mwContent = $('#content.mw-body');
   var contentMarginLeft = $mwContent.css('margin-left');
   var $mwNavigation = $('#mw-navigation');
@@ -225,8 +226,8 @@
   var $mwNavButton = $('<img>').addClass('btn-toggle-mw-nav');
   $mwNavButton.attr('src', '/mediawiki-vagrant.png');
   $mwNavButton.on('click', mwNavigationButtonClicked);
-  $mwNavButton.insertBefore($mwNavigation);
-  hideMwNavigation($mwNavigation);
+  //$mwNavButton.insertBefore($mwNavigation);
+  //hideMwNavigation($mwNavigation);
   
   function mwNavigationButtonClicked() {
     if ($mwNavigation.hasClass('hidden')) {
