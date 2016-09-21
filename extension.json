@@ -2,7 +2,8 @@
   "name": "MOOC",
   "version": "0.1.0",
   "author": [
-    "Rene Pickhardt, Sebastian Schlicht"
+    "Rene Pickhardt",
+    "Sebastian Schlicht"
   ],
   "url": "https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC",
   "descriptionmsg": "mooc-desc",

@@ -42,51 +42,101 @@ class MoocContentRenderer {
     }
 
     private function addLearningGoalsSection($item) {
-        $this->beginSection('learning-goals');
+        $sectionKey = 'learning-goals';
+        $this->beginSection($sectionKey);
         
-        $learningGoals = '';
-        foreach ($item->getLearningGoals() as $learningGoal) {
-            $learningGoals .= "\n" . '# ' . $learningGoal;
+        if (count($item->getLearningGoals()) > 0) {
+            // show learning goals as ordered list if any
+            $learningGoals = '';
+            foreach ($item->getLearningGoals() as $learningGoal) {
+                $learningGoals .= "\n" . '# ' . $learningGoal;
+            }
+            $this->out->addWikiText($learningGoals);
+        } else {
+            // show info box if no learning goal added yet
+            $this->addEmptySectionBox($sectionKey);
         }
-        $this->out->addWikiText($learningGoals);
         
         $this->endSection();
     }
 
     private function addVideoSection($item) {
-        $this->beginSection('video');
+        $sectionKey = 'video';
+        $this->beginSection($sectionKey);
         
-        $this->out->addWikiText('[[File:' . $item->getVideo() . ']]');
+        if ($item->getVideo()) {
+            // show video player if video set
+            $this->out->addWikiText('[[File:' . $item->getVideo() . '|800px]]');
+        } else {
+            // show info box if video not set yet
+            $this->addEmptySectionBox($sectionKey);
+        }
         
         $this->endSection();
     }
 
     private function addScriptSection($item) {
-        $this->beginSection('script');
+        $sectionKey = 'script';
+        $this->beginSection($sectionKey);
         
-        $this->out->addWikiText('{{:' . $item->getScriptTitle() . '}}');
+        if ($item->getScriptTitle()->exists()) {
+            // transclude script if existing
+            $this->out->addWikiText('{{:' . $item->getScriptTitle() . '}}');
+        } else {
+            // show info box if script not created yet
+            $this->addEmptySectionBox($sectionKey, $item->getScriptTitle());
+        }
         
         $this->endSection();
     }
 
     private function addQuizSection($item) {
-        $this->beginSection('quiz');
+        $sectionKey = 'quiz';
+        $this->beginSection($sectionKey);
         
-        $this->out->addWikiText('{{:' . $item->getQuizTitle() . '}}');
+        if ($item->getQuizTitle()->exists()) {
+            // transclude quiz if existing
+            $this->out->addWikiText('{{:' . $item->getQuizTitle() . '}}');
+        } else {
+            // show info box if script not created yet
+            $this->addEmptySectionBox($sectionKey, $item->getScriptTitle());
+        }
         
         $this->endSection();
     }
 
     private function addFurtherReadingSection($item) {
-        $this->beginSection('further-reading');
+        $sectionKey = 'further-reading';
+        $this->beginSection($sectionKey);
         
-        $furtherReading = '';
-        foreach ($item->getFurtherReading() as $furtherReadingEntry) {
-            $furtherReading .= "\n" . '# ' . $furtherReadingEntry;
+        if (count($item->getFurtherReading()) > 0) {
+            // show further reading as ordered list if any
+            $furtherReading = '';
+            foreach ($item->getFurtherReading() as $furtherReadingEntry) {
+                $furtherReading .= "\n" . '# ' . $furtherReadingEntry;
+            }
+            $this->out->addWikiText($furtherReading);
+        } else {
+            // show info box if no further reading added yet
+            $this->addEmptySectionBox($sectionKey);
         }
-        $this->out->addWikiText($furtherReading);
         
         $this->endSection();
+    }
+
+    protected function addEmptySectionBox($sectionKey, ...$params) {
+        // TODO can we automatically prefix classes/ids? at least in LESS?
+        $this->out->addHTML('<div class="section-empty-box">');
+        
+        $this->out->addHTML('<span class="description">');
+        $this->out->addHTML($this->loadMessage('section-' . $sectionKey . '-empty-description', $params));
+        $this->out->addHTML('</span> ');
+        $this->out->addHTML('<a class="edit-link">');
+        $this->out->addHTML($this->loadMessage('section-' . $sectionKey . '-empty-edit-link'));
+        $this->out->addHTML('</a>');
+        // TODO do we need an additional text to point at external resources such as /script or general hints?
+        
+        $this->out->addHTML('</div>');
     }
 
     protected function beginSection($sectionKey) {
