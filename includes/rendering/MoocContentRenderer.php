@@ -32,13 +32,16 @@ class MoocContentRenderer {
         $this->addScriptSection($this->item);
         $this->addQuizSection($this->item);
         $this->addFurtherReadingSection($this->item);
-        // TODO show info box if no content -- if allowed ever
+        $this->out->addHTML('</div>');
+        $categoryNS = $this->item->getBaseTitle()->getNsText();
+        $this->out->addWikiText('[[Category:' . $categoryNS . ']]');
+        $this->parserOutput->addCategory($categoryNS);
+        $categoryMooc = strtok($this->item->getBaseTitle()->getText(), '/');
+        $this->out->addWikiText('[[Category:' . $categoryMooc . ']]');
+        $this->parserOutput->addCategory($categoryMooc);
         $this->out->addHTML('</div>');
         
         $this->out->addHTML('</div>');
-        $this->out->addHTML('</div>');
-        
-        $this->parserOutput->addCategory($this->item->getBaseTitle());
     }
 
     private function addLearningGoalsSection($item) {
