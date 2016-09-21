@@ -4,11 +4,12 @@ class MoocContentStructureProvider {
 
     public static function loadMoocStructure($item) {
         $baseTitle = $item->getBaseTitle();
+        // TODO use getSubpages (once working) to fetch subpages and build a query to get their content?
+        // TODO if not working (e.g delayed) fetch all pages LIKE title/*, filter children and query their content
         return MoocContentStructureProvider::loadMoocStructureFromTitle($baseTitle);
     }
 
     private static function loadMoocStructureFromTitle($title) {
-        // TODO more performant to select all sub pages in one query and filter later on
         $itemHeader = MoocItemHeader::newFromTitle($title);
         
         $text = MoocContentStructureProvider::loadPageText($title);

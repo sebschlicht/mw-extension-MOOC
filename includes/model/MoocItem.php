@@ -31,7 +31,7 @@ class MoocItem {
 
     public function __construct($title, $moocContentJson) {
         $this->title = $title;
-        // FIXME getRootTitle not working because subpages not registered for namespace somehow
+        // FIXME Title.getRootTitle not working because subpages not registered for namespace somehow
         $this->baseTitle = Title::makeTitle($title->getNamespace(), strtok($title->getText(), '/'));
         $this->learningGoals = $moocContentJson['learning-goals'];
         $this->video = $moocContentJson['video'];
