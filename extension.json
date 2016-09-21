@@ -50,8 +50,7 @@
     {
       "id": 350,
       "constant": "NS_MOOC",
-      "name": "Mooc",
-      "defaultcontentmodel": "mooc-item"
+      "name": "Mooc"
     },
     {
       "id": 351,
