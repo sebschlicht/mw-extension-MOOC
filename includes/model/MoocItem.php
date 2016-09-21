@@ -1,7 +1,7 @@
 <?php
 
 /**
- * MOOC Item Model
+ * MOOC item model
  *
  * @file
  *
@@ -31,8 +31,8 @@ class MoocItem {
 
     public function __construct($title, $moocContentJson) {
         $this->title = $title;
-        // FIXME determine real base title
-        $this->baseTitle = $title;
+        // FIXME getRootTitle not working because subpages not registered for namespace somehow
+        $this->baseTitle = Title::makeTitle($title->getNamespace(), strtok($title->getText(), '/'));
         $this->learningGoals = $moocContentJson['learning-goals'];
         $this->video = $moocContentJson['video'];
         $this->scriptTitle = Title::newFromText($title . '/script');

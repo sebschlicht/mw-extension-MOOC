@@ -31,7 +31,8 @@ class MoocContent extends JsonContent {
     public function isValid() {
         if (parent::isValid()) {
             $json = parent::getJsonData();
-            $item = new MoocItem('', $json);
+            // TODO separate Title from MoocItem?
+            $item = new MoocItem(Title::newFromText('Test'), $json);
             
             if (! isset($item->getVideo())) {
                 return false;
@@ -73,8 +74,8 @@ class MoocContent extends JsonContent {
             
             $output->setEnableOOUI(true);
             $output->setTOCEnabled(false);
-            
             $output->setText($renderer->getHTML());
+            
             $output->addModuleScripts('ext.mooc');
             $output->addModuleStyles('ext.mooc');
         } else {
