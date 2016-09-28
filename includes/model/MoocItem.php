@@ -15,8 +15,6 @@ class MoocItem {
 
     protected $title;
 
-    protected $baseTitle;
-
     protected $learningGoals;
 
     protected $video;
@@ -29,10 +27,16 @@ class MoocItem {
 
     protected $children;
 
+    /**
+     * Creates a new MOOC item from JSON.
+     *
+     * @param Title $title
+     *            page title
+     * @param mixed $moocContentJson
+     *            decoded JSON string
+     */
     public function __construct($title, $moocContentJson) {
         $this->title = $title;
-        // FIXME Title.getRootTitle not working because subpages not registered for namespace somehow
-        $this->baseTitle = Title::makeTitle($title->getNamespace(), strtok($title->getText(), '/'));
         $this->learningGoals = $moocContentJson['learning-goals'];
         $this->video = $moocContentJson['video'];
         $this->scriptTitle = Title::newFromText($title . '/script');
@@ -41,14 +45,26 @@ class MoocItem {
         $this->children = $moocContentJson['children'];
     }
 
+    /**
+     *
+     * @return Title page title
+     */
     public function getTitle() {
         return $this->title;
     }
 
-    public function getBaseTitle() {
-        return $this->baseTitle;
+    /**
+     *
+     * @return string name of the item (extracted from page title)
+     */
+    public function getName() {
+        return $this->title->getSubpageText();
     }
 
+    /**
+     *
+     * @return Array(string) learning goals that should be fulfilled at the end of this item
+     */
     public function getLearningGoals() {
         return $this->learningGoals;
     }
@@ -83,6 +99,14 @@ class MoocItem {
      */
     public function getFurtherReading() {
         return $this->furtherReading;
+    }
+
+    /**
+     *
+     * @return boolean whether the item has children
+     */
+    public function hasChildren() {
+        return (count($this->children) > 0);
     }
 
     /**

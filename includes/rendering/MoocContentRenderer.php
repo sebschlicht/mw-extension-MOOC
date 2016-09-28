@@ -20,7 +20,7 @@ class MoocContentRenderer {
         
         // # navigation
         $this->out->addHTML('<div id="mooc-navigation-bar" class="col-xs-12 col-sm-3">');
-        $structure = $this->loadStructure($this->item);
+        $structure = MoocContentStructureProvider::loadMoocStructure($item);
         $this->addNavigation($structure);
         $this->out->addHTML('</div>');
         
@@ -37,10 +37,11 @@ class MoocContentRenderer {
         $this->out->addHTML('</div>');
         
         // ## categories
-        $categoryNS = $this->item->getBaseTitle()->getNsText();
+        $rootTitle = $this->item->getTitle()->getRootTitle();
+        $categoryNS = $rootTitle->getNsText();
         $this->out->addWikiText('[[Category:' . $categoryNS . ']]');
         $this->parserOutput->addCategory($categoryNS);
-        $categoryMooc = strtok($this->item->getBaseTitle()->getText(), '/');
+        $categoryMooc = $categoryNS . ':' . $rootTitle->getText();
         $this->out->addWikiText('[[Category:' . $categoryMooc . ']]');
         $this->parserOutput->addCategory($categoryMooc);
         
@@ -203,7 +204,7 @@ class MoocContentRenderer {
         $this->out->addHTML('</div>');
     }
 
-    protected function addNavigation($baseHeader) {
+    protected function addNavigation($baseStructureItem) {
         $this->out->addHTML('<div id="mooc-navigation">');
         // header
         $title = $this->loadMessage('navigation-title');
@@ -219,31 +220,29 @@ class MoocContentRenderer {
         
         // content
         $this->out->addHTML('<ul class="content">');
-        $this->addNavigationItem($baseHeader);
+        $this->addNavigationItem($baseStructureItem);
         $this->out->addHTML('</ul>');
         
         $this->out->addHTML('</div>');
     }
 
-    protected function addNavigationItem($itemHeader) {
+    protected function addNavigationItem($structureItem) {
+        $item = $structureItem->getItem();
+        
         $this->out->addHTML('<li>');
-        $this->out->addWikiText('[[' . $itemHeader->getTitle() . '|' . $itemHeader->getName() . ']]');
+        $this->out->addWikiText('[[' . $item->getTitle() . '|' . $item->getName() . ']]');
         // register link for interwiki meta data
-        $this->parserOutput->addLink($itemHeader->getTitle());
+        $this->parserOutput->addLink($item->getTitle());
         
         // add menu items for children - if any
-        if ($itemHeader->hasChildren()) {
+        if ($item->hasChildren()) {
             $this->out->addHTML('<ul>');
-            foreach ($itemHeader->getChildren() as $childHeader) {
-                $this->addNavigationItem($childHeader);
+            foreach ($structureItem->getChildren() as $childStructureItem) {
+                $this->addNavigationItem($childStructureItem);
             }
             $this->out->addHTML('</ul>');
         }
         $this->out->addHTML('</li>');
-    }
-
-    private function loadStructure($item) {
-        return MoocContentStructureProvider::loadMoocStructure($this->item);
     }
 
     private function loadMessage($key, ...$params) {
