@@ -17,6 +17,7 @@
 
 	"globals": {
     "console": false,
+    "JSON": false,
 		"mediaWiki": false,
 		"jQuery": false
 	}
