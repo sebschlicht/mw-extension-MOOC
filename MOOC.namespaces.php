@@ -6,6 +6,12 @@
  */
 $namespaceNames = array();
 
+// For wikis without MOOC installed.
+if (! defined('NS_MOOC')) {
+    define('NS_MOOC', 350);
+    define('NS_MOOC_TALK', 351);
+}
+
 /**
  * English
  */

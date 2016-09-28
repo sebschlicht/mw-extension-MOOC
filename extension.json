@@ -8,16 +8,12 @@
   "url": "https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC",
   "descriptionmsg": "mooc-desc",
   "license-name": "GPL v2",
-  "type": "specialpage",
+  "type": "other",
   "AutoloadClasses": {
     "MOOCHooks": "MOOC.hooks.php",
     "Mooc": "includes/model/Mooc.php",
-    "MoocItemHeader": "includes/model/MoocItemHeader.php",
-    "PreviewItemHeader": "includes/model/PreviewItemHeader.php",
-    "HTMLGenerator": "includes/rendering/HTMLGenerator.php",
-    "MoocItemRenderer": "includes/rendering/MoocItemRenderer.php",
-    "MoocStructureProvider": "includes/MoocStructureProvider.php",
-    "MoocContentStructureProvider": "includes/MoocContentStructureProvider.php",
+    "MoocStructureItem": "includes/structure/MoocStructureItem.php",
+    "MoocContentStructureProvider": "includes/structure/MoocContentStructureProvider.php",
     "SpecialHelloWorld": "specials/SpecialHelloWorld.php",
     "MoocItem": "includes/model/MoocItem.php",
     "MoocContent": "includes/content/MoocContent.php",
@@ -27,30 +23,27 @@
   "config": {
     "MOOCEnableFoo": true
   },
-  "ContentHandlers": {
-    "mooc-item": "MoocContentHandler"
+  "MessagesDirs": {
+    "MOOC": [
+      "i18n"
+    ]
   },
-  "ContentNamespaces": [
-    350
-  ],
   "ExtensionMessagesFiles": {
-    "MOOCAlias": "MOOC.i18n.alias.php"
+    "MOOCAlias": "MOOC.i18n.alias.php",
+    "MOOCNamespaces": "MOOC.namespaces.php"
   },
   "Hooks": {
     "ParserFirstCallInit": [
       "MOOCHooks::onParserFirstCallInit"
     ]
   },
-  "MessagesDirs": {
-    "MOOC": [
-      "i18n"
-    ]
-  },
   "namespaces": [
     {
       "id": 350,
       "constant": "NS_MOOC",
-      "name": "Mooc"
+      "name": "Mooc",
+      "subpages": true,
+      "content": true
     },
     {
       "id": 351,
@@ -58,6 +51,9 @@
       "name": "Mooc_talk"
     }
   ],
+  "ContentHandlers": {
+    "mooc-item": "MoocContentHandler"
+  },
   "ResourceModules": {
     "ext.mooc": {
       "dependencies": [
