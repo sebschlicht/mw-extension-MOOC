@@ -18,14 +18,16 @@ class MoocContentRenderer {
     public function render() {
         $this->out->addHTML('<div id="mooc">');
         
-        // navigation
+        // # navigation
         $this->out->addHTML('<div id="mooc-navigation-bar" class="col-xs-12 col-sm-3">');
         $structure = $this->loadStructure($this->item);
         $this->addNavigation($structure);
         $this->out->addHTML('</div>');
         
+        // # content
         $this->out->addHTML('<div id="mooc-content" class="col-xs-12 col-sm-9">');
-        // sections
+        
+        // ## sections
         $this->out->addHTML('<div id="mooc-sections">');
         $this->addLearningGoalsSection($this->item);
         $this->addVideoSection($this->item);
@@ -33,12 +35,15 @@ class MoocContentRenderer {
         $this->addQuizSection($this->item);
         $this->addFurtherReadingSection($this->item);
         $this->out->addHTML('</div>');
+        
+        // ## categories
         $categoryNS = $this->item->getBaseTitle()->getNsText();
         $this->out->addWikiText('[[Category:' . $categoryNS . ']]');
         $this->parserOutput->addCategory($categoryNS);
         $categoryMooc = strtok($this->item->getBaseTitle()->getText(), '/');
         $this->out->addWikiText('[[Category:' . $categoryMooc . ']]');
         $this->parserOutput->addCategory($categoryMooc);
+        
         $this->out->addHTML('</div>');
         
         $this->out->addHTML('</div>');

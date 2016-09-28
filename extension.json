@@ -62,7 +62,8 @@
     "ext.mooc": {
       "dependencies": [
         "mediawiki.jqueryMsg",
-        "jquery.ui.core"
+        "jquery.ui.core",
+        "oojs-ui-core"
       ],
       "position": "top",
       "scripts": [
