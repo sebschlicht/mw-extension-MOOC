@@ -149,7 +149,16 @@ class MoocContentRenderer {
     }
 
     protected function beginSection($sectionKey) {
-        $this->out->addHTML('<div id="' . $sectionKey . '" class="section">');
+        global $wgMOOCSectionConfig;
+        $sectionConfig = $wgMOOCSectionConfig[$sectionKey];
+        
+        $classes = 'section';
+        // trigger collapsing of selected, large sections
+        if ($sectionConfig['collapsed']) {
+            $classes .= ' default-collapsed';
+        }
+        
+        $this->out->addHTML('<div id="' . $sectionKey . '" class="' . $classes . '">');
         $this->addSectionHeader($sectionKey);
         $this->out->addHTML('<div class="content">');
     }
