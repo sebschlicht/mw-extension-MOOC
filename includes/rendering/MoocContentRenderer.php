@@ -20,7 +20,7 @@ class MoocContentRenderer {
         
         // # navigation
         $this->out->addHTML('<div id="mooc-navigation-bar" class="col-xs-12 col-sm-3">');
-        $structure = MoocContentStructureProvider::loadMoocStructure($item);
+        $structure = MoocContentStructureProvider::loadMoocStructure($this->item);
         $this->addNavigation($structure);
         $this->out->addHTML('</div>');
         
