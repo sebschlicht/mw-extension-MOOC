@@ -195,6 +195,11 @@ class MoocContentRenderer {
         $this->out->addHTML('</a>');
         $this->out->addHTML('</div>');
         
+        // modal box
+        $this->out->addHTML('<form class="edit-form">');
+        $this->out->addHTML('<textarea class="value"></textarea>');
+        $this->out->addHTML('</form>');
+        
         $this->out->addHTML('</div>');
     }
 
