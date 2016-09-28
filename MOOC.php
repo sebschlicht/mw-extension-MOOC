@@ -14,49 +14,26 @@ if (function_exists('wfLoadExtension')) {
     // TODO how to include boostrap other than shipping => composer?!
     // TODO get out how to include jquery.ui.effects (includes easing) other than shipping
     
-    $wgMOOCSectionNames = [
-        'learning-goals',
-        'video',
-        'script',
-        'quiz',
-        'further-reading',
-        'lessons',
-        'units'
-    ];
-    $wgMOOCSections = [
+    $wgMOOCSectionConfig = [
         'learning-goals' => [
-            'title' => 'Learning Goals',
-            'icon' => 'Wikiversity-Mooc-Icon-Learning-goals.svg',
             'collapsed' => false
         ],
         'video' => [
-            'title' => 'Video',
-            'icon' => 'Wikiversity-Mooc-Icon-Video.svg',
             'collapsed' => false
         ],
         'script' => [
-            'title' => 'Script',
-            'icon' => 'Wikiversity-Mooc-Icon-Script.svg',
             'collapsed' => true
         ],
         'quiz' => [
-            'title' => 'Quiz',
-            'icon' => 'Wikiversity-Mooc-Icon-Quiz.svg',
             'collapsed' => true
         ],
         'further-reading' => [
-            'title' => 'Further Reading',
-            'icon' => 'Wikiversity-Mooc-Icon-Further-readings.svg',
             'collapsed' => false
         ],
         'lessons' => [
-            'title' => 'Lessons',
-            'icon' => 'Wikiversity-Mooc-Icon-Associated-units.svg',
             'collapsed' => false
         ],
         'units' => [
-            'title' => 'Units',
-            'icon' => 'Wikiversity-Mooc-Icon-Associated-units.svg',
             'collapsed' => false
         ]
     ];
