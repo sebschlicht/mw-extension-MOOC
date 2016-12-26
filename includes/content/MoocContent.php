@@ -13,6 +13,9 @@
  */
 class MoocContent extends JsonContent {
 
+    /**
+     * identifier of the MOOC item content model
+     */
     const CONTENT_MODEL_MOOC_ITEM = 'mooc-item';
 
     /**
@@ -29,17 +32,19 @@ class MoocContent extends JsonContent {
     }
 
     /**
+     * Decodes the page content JSON into a MOOC item.
+     *
      * @return MoocItem MOOC item loaded from the content
      */
     public function loadItem() {
-        $json = parent::getJsonData();
-        return new MoocUnit(null, $json);
+        return MoocItem::loadItemFromJson(null, parent::getData());
     }
 
     /**
      * @return bool whether content is valid
      */
     public function isValid() {
+        // check for valid JSON
         if (parent::isValid()) {
             // load MOOC item if not loaded yet
             if (!isset($this->item)) {
@@ -64,7 +69,8 @@ class MoocContent extends JsonContent {
                 }
             }
             return true;
-        }// else: invalid JSON
+        }
+        return false;
     }
 
     /**
@@ -83,15 +89,14 @@ class MoocContent extends JsonContent {
         if ($generateHtml && $this->isValid()) {
             $this->item->setTitle($title);
             $renderer = new MoocContentRenderer($output, $this->item);
-            $renderer->render($this->item);
-            
             $output->setEnableOOUI(true);
             $output->setTOCEnabled(false);
-            $output->setText($renderer->getHTML());
+            $output->setText($renderer->render());
             
             $output->addModuleScripts('ext.mooc');
             $output->addModuleStyles('ext.mooc');
-            $output->addCategory('Course');
+            // TODO internationalization
+            $output->addCategory('Course', 0);
         } else {
             $output->setText('');
         }
