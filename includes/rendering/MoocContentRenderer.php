@@ -1,16 +1,32 @@
 <?php
 
+/**
+ * Renderer for MOOC items.
+ *
+ * @author Sebastian Schlicht <sebastian@jablab.de>
+ *
+ * @file
+ */
 class MoocContentRenderer {
 
-    private $parserOutput;
-
-    private $out;
-
-    private $item;
+    /**
+     * @var ParserOutput parser output to manipulate the result
+     */
+    protected $parserOutput;
 
     /**
-     * @param ParserOutput $parserOutput
-     * @param MoocItem $item
+     * @var OutputPage output page used for Wikitext processing internally
+     */
+    protected $out;
+
+    /**
+     * @var MoocItem MOOC item being rendered
+     */
+    protected $item;
+
+    /**
+     * @param ParserOutput $parserOutput parser output
+     * @param MoocItem $item MOOC item being rendered
      */
     public function __construct(&$parserOutput, $item) {
         $this->parserOutput = $parserOutput;
@@ -19,6 +35,11 @@ class MoocContentRenderer {
         $this->out->enableTOC(false);
     }
 
+    /**
+     * Renders the MOOC item into a HTML document.
+     *
+     * @return string body HTML
+     */
     public function render() {
         $this->out->addHTML('<div id="mooc">');
         
@@ -33,18 +54,15 @@ class MoocContentRenderer {
         
         // ## sections
         $this->out->addHTML('<div id="mooc-sections">');
-        $this->addLearningGoalsSection($this->item);
-        $this->addVideoSection($this->item);
-        $this->addScriptSection($this->item);
-        $this->addQuizSection($this->item);
-        $this->addFurtherReadingSection($this->item);
+        $this->addSections();
         $this->out->addHTML('</div>');
         
         // ## categories
         $rootTitle = $this->item->title->getRootTitle();
         $categoryNS = $rootTitle->getNsText();
-        $this->out->addWikiText('[[Category:' . $categoryNS . ']]');
-        $this->parserOutput->addCategory($categoryNS, 0);
+        // TODO was this intended to add the course NS?
+        //$this->out->addWikiText('[[Category:' . $categoryNS . ']]');
+        //$this->parserOutput->addCategory($categoryNS, 0);
         $categoryMooc = $categoryNS . ':' . $rootTitle->getText();
         $this->out->addWikiText('[[Category:' . $categoryMooc . ']]');
         $this->parserOutput->addCategory($categoryMooc, 1);
@@ -52,16 +70,28 @@ class MoocContentRenderer {
         $this->out->addHTML('</div>');
         
         $this->out->addHTML('</div>');
+        return $this->out->getHTML();
     }
 
-    private function addLearningGoalsSection($item) {
+    /**
+     * Adds the sections of the MOOC item to the current output.
+     */
+    protected function addSections() {
+        $this->addLearningGoalsSection();
+        $this->addVideoSection();
+        $this->addScriptSection();
+        $this->addQuizSection();
+        $this->addFurtherReadingSection();
+    }
+
+    private function addLearningGoalsSection() {
         $sectionKey = 'learning-goals';
         $this->beginSection($sectionKey);
         
-        if (count($item->learningGoals) > 0) {
+        if (count($this->item->learningGoals) > 0) {
             // show learning goals as ordered list if any
             $learningGoals = '';
-            foreach ($item->learningGoals as $learningGoal) {
+            foreach ($this->item->learningGoals as $learningGoal) {
                 $learningGoals .= "\n" . '# ' . $learningGoal;
             }
             $this->out->addWikiText($learningGoals);
@@ -73,13 +103,13 @@ class MoocContentRenderer {
         $this->endSection();
     }
 
-    private function addVideoSection($item) {
+    private function addVideoSection() {
         $sectionKey = 'video';
         $this->beginSection($sectionKey);
         
-        if ($item->video) {
+        if ($this->item->video) {
             // show video player if video set
-            $this->out->addWikiText('[[File:' . $item->video. '|800px]]');
+            $this->out->addWikiText('[[File:' . $this->item->video. '|800px]]');
         } else {
             // show info box if video not set yet
             $this->addEmptySectionBox($sectionKey);
@@ -88,44 +118,44 @@ class MoocContentRenderer {
         $this->endSection();
     }
 
-    private function addScriptSection($item) {
+    private function addScriptSection() {
         $sectionKey = 'script';
         $this->beginSection($sectionKey);
         
-        if ($item->scriptTitle->exists()) {
+        if ($this->item->scriptTitle->exists()) {
             // transclude script if existing
-            $this->out->addWikiText('{{:' . $item->scriptTitle . '}}');
+            $this->out->addWikiText('{{:' . $this->item->scriptTitle . '}}');
         } else {
             // show info box if script not created yet
-            $this->addEmptySectionBox($sectionKey, $item->scriptTitle);
+            $this->addEmptySectionBox($sectionKey, $this->item->scriptTitle);
         }
         
         $this->endSection();
     }
 
-    private function addQuizSection($item) {
+    private function addQuizSection() {
         $sectionKey = 'quiz';
         $this->beginSection($sectionKey);
         
-        if ($item->quizTitle->exists()) {
+        if ($this->item->quizTitle->exists()) {
             // transclude quiz if existing
-            $this->out->addWikiText('{{:' . $item->quizTitle . '}}');
+            $this->out->addWikiText('{{:' . $this->item->quizTitle . '}}');
         } else {
             // show info box if quiz not created yet
-            $this->addEmptySectionBox($sectionKey, $item->quizTitle);
+            $this->addEmptySectionBox($sectionKey, $this->item->quizTitle);
         }
         
         $this->endSection();
     }
 
-    private function addFurtherReadingSection($item) {
+    private function addFurtherReadingSection() {
         $sectionKey = 'further-reading';
         $this->beginSection($sectionKey);
         
-        if (count($item->furtherReading) > 0) {
+        if (count($this->item->furtherReading) > 0) {
             // show further reading as ordered list if any
             $furtherReading = '';
-            foreach ($item->furtherReading as $furtherReadingEntry) {
+            foreach ($this->item->furtherReading as $furtherReadingEntry) {
                 $furtherReading .= "\n" . '# ' . $furtherReadingEntry;
             }
             $this->out->addWikiText($furtherReading);
@@ -137,6 +167,12 @@ class MoocContentRenderer {
         $this->endSection();
     }
 
+    /**
+     * Adds an info box emphasising users to contribute to a currently empty section to the output.
+     *
+     * @param string $sectionKey key of the empty section
+     * @param array ...$params additional parameters passed to the message loading of the info box description
+     */
     protected function addEmptySectionBox($sectionKey, ...$params) {
         // TODO can we automatically prefix classes/ids? at least in LESS?
         $this->out->addHTML('<div class="section-empty-box">');
@@ -244,6 +280,10 @@ class MoocContentRenderer {
         $this->out->addHTML('</div>');
     }
 
+    /**
+     * Adds a MOOC item to the navigation bar.
+     * @param MoocStructureItem $structureItem structure information of the MOOC item to add
+     */
     protected function addNavigationItem($structureItem) {
         $item = $structureItem->item;
         
@@ -267,9 +307,5 @@ class MoocContentRenderer {
         $key = 'mooc-' . $key;
         $wfMessage = wfMessage($key, $params);
         return $wfMessage->text();
-    }
-
-    public function getHTML() {
-        return $this->out->getHTML();
     }
 }
