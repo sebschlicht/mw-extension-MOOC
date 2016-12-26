@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Structure information loader for MOOCs
- *
- * @file
+ * Structure information loader for MOOCs.
  *
  * @author Sebastian Schlicht <sebastian@jablab.de>
+ *
+ * @file
  */
 class MoocContentStructureProvider {
 

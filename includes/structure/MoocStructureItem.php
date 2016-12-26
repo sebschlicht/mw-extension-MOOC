@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Structure information container for MOOC items
- *
- * @file
+ * Structure information container for MOOC items.
  *
  * @author Sebastian Schlicht <sebastian@jablab.de>
+ *
+ * @file
  */
 class MoocStructureItem {
 
@@ -20,8 +20,6 @@ class MoocStructureItem {
     public $children;
 
     /**
-     * Creates the structure information container for a MOOC item.
-     *
      * @param $item MoocItem MOOC item
      * @param $children string[] names of child pages
      */

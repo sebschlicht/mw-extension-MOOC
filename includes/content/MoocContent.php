@@ -1,15 +1,12 @@
 <?php
 
 /**
- * MOOC item content model
+ * Represents the content of a MOOC item.
+ *
+ * @author  Sebastian Schlicht <sebastian@jablab.de>
  *
  * @file
- *
- * @author Sebastian Schlicht <sebastian@jablab.de>
- */
-
-/**
- * Represents the content of a MOOC item.
+ * @ingroup Content
  */
 class MoocContent extends JsonContent {
 
