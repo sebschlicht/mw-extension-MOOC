@@ -44,12 +44,9 @@ abstract class MoocItem {
      *            decoded JSON string
      */
     public function __construct($title, $moocContentJson) {
-        // TODO separate Title from MoocItem?
-        $this->title = $title;
-        if ($title != null) {
-            $this->scriptTitle = Title::newFromText($title . '/script');
-            $this->quizTitle = Title::newFromText($title . '/quiz');
-        }
+        // TODO completely separate Title from MoocItem?
+        $this->setTitle($title);
+
         // common MOOC item fields
         $this->type = $moocContentJson[self::JFIELD_TYPE];
         $this->video = $moocContentJson[self::JFIELD_VIDEO];
@@ -58,7 +55,6 @@ abstract class MoocItem {
     }
 
     /**
-     *
      * @return Title page title
      */
     public function getTitle() {
@@ -66,7 +62,17 @@ abstract class MoocItem {
     }
 
     /**
-     *
+     * @param $title Title page title
+     */
+    public function setTitle($title) {
+        $this->title = $title;
+        if ($title != null) {
+            $this->scriptTitle = Title::newFromText($title . '/script');
+            $this->quizTitle = Title::newFromText($title . '/quiz');
+        }
+    }
+
+    /**
      * @return string name of the item (extracted from page title)
      */
     public function getName() {
@@ -81,7 +87,6 @@ abstract class MoocItem {
     }
 
     /**
-     *
      * @return Array(string) learning goals that should be fulfilled at the end of this item
      */
     public function getLearningGoals() {
@@ -89,7 +94,6 @@ abstract class MoocItem {
     }
 
     /**
-     *
      * @return string name of the video file
      */
     public function getVideo() {
@@ -97,7 +101,6 @@ abstract class MoocItem {
     }
 
     /**
-     *
      * @return Title title of the script associated with this item
      */
     public function getScriptTitle() {
@@ -105,7 +108,6 @@ abstract class MoocItem {
     }
 
     /**
-     *
      * @return Title title of the quiz associated with this item
      */
     public function getQuizTitle() {
@@ -113,7 +115,6 @@ abstract class MoocItem {
     }
 
     /**
-     *
      * @return Array(string) resources of further reading
      */
     public function getFurtherReading() {
@@ -121,7 +122,6 @@ abstract class MoocItem {
     }
 
     /**
-     *
      * @return boolean whether the item has children
      */
     public function hasChildren() {
@@ -129,7 +129,6 @@ abstract class MoocItem {
     }
 
     /**
-     *
      * @return Array(string) names of child items
      */
     public function getChildren() {
