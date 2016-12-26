@@ -188,6 +188,11 @@ class MoocContentRenderer {
         $this->out->addHTML('</div>');
     }
 
+    /**
+     * Starts a section in the output in order to make it ready for the section content to be added.
+     *
+     * @param string $sectionKey section key
+     */
     protected function beginSection($sectionKey) {
         global $wgMOOCSectionConfig;
         $sectionConfig = $wgMOOCSectionConfig[$sectionKey];
@@ -203,6 +208,11 @@ class MoocContentRenderer {
         $this->out->addHTML('<div class="content">');
     }
 
+    /**
+     * Adds the header of a section to the output.
+     *
+     * @param string $sectionKey section key
+     */
     protected function addSectionHeader($sectionKey) {
         $sectionName = $this->loadMessage('section-' . $sectionKey);
         $this->out->addHTML('<div class="header">');
@@ -219,6 +229,12 @@ class MoocContentRenderer {
         $this->out->addHTML('</div>');
     }
 
+    /**
+     * Adds the action buttons for a section header to the output.
+     *
+     * @param string $sectionKey section key
+     * @param string $sectionName section title
+     */
     protected function addSectionActions($sectionKey, $sectionName) {
         $this->out->addHTML('<div class="actions">');
         
@@ -243,6 +259,11 @@ class MoocContentRenderer {
         $this->out->addHTML('</div>');
     }
 
+    /**
+     * Adds the icon for a section header to the output.
+     *
+     * @param string $sectionKey section key
+     */
     protected function addSectionIcon($sectionKey) {
         $this->out->addHTML('<div class="icon">');
         
@@ -253,11 +274,19 @@ class MoocContentRenderer {
         $this->out->addHTML('</div>');
     }
 
+    /**
+     * Finishes the current section output.
+     */
     protected function endSection() {
         $this->out->addHTML('</div>');
         $this->out->addHTML('</div>');
     }
 
+    /**
+     * Adds the navigation bar for the MOOC to the output.
+     *
+     * @param MoocStructureItem $baseStructureItem structure information of the MOOC's base item
+     */
     protected function addNavigation($baseStructureItem) {
         $this->out->addHTML('<div id="mooc-navigation">');
         // header
@@ -281,7 +310,8 @@ class MoocContentRenderer {
     }
 
     /**
-     * Adds a MOOC item to the navigation bar.
+     * Adds a navigation item for a MOOC item to the navigation bar output.
+     *
      * @param MoocStructureItem $structureItem structure information of the MOOC item to add
      */
     protected function addNavigationItem($structureItem) {
@@ -291,6 +321,7 @@ class MoocContentRenderer {
         $this->out->addWikiText('[[' . $item->title . '|' . $item->getName() . ']]');
         // register link for interwiki meta data
         $this->parserOutput->addLink($item->title);
+        // TODO do this for next/previous links and displayed children as well
         
         // add menu items for children - if any
         if ($item->hasChildren()) {
@@ -303,6 +334,13 @@ class MoocContentRenderer {
         $this->out->addHTML('</li>');
     }
 
+    /**
+     * Loads a message in context of the MOOC extension.
+     *
+     * @param string $key message key
+     * @param array ...$params message parameters
+     * @return string internationalized message built
+     */
     private function loadMessage($key, ...$params) {
         $key = 'mooc-' . $key;
         $wfMessage = wfMessage($key, $params);
