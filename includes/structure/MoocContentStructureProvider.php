@@ -2,6 +2,12 @@
 
 class MoocContentStructureProvider {
 
+    /**
+     * Currently the structure contains all properties of MOOC items, thus the whole MOOC is loaded.
+     * This allows to render children, previous and next items flawlessy.
+     * @param $item
+     * @return MoocStructureItem
+     */
     public static function loadMoocStructure($item) {
         $rootTitle = $item->getTitle()->getRootTitle();
         // TODO use getSubpages (once working) to fetch subpages and build a query to get their content?
@@ -10,24 +16,21 @@ class MoocContentStructureProvider {
     }
 
     /**
-     * Recursively loads the whole structure of the MOOC.
-     * Currently the structure contains all properties of MOOC items, thus the whole MOOC is loaded.
-     * This allows to render children, previous and next items flawlessy.
+     * Recursively loads the whole structure of a MOOC item and its children.
      *
-     * @param Title $title
-     *            title of the root MOOC item
+     * @param Title $title title of the MOOC item
+     * @return MoocStructureItem structure information of the MOOC item
      */
     private static function loadMoocStructureFromTitle($title) {
         // load single page from DB
         $text = MoocContentStructureProvider::loadPageText($title);
         // load MoocItem from page content (JSON)
         $contentModel = new MoocContent($text);
-        $json = $contentModel->getJsonData();
-        $item = new MoocItem($title, $json);
-        
+        $item = $contentModel->loadItem();
+
         // recursively load children via title
         $children = [];
-        foreach ($item->getChildren() as $childName) {
+        foreach ($item->children as $childName) {
             $childTitle = Title::newFromText($title . '/' . $childName);
             $childStructure = MoocContentStructureProvider::loadMoocStructureFromTitle($childTitle);
             array_push($children, $childStructure);

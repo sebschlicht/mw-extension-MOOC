@@ -2,20 +2,12 @@
 
 class MoocStructureItem {
 
-    protected $item;
+    public $item;
 
-    protected $children;
+    public $children;
 
     public function __construct($item, $children) {
         $this->item = $item;
         $this->children = $children;
-    }
-
-    public function getItem() {
-        return $this->item;
-    }
-
-    public function getChildren() {
-        return $this->children;
     }
 }

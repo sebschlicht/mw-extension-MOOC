@@ -19,21 +19,45 @@ abstract class MoocItem {
 
     const JFIELD_CHILDREN = 'children';
 
-    protected $title;
+    /**
+     * @var Title page title
+     */
+    public $title;
 
-    protected $type;
+    /**
+     * @var string type of the MOOC item
+     */
+    public $type;
 
-    protected $learningGoals;
+    /**
+     * @var Array(string) learning goals that should be fulfilled at the end of this item
+     */
+    public $learningGoals;
 
-    protected $video;
+    /**
+     * @var string name of the video file
+     */
+    public $video;
 
-    protected $scriptTitle;
+    /**
+     * @var Title title of the script associated with this item
+     */
+    public $scriptTitle;
 
-    protected $quizTitle;
+    /**
+     * @var Title title of the quiz associated with this item
+     */
+    public $quizTitle;
 
-    protected $furtherReading;
+    /**
+     * @var Array(string) resources of further reading
+     */
+    public $furtherReading;
 
-    protected $children;
+    /**
+     * @var Array(string) names of child items
+     */
+    public $children;
 
     /**
      * Creates a new MOOC item from JSON.
@@ -55,13 +79,6 @@ abstract class MoocItem {
     }
 
     /**
-     * @return Title page title
-     */
-    public function getTitle() {
-        return $this->title;
-    }
-
-    /**
      * @param $title Title page title
      */
     public function setTitle($title) {
@@ -80,59 +97,10 @@ abstract class MoocItem {
     }
 
     /**
-     * @return string type of the MOOC item
-     */
-    public function getType() {
-        return $this->type;
-    }
-
-    /**
-     * @return Array(string) learning goals that should be fulfilled at the end of this item
-     */
-    public function getLearningGoals() {
-        return $this->learningGoals;
-    }
-
-    /**
-     * @return string name of the video file
-     */
-    public function getVideo() {
-        return $this->video;
-    }
-
-    /**
-     * @return Title title of the script associated with this item
-     */
-    public function getScriptTitle() {
-        return $this->scriptTitle;
-    }
-
-    /**
-     * @return Title title of the quiz associated with this item
-     */
-    public function getQuizTitle() {
-        return $this->quizTitle;
-    }
-
-    /**
-     * @return Array(string) resources of further reading
-     */
-    public function getFurtherReading() {
-        return $this->furtherReading;
-    }
-
-    /**
      * @return boolean whether the item has children
      */
     public function hasChildren() {
         return isset($this->children) && !empty($this->children);
-    }
-
-    /**
-     * @return Array(string) names of child items
-     */
-    public function getChildren() {
-        return $this->children;
     }
 
     /**

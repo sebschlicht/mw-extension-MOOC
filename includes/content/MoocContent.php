@@ -13,28 +13,19 @@
  */
 class MoocContent extends JsonContent {
 
-    protected $item;
+    const CONTENT_MODEL_MOOC_ITEM = 'mooc-item';
 
     /**
-     * @param string $text
-     *            MOOC item JSON
+     * @var MoocItem MOOC item being loaded
      */
-    public function __construct($text, $modelId = self::CONTENT_MODEL_MOOC_UNIT) {
+    public $item;
+
+    /**
+     * @param string $text MOOC item JSON
+     * @param string $modelId identifier of the page's content model
+     */
+    public function __construct($text, $modelId = self::CONTENT_MODEL_MOOC_ITEM) {
         parent::__construct($text, $modelId);
-    }
-
-    /**
-     * @return MoocItem MOOC item
-     */
-    public function getItem() {
-        return $this->item;
-    }
-
-    /**
-     * @param $item MoocItem MOOC item
-     */
-    public function setItem($item) {
-        $this->item = $item;
     }
 
     /**
@@ -50,27 +41,25 @@ class MoocContent extends JsonContent {
      */
     public function isValid() {
         if (parent::isValid()) {
-            $item = $this->getItem();
-
             // load MOOC item if not loaded yet
-            if (!isset($item)) {
-                $item = $this->loadItem();
-                $this->setItem($item);
+            if (!isset($this->item)) {
+                $this->item = $this->loadItem();
             }
+            $item = $this->item;
 
             // validate MOOC item
-            if (! isset($item->getVideo())) {
+            if (! isset($item->video)) {
                 return false;
             }
-            if (! is_array($item->getLearningGoals())) {
+            if (! is_array($item->learningGoals)) {
                 return false;
             }
-            if (! is_array($item->getFurtherReading())) {
+            if (! is_array($item->furtherReading)) {
                 return false;
             }
             // validate MOOC lesson
-            if ($item->getType() === MoocLesson::ITEM_TYPE_LESSON) {
-                if (! is_array($item->getChildren())) {
+            if ($item->type === MoocLesson::ITEM_TYPE_LESSON) {
+                if (! is_array($item->children)) {
                     return false;
                 }
             }
@@ -92,11 +81,9 @@ class MoocContent extends JsonContent {
         // FIXME: WikiPage::doEditContent generates parser output before validation.
         // As such, native data may be invalid (though output is discarded later in that case).
         if ($generateHtml && $this->isValid()) {
-            $item = $this->getItem();
-            $item->setTitle($title);
-            
-            $renderer = new MoocContentRenderer($output, $item);
-            $renderer->render($item);
+            $this->item->setTitle($title);
+            $renderer = new MoocContentRenderer($output, $this->item);
+            $renderer->render($this->item);
             
             $output->setEnableOOUI(true);
             $output->setTOCEnabled(false);

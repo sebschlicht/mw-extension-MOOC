@@ -8,6 +8,10 @@ class MoocContentRenderer {
 
     private $item;
 
+    /**
+     * @param ParserOutput $parserOutput
+     * @param MoocItem $item
+     */
     public function __construct(&$parserOutput, $item) {
         $this->parserOutput = $parserOutput;
         $this->item = $item;
@@ -37,13 +41,13 @@ class MoocContentRenderer {
         $this->out->addHTML('</div>');
         
         // ## categories
-        $rootTitle = $this->item->getTitle()->getRootTitle();
+        $rootTitle = $this->item->title->getRootTitle();
         $categoryNS = $rootTitle->getNsText();
         $this->out->addWikiText('[[Category:' . $categoryNS . ']]');
-        $this->parserOutput->addCategory($categoryNS);
+        $this->parserOutput->addCategory($categoryNS, 0);
         $categoryMooc = $categoryNS . ':' . $rootTitle->getText();
         $this->out->addWikiText('[[Category:' . $categoryMooc . ']]');
-        $this->parserOutput->addCategory($categoryMooc);
+        $this->parserOutput->addCategory($categoryMooc, 1);
         
         $this->out->addHTML('</div>');
         
@@ -54,10 +58,10 @@ class MoocContentRenderer {
         $sectionKey = 'learning-goals';
         $this->beginSection($sectionKey);
         
-        if (count($item->getLearningGoals()) > 0) {
+        if (count($item->learningGoals) > 0) {
             // show learning goals as ordered list if any
             $learningGoals = '';
-            foreach ($item->getLearningGoals() as $learningGoal) {
+            foreach ($item->learningGoals as $learningGoal) {
                 $learningGoals .= "\n" . '# ' . $learningGoal;
             }
             $this->out->addWikiText($learningGoals);
@@ -73,9 +77,9 @@ class MoocContentRenderer {
         $sectionKey = 'video';
         $this->beginSection($sectionKey);
         
-        if ($item->getVideo()) {
+        if ($item->video) {
             // show video player if video set
-            $this->out->addWikiText('[[File:' . $item->getVideo() . '|800px]]');
+            $this->out->addWikiText('[[File:' . $item->video. '|800px]]');
         } else {
             // show info box if video not set yet
             $this->addEmptySectionBox($sectionKey);
@@ -88,12 +92,12 @@ class MoocContentRenderer {
         $sectionKey = 'script';
         $this->beginSection($sectionKey);
         
-        if ($item->getScriptTitle()->exists()) {
+        if ($item->scriptTitle->exists()) {
             // transclude script if existing
-            $this->out->addWikiText('{{:' . $item->getScriptTitle() . '}}');
+            $this->out->addWikiText('{{:' . $item->scriptTitle . '}}');
         } else {
             // show info box if script not created yet
-            $this->addEmptySectionBox($sectionKey, $item->getScriptTitle());
+            $this->addEmptySectionBox($sectionKey, $item->scriptTitle);
         }
         
         $this->endSection();
@@ -103,12 +107,12 @@ class MoocContentRenderer {
         $sectionKey = 'quiz';
         $this->beginSection($sectionKey);
         
-        if ($item->getQuizTitle()->exists()) {
+        if ($item->quizTitle->exists()) {
             // transclude quiz if existing
-            $this->out->addWikiText('{{:' . $item->getQuizTitle() . '}}');
+            $this->out->addWikiText('{{:' . $item->quizTitle . '}}');
         } else {
-            // show info box if script not created yet
-            $this->addEmptySectionBox($sectionKey, $item->getScriptTitle());
+            // show info box if quiz not created yet
+            $this->addEmptySectionBox($sectionKey, $item->quizTitle);
         }
         
         $this->endSection();
@@ -118,10 +122,10 @@ class MoocContentRenderer {
         $sectionKey = 'further-reading';
         $this->beginSection($sectionKey);
         
-        if (count($item->getFurtherReading()) > 0) {
+        if (count($item->furtherReading) > 0) {
             // show further reading as ordered list if any
             $furtherReading = '';
-            foreach ($item->getFurtherReading() as $furtherReadingEntry) {
+            foreach ($item->furtherReading as $furtherReadingEntry) {
                 $furtherReading .= "\n" . '# ' . $furtherReadingEntry;
             }
             $this->out->addWikiText($furtherReading);
@@ -184,7 +188,7 @@ class MoocContentRenderer {
         
         // edit button
         global $wgMOOCImagePath;
-        $btnHref = '/SpecialPage:MoocEdit?title=' . $this->item->getTitle() . '&section=' . $sectionKey;
+        $btnHref = '/SpecialPage:MoocEdit?title=' . $this->item->title . '&section=' . $sectionKey;
         $btnTitle = $this->loadMessage('edit-section-button-title', $sectionName);
         $this->out->addHTML('<div class="btn-edit">');
         // TODO ensure to link to the special page allowing to edit this section
@@ -241,17 +245,17 @@ class MoocContentRenderer {
     }
 
     protected function addNavigationItem($structureItem) {
-        $item = $structureItem->getItem();
+        $item = $structureItem->item;
         
         $this->out->addHTML('<li>');
-        $this->out->addWikiText('[[' . $item->getTitle() . '|' . $item->getName() . ']]');
+        $this->out->addWikiText('[[' . $item->title . '|' . $item->getName() . ']]');
         // register link for interwiki meta data
-        $this->parserOutput->addLink($item->getTitle());
+        $this->parserOutput->addLink($item->title);
         
         // add menu items for children - if any
         if ($item->hasChildren()) {
             $this->out->addHTML('<ul>');
-            foreach ($structureItem->getChildren() as $childStructureItem) {
+            foreach ($structureItem->children as $childStructureItem) {
                 $this->addNavigationItem($childStructureItem);
             }
             $this->out->addHTML('</ul>');
