@@ -3,20 +3,35 @@
 /**
  * Abstract model for all types of MOOC items.
  *
- * @file
- *
  * @author Sebastian Schlicht <sebastian@jablab.de>
+ *
+ * @file
  */
 abstract class MoocItem {
 
+    /**
+     * JSON field identifier for the MOOC item type
+     */
     const JFIELD_TYPE = 'type';
 
+    /**
+     * JSON field identifier for learning goals
+     */
     const JFIELD_LEARNING_GOALS = 'learning-goals';
 
+    /**
+     * JSON field identifier for the video
+     */
     const JFIELD_VIDEO = 'video';
 
+    /**
+     * JSON field identifier for further reading material
+     */
     const JFIELD_FURTHER_READING = 'further-reading';
 
+    /**
+     * JSON field identifier for child items
+     */
     const JFIELD_CHILDREN = 'children';
 
     /**
@@ -30,7 +45,7 @@ abstract class MoocItem {
     public $type;
 
     /**
-     * @var Array(string) learning goals that should be fulfilled at the end of this item
+     * @var string[] learning goals that should be fulfilled at the end of this item
      */
     public $learningGoals;
 
@@ -50,22 +65,20 @@ abstract class MoocItem {
     public $quizTitle;
 
     /**
-     * @var Array(string) resources of further reading
+     * @var string[] resources of further reading
      */
     public $furtherReading;
 
     /**
-     * @var Array(string) names of child items
+     * @var string[] names of child items
      */
     public $children;
 
     /**
      * Creates a new MOOC item from JSON.
      *
-     * @param Title $title
-     *            page title
-     * @param mixed $moocContentJson
-     *            decoded JSON string
+     * @param Title $title page title
+     * @param array $moocContentJson JSON (associative array) representing a MOOC item
      */
     public function __construct($title, $moocContentJson) {
         // TODO completely separate Title from MoocItem?
@@ -106,9 +119,9 @@ abstract class MoocItem {
     /**
      * Loads a MOOC item from JSON content.
      *
-     * @param $title Title title of the MOOC item page
-     * @param $moocContentJson JSON JSON content (associative array) representing a MOOC item
-     * @return MoocLesson|MoocUnit|null MOOC item instance or null on error
+     * @param Title $title title of the MOOC item page
+     * @param array $moocContentJson JSON (associative array) representing a MOOC item
+     * @return MoocItem MOOC item instance or null on error
      */
     public static function loadItemFromJson($title, $moocContentJson) {
         if (!array_key_exists(self::JFIELD_TYPE, $moocContentJson)) {
