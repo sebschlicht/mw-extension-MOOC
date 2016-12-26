@@ -11,16 +11,16 @@
 /**
  * Represents the content of a MOOC item.
  */
-class MoocContent extends JsonContent {
+class MoocUnitContent extends JsonContent {
 
-    const CONTENT_MODEL_MOOC_ITEM = 'mooc-item';
+    const CONTENT_MODEL_MOOC_UNIT = 'mooc-unit';
 
     /**
      *
      * @param string $text
-     *            MOOC Item JSON
+     *            MOOC unit JSON
      */
-    public function __construct($text, $modelId = MoocContent::CONTENT_MODEL_MOOC_ITEM) {
+    public function __construct($text, $modelId = self::CONTENT_MODEL_MOOC_UNIT) {
         parent::__construct($text, $modelId);
     }
 
@@ -32,9 +32,9 @@ class MoocContent extends JsonContent {
         if (parent::isValid()) {
             $json = parent::getJsonData();
             // TODO separate Title from MoocItem?
-            $item = new MoocItem(Title::newFromText('Test'), $json);
+            $item = new MoocUnit(Title::newFromText('Test'), $json);
             
-            if (! isset($item->getVideo())) {
+            if (!isset($item->getVideo())) {
                 return false;
             }
             if (! is_array($item->getLearningGoals())) {
@@ -67,7 +67,7 @@ class MoocContent extends JsonContent {
         // As such, native data may be invalid (though output is discarded later in that case).
         if ($generateHtml && $this->isValid()) {
             $json = parent::getJsonData();
-            $item = new MoocItem($title, $json);
+            $item = new MoocUnitContent($title, $json);
             
             $renderer = new MoocContentRenderer($output, $item);
             $renderer->render($item);
