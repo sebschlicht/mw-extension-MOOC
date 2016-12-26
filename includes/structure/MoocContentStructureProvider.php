@@ -1,22 +1,31 @@
 <?php
 
+/**
+ * Structure information loader for MOOCs
+ *
+ * @file
+ *
+ * @author Sebastian Schlicht <sebastian@jablab.de>
+ */
 class MoocContentStructureProvider {
 
     /**
+     * Loads the structure of a MOOC.
      * Currently the structure contains all properties of MOOC items, thus the whole MOOC is loaded.
-     * This allows to render children, previous and next items flawlessy.
-     * @param $item
-     * @return MoocStructureItem
+     * This allows to render children, previous and next items flawlessly.
+     *
+     * @param MoocItem $item base item of the MOOC
+     * @return MoocStructureItem structure information of the MOOC base item
      */
     public static function loadMoocStructure($item) {
-        $rootTitle = $item->getTitle()->getRootTitle();
+        $rootTitle = $item->title->getRootTitle();
         // TODO use getSubpages (once working) to fetch subpages and build a query to get their content?
         // TODO if not working (e.g delayed) fetch all pages LIKE title/*, filter children and query their content
-        return MoocContentStructureProvider::loadMoocStructureFromTitle($rootTitle);
+        return self::loadMoocStructureFromTitle($rootTitle);
     }
 
     /**
-     * Recursively loads the whole structure of a MOOC item and its children.
+     * Loads the structure of a MOOC item and its children.
      *
      * @param Title $title title of the MOOC item
      * @return MoocStructureItem structure information of the MOOC item
@@ -42,8 +51,8 @@ class MoocContentStructureProvider {
     /**
      * Loads the content of a single page from the database.
      *
-     * @param Title $title
-     *            page title
+     * @param Title $title page title
+     * @return string page content loaded from the database
      */
     private static function loadPageText($title) {
         $db = wfGetDB(DB_SLAVE);
