@@ -85,10 +85,9 @@ class MoocContent extends JsonContent {
         // As such, native data may be invalid (though output is discarded later in that case).
         if ($generateHtml && $this->isValid()) {
             $this->item->setTitle($title);
-            $renderer = new MoocContentRenderer($output, $this->item);
             $output->setEnableOOUI(true);
             $output->setTOCEnabled(false);
-            $output->setText($renderer->render());
+            $output->setText(MoocContentRenderer::renderItem($output, $this->item));
             
             $output->addModuleScripts('ext.mooc');
             $output->addModuleStyles('ext.mooc');

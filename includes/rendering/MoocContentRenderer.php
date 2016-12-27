@@ -24,23 +24,56 @@ abstract class MoocContentRenderer {
      */
     protected $item;
 
-    /**
-     * @param ParserOutput $parserOutput parser output
-     * @param MoocItem $item MOOC item being rendered
-     */
-    public function __construct(&$parserOutput, $item) {
-        $this->parserOutput = $parserOutput;
-        $this->item = $item;
+    public function __construct() {
         $this->out = new OutputPage();
+        // TODO necessary?
         $this->out->enableTOC(false);
     }
 
     /**
-     * Renders the MOOC item into a HTML document.
+     * Retrieves the appropriate renderer for a certain MOOC item type.
      *
+     * @param string $type MOOC item type
+     * @return MoocLessonRenderer|MoocUnitRenderer|null appropriate renderer for the item type or null
+     */
+    protected static function getRenderer($type) {
+        // TODO use some registration process for flexibility
+        switch($type) {
+            case MoocUnit::ITEM_TYPE_UNIT:
+                return new MoocUnitRenderer();
+
+            case MoocLesson::ITEM_TYPE_LESSON:
+                return new MoocLessonRenderer();
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Renders a MOOC item.
+     * The appropriate renderer is looked up for the MOOC item by its type.
+     *
+     * @param ParserOutput $parserOutput parser output
+     * @param MoocItem $item MOOC item to render
+     * @return string|null body HTML
+     */
+    public static function renderItem(&$parserOutput, $item) {
+        $renderer = self::getRenderer($item->type);
+        return ($renderer == null) ? null : $renderer::render($parserOutput, $item);
+    }
+
+    /**
+     * Renders a MOOC item into a HTML document.
+     *
+     * @param ParserOutput $parserOutput parser output
+     * @param MoocItem $item MOOC item to render
      * @return string body HTML
      */
-    public function render() {
+    public function render(&$parserOutput, $item) {
+        $this->parserOutput = $parserOutput;
+        $this->item = $item;
+
         $this->out->addHTML('<div id="mooc">');
         
         // # navigation
@@ -60,7 +93,7 @@ abstract class MoocContentRenderer {
         // ## categories
         $rootTitle = $this->item->title->getRootTitle();
         $categoryNS = $rootTitle->getNsText();
-        // TODO was this intended to add the course NS?
+        // TODO was this intended to add the course NS? this is done in MoocContent
         //$this->out->addWikiText('[[Category:' . $categoryNS . ']]');
         //$this->parserOutput->addCategory($categoryNS, 0);
         $categoryMooc = $categoryNS . ':' . $rootTitle->getText();
@@ -70,6 +103,7 @@ abstract class MoocContentRenderer {
         $this->out->addHTML('</div>');
         
         $this->out->addHTML('</div>');
+        // TODO call parserOutput->setText from here
         return $this->out->getHTML();
     }
 
