@@ -7,7 +7,7 @@
  *
  * @file
  */
-class MoocContentRenderer {
+abstract class MoocContentRenderer {
 
     /**
      * @var ParserOutput parser output to manipulate the result
@@ -76,15 +76,9 @@ class MoocContentRenderer {
     /**
      * Adds the sections of the MOOC item to the current output.
      */
-    protected function addSections() {
-        $this->addLearningGoalsSection();
-        $this->addVideoSection();
-        $this->addScriptSection();
-        $this->addQuizSection();
-        $this->addFurtherReadingSection();
-    }
+    abstract protected function addSections();
 
-    private function addLearningGoalsSection() {
+    protected function addLearningGoalsSection() {
         $sectionKey = 'learning-goals';
         $this->beginSection($sectionKey);
         
@@ -103,7 +97,7 @@ class MoocContentRenderer {
         $this->endSection();
     }
 
-    private function addVideoSection() {
+    protected function addVideoSection() {
         $sectionKey = 'video';
         $this->beginSection($sectionKey);
         
@@ -118,7 +112,7 @@ class MoocContentRenderer {
         $this->endSection();
     }
 
-    private function addScriptSection() {
+    protected function addScriptSection() {
         $sectionKey = 'script';
         $this->beginSection($sectionKey);
         
@@ -133,7 +127,7 @@ class MoocContentRenderer {
         $this->endSection();
     }
 
-    private function addQuizSection() {
+    protected function addQuizSection() {
         $sectionKey = 'quiz';
         $this->beginSection($sectionKey);
         
@@ -148,7 +142,7 @@ class MoocContentRenderer {
         $this->endSection();
     }
 
-    private function addFurtherReadingSection() {
+    protected function addFurtherReadingSection() {
         $sectionKey = 'further-reading';
         $this->beginSection($sectionKey);
         
@@ -341,7 +335,7 @@ class MoocContentRenderer {
      * @param array ...$params message parameters
      * @return string internationalized message built
      */
-    private function loadMessage($key, ...$params) {
+    protected function loadMessage($key, ...$params) {
         $key = 'mooc-' . $key;
         $wfMessage = wfMessage($key, $params);
         return $wfMessage->text();
