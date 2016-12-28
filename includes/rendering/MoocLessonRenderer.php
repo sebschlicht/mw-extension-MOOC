@@ -42,4 +42,14 @@ class MoocLessonRenderer extends MoocContentRenderer {
     protected function addChildItem() {
         // TODO implement
     }
+
+    protected function getSectionIconFilename($sectionKey) {
+        switch ($sectionKey) {
+            case 'units':
+                return parent::getSectionIconFilename('children');
+
+            default:
+                return parent::getSectionIconFilename($sectionKey);
+        }
+    }
 }

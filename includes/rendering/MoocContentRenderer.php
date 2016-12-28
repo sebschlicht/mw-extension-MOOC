@@ -60,7 +60,7 @@ abstract class MoocContentRenderer {
      */
     public static function renderItem(&$parserOutput, $item) {
         $renderer = self::getRenderer($item->type);
-        return ($renderer == null) ? null : $renderer::render($parserOutput, $item);
+        return ($renderer == null) ? null : $renderer->render($parserOutput, $item);
     }
 
     /**
@@ -297,9 +297,17 @@ abstract class MoocContentRenderer {
         
         global $wgMOOCImagePath;
         $this->out->addHTML(
-            '<img src="' . $wgMOOCImagePath . 'ic_' . $sectionKey . '.svg" width="32px" height="32px" alt="" />');
+            '<img src="' . $wgMOOCImagePath . $this->getSectionIconFilename($sectionKey) . '" width="32px" height="32px" alt="" />');
         
         $this->out->addHTML('</div>');
+    }
+
+    /**
+     * @param string $sectionKey section key
+     * @return string name of the section icon file
+     */
+    protected function getSectionIconFilename($sectionKey) {
+        return 'ic_' . $sectionKey . '.svg';
     }
 
     /**
