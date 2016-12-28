@@ -36,6 +36,7 @@ class MoocContentStructureProvider {
         // load MoocItem from page content (JSON)
         $contentModel = new MoocContent($text);
         $item = $contentModel->loadItem();
+        $item->setTitle($title);
 
         // recursively load children via title
         $children = [];
@@ -56,6 +57,9 @@ class MoocContentStructureProvider {
      */
     private static function loadPageText($title) {
         $db = wfGetDB(DB_SLAVE);
+        // TODO try this neat (cached) function
+        //$rev = Revision::loadFromTitle($db, $title);
+        //return $rev->getContent()->getNativeData();
         $row = $db->select(array(
             'text',
             'revision'
