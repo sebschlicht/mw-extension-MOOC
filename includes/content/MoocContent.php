@@ -34,7 +34,8 @@ class MoocContent extends JsonContent {
      * @return MoocItem MOOC item loaded from the content
      */
     public function loadItem() {
-        return MoocItem::loadItemFromJson(null, parent::getData());
+        //return MoocItem::loadItemFromJson(null, parent::getData()->getValue());
+        return MoocItem::loadItemFromJson(null, parent::getJsonData());
     }
 
     /**
@@ -46,24 +47,6 @@ class MoocContent extends JsonContent {
             // load MOOC item if not loaded yet
             if (!isset($this->item)) {
                 $this->item = $this->loadItem();
-            }
-            $item = $this->item;
-
-            // validate MOOC item
-            if (! isset($item->video)) {
-                return false;
-            }
-            if (! is_array($item->learningGoals)) {
-                return false;
-            }
-            if (! is_array($item->furtherReading)) {
-                return false;
-            }
-            // validate MOOC lesson
-            if ($item->type === MoocLesson::ITEM_TYPE_LESSON) {
-                if (! is_array($item->children)) {
-                    return false;
-                }
             }
             return true;
         }
@@ -85,10 +68,11 @@ class MoocContent extends JsonContent {
         // As such, native data may be invalid (though output is discarded later in that case).
         if ($generateHtml && $this->isValid()) {
             $this->item->setTitle($title);
+
             $output->setEnableOOUI(true);
             $output->setTOCEnabled(false);
             $output->setText(MoocContentRenderer::renderItem($output, $this->item));
-            
+
             $output->addModuleScripts('ext.mooc');
             $output->addModuleStyles('ext.mooc');
             // TODO internationalization
