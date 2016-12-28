@@ -11,14 +11,17 @@
   "type": "other",
   "AutoloadClasses": {
     "MOOCHooks": "MOOC.hooks.php",
-    "Mooc": "includes/model/Mooc.php",
-    "MoocStructureItem": "includes/structure/MoocStructureItem.php",
-    "MoocContentStructureProvider": "includes/structure/MoocContentStructureProvider.php",
-    "SpecialHelloWorld": "specials/SpecialHelloWorld.php",
-    "MoocItem": "includes/model/MoocItem.php",
     "MoocContent": "includes/content/MoocContent.php",
     "MoocContentHandler": "includes/content/MoocContentHandler.php",
-    "MoocContentRenderer": "includes/rendering/MoocContentRenderer.php"
+    "MoocItem": "includes/model/MoocItem.php",
+    "MoocLesson": "includes/model/MoocLesson.php",
+    "MoocUnit": "includes/model/MoocUnit.php",
+    "MoocContentRenderer": "includes/rendering/MoocContentRenderer.php",
+    "MoocLessonRenderer": "includes/rendering/MoocLessonRenderer.php",
+    "MoocUnitRenderer": "includes/rendering/MoocUnitRenderer.php",
+    "MoocStructureItem": "includes/structure/MoocStructureItem.php",
+    "MoocContentStructureProvider": "includes/structure/MoocContentStructureProvider.php",
+    "SpecialHelloWorld": "specials/SpecialHelloWorld.php"
   },
   "config": {
     "MOOCEnableFoo": true
