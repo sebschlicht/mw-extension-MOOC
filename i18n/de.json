@@ -25,7 +25,11 @@
   "mooc-section-further-reading-empty-description": "Der Lesestoff zu diesem Kurs wurde noch nicht angegeben.",
   "mooc-section-further-reading-empty-edit-link": "Klicken Sie hier, um Literatur hinzuzufügen.",
   "mooc-section-lessons": "Lektionen",
+  "mooc-section-lessons-empty-description": "Diesem Kurs wurden noch keine Lektionen hinzugefügt.",
+  "mooc-section-lessons-empty-edit-link": "Klicken Sie auf \"Lektion hinzufügen\", um eine Lektion hinzuzufügen.",
   "mooc-section-units": "Lerneinheiten",
+  "mooc-section-units-empty-description": "Dieser Lektion wurden noch keine Lerneinheiten hinzugefügt.",
+  "mooc-section-units-empty-edit-link": "Klicken Sie auf \"Lerneinheit hinzufügen\", um eine Lerneinheit hinzuzufügen.",
   "mooc-button-save-edit": "Speichern",
   "mooc-button-cancel": "Abbrechen",
   "mooc-button-expand-section": "Hier klicken zum Ausklappen"

@@ -25,7 +25,11 @@
   "mooc-section-further-reading-empty-description": "The further reading resources to this course have not been set yet.",
   "mooc-section-further-reading-empty-edit-link": "Click here, to add further reading resources.",
   "mooc-section-lessons": "lessons",
+  "mooc-section-lessons-empty-description": "No lessons have been added to this course yet.",
+  "mooc-section-lessons-empty-edit-link": "Use the button \"Add Lesson\" to add a lesson.",
   "mooc-section-units": "units",
+  "mooc-section-units-empty-description": "No units have been added to this lesson yet.",
+  "mooc-section-units-empty-edit-link": "Use the button \"Add Unit\" to add a unit.",
   "mooc-button-save-edit": "Save",
   "mooc-button-cancel": "Cancel",
   "mooc-button-expand-section": "Click to expand"

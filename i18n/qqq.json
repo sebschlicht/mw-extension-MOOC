@@ -27,7 +27,11 @@
   "mooc-section-further-reading-empty-description": "Placeholder shown when the further reading section is empty.",
   "mooc-section-further-reading-empty-edit-link": "Text of the link to encourage viewers to define a further reading resource.",
   "mooc-section-lessons": "Name of the lessons section when used within a sentence.",
+  "mooc-section-lessons-empty-description": "Placeholder shown when the lessons section is empty.",
+  "mooc-section-lessons-empty-edit-link": "Text of the link to encourage viewers to add lessons.",
   "mooc-section-units": "Name of the units section when used within a sentence.",
+  "mooc-section-units-empty-description": "Placeholder shown when the units section is empty.",
+  "mooc-section-units-empty-edit-link": "Text of the link to encourage viewers to add units.",
   "mooc-button-save-edit": "Label of the button that saves the edits made to a section.",
   "mooc-button-cancel": "Label of the button that cancels the current action.",
   "mooc-button-expand-section": "Label of the button that expands the section."
