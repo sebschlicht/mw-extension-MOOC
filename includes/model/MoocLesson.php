@@ -18,7 +18,7 @@ class MoocLesson extends MoocItem {
      * @param Title $title page title
      * @param mixed $moocContentJson JSON (associative array) representing a MOOC item
      */
-    public function __construct(Title $title, $moocContentJson) {
+    public function __construct($title, $moocContentJson) {
         parent::__construct($title, $moocContentJson);
         $this->children = $moocContentJson[self::JFIELD_CHILDREN];
     }
