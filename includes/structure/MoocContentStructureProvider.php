@@ -10,27 +10,52 @@
 class MoocContentStructureProvider {
 
     /**
-     * Loads the structure of a MOOC.
+     * Loads the structure of a MOOC and stores it in the MOOC item passed.
      * Currently the structure contains all properties of MOOC items, thus the whole MOOC is loaded.
      * This allows to render children, previous and next items flawlessly.
      *
-     * @param MoocItem $item base item of the MOOC
-     * @return MoocStructureItem structure information of the MOOC base item
+     * @param MoocItem $item MOOC item that the structure is needed for
      */
-    public static function loadMoocStructure($item) {
+    public static function loadMoocStructure(&$item) {
         $rootTitle = $item->title->getRootTitle();
         // TODO use getSubpages (once working) to fetch subpages and build a query to get their content?
         // TODO if not working (e.g delayed) fetch all pages LIKE title/*, filter children and query their content
-        return self::loadMoocStructureFromTitle($rootTitle);
+        $baseItem = self::loadMoocStructureFromTitle($rootTitle);
+        $item->baseItem = $baseItem;
+
+        $queue = [ $baseItem ];
+        while (!empty($queue)) {
+            $crr = array_pop($queue); // LIFO until reversing array
+
+            // check if item is what we are searching for
+            if ($item->title->equals($crr->title)) {
+                $item->children = $crr->children;
+                return;
+            }
+            // continue with its children
+            if ($crr->hasChildren()) {
+                foreach ($crr->children as $child) {
+                    array_push($queue, $child);
+                }
+            }
+        }
+        /*
+         * approaches:
+         * 1. single db-query to identifty sub-titles with appropriate content model
+         * 2. use explicit child items that are sub-titles a) either using a single db-query or b) recursive queries
+         *
+         * currently: 2b (worst performance)
+         * TODO use what is most reasonable
+         */
     }
 
     /**
-     * Loads the structure of a MOOC item and its children.
+     * Loads the whole structure of a MOOC item (all its children down to the units).
      *
      * @param Title $title title of the MOOC item
-     * @return MoocStructureItem structure information of the MOOC item
+     * @return MoocItem MOOC item
      */
-    private static function loadMoocStructureFromTitle($title) {
+    private static function loadMoocStructureFromTitle(&$title) {
         // load single page from DB
         $text = MoocContentStructureProvider::loadPageText($title);
         // load MoocItem from page content (JSON)
@@ -40,13 +65,13 @@ class MoocContentStructureProvider {
 
         // recursively load children via title
         $children = [];
-        foreach ($item->children as $childName) {
+        foreach ($item->childNames as $childName) {
             $childTitle = Title::newFromText($title . '/' . $childName);
             $childStructure = MoocContentStructureProvider::loadMoocStructureFromTitle($childTitle);
             array_push($children, $childStructure);
         }
-        
-        return new MoocStructureItem($item, $children);
+        $item->children = $children;
+        return $item;
     }
 
     /**
