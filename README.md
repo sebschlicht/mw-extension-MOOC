@@ -1,43 +1,32 @@
 # MOOC
 
-Allows to create and maintain Massive Open Online Courses.
-
-A wiki page that includes the magic word `MOOC` will be rendered as a MOOC page:
-
-    ...
-    {{#MOOC: }}
-    ...
+The Massive Open Online Course (MOOC) extension allows to create, maintain and attend online courses in a user-friendly way.
+It enhances (or rather replaces) the user interface of the MediaWiki, in order to offer the relevant functions to the user.
 
 ## Installation
 
-1. install the dependencies:
+1. install the dependencies
    * [MwEmbedSupport](https://www.mediawiki.org/wiki/Extension:MwEmbedSupport)
    * [TimedMediaHandler](https://www.mediawiki.org/wiki/Extension:TimedMediaHandler)
-1. add the following line to your *LocalSettings.php*:
-       
-       require_once "$IP/extensions/MOOC/MOOC.php";
+1. and additionally append the following line to your *LocalSettings.php*:
+   `require_once "$IP/extensions/MOOC/MOOC.php";`
 
 ## Technical Information
 
-The extension is activated via a conditioned hook:
-
-1. Wiki pages are scanned for the magic word `MOOC`.
-2. _If_ the magic word has been found, we trigger the resource loader and register an `OutputPageBeforeHTML` hook.
-3. This hook finally triggers the HTML structure manipulation of the wiki page content.
-
-The conditioned hook activation method is supposed to reduce the overhead of the extension.
+Technically this extension introduces a namespace (*Course*) where courses can be stored.
+Courses that have been created using this extension still are pages using a new content model `mooc-item` which is based on *JSON*.
 
 ## Files
 
 This extension mainly consists of the following files:
 * `MOOC.php` - MediaWiki entry point
-* `MOOC.hooks.php` - Extension entry point and code (**TODO**: separate extension code from entry point to `MOOC.class.php`)
+* `MOOC.hooks.php` - extension initialization
 * `resources/ext.mooc.css` - stylesheet for MOOC pages
 
 ## Links
 
 * [Extension Page](https://www.mediawiki.org/wiki/Extension:MOOC)
-* [Phabricator Page](https://phabricator.wikimedia.org/diffusion/1892/repository/master/)
-* [Gerrit Page](https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC)
-* [Extension Prototype Page (Wikiversity)](https://en.wikiversity.org/wiki/Wikiversity:MOOC_Interface)
+* [Project on Phabricator](https://phabricator.wikimedia.org/diffusion/1892/repository/master/)
+* [Project on Gerrit](https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC)
+* [Extension Prototype (Wikiversity)](https://en.wikiversity.org/wiki/Wikiversity:MOOC_Interface)
 * [Extension Prototype Demo (Wikiversity)](https://en.wikiversity.org/wiki/Web_Science/Part1:_Foundations_of_the_web/Ethernet)
