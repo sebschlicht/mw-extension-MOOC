@@ -115,13 +115,9 @@ abstract class MoocContentRenderer {
     protected function addLearningGoalsSection() {
         $sectionKey = 'learning-goals';
         $this->beginSection($sectionKey);
-        
-        if (count($this->item->learningGoals) > 0) {
-            // show learning goals as ordered list if any
-            $learningGoals = '';
-            foreach ($this->item->learningGoals as $learningGoal) {
-                $learningGoals .= "\n" . '# ' . $learningGoal;
-            }
+
+        $learningGoals = $this->generateLearningGoalsWikiText($this->item);
+        if ($learningGoals != null) {
             $this->out->addWikiText($learningGoals);
         } else {
             // show info box if no learning goal added yet
@@ -129,6 +125,17 @@ abstract class MoocContentRenderer {
         }
         
         $this->endSection();
+    }
+
+    protected function generateLearningGoalsWikiText($item) {
+        if (count($item->learningGoals) == 0) {
+            return null;
+        }
+        $learningGoals = '';
+        foreach ($item->learningGoals as $learningGoal) {
+            $learningGoals .= "\n" . '# ' . $learningGoal;
+        }
+        return $learningGoals;
     }
 
     protected function addVideoSection() {
@@ -246,7 +253,9 @@ abstract class MoocContentRenderer {
         $this->out->addHTML('<div class="header">');
         
         // actions
+        $this->out->addHTML('<div class="actions">');
         $this->addSectionActions($sectionKey, $sectionName);
+        $this->out->addHTML('</div>');
         
         // icon
         $this->addSectionIcon($sectionKey);
@@ -264,26 +273,32 @@ abstract class MoocContentRenderer {
      * @param string $sectionName section title
      */
     protected function addSectionActions($sectionKey, $sectionName) {
-        $this->out->addHTML('<div class="actions">');
-        
-        // edit button
-        global $wgMOOCImagePath;
+        // add edit button
+        $this->addSectionActionEdit($sectionKey, $sectionName);
+    }
+
+    protected function addSectionActionEdit($sectionKey, $sectionName) {
         $btnHref = '/SpecialPage:MoocEdit?title=' . $this->item->title . '&section=' . $sectionKey;
         $btnTitle = $this->loadMessage('edit-section-button-title', $sectionName);
-        $this->out->addHTML('<div class="btn-edit">');
-        // TODO ensure to link to the special page allowing to edit this section
-        // TODO replace href with link that allows tab-browsing with modal boxes
-        $this->out->addHTML('<a href="' . $btnHref . '" title="' . $btnTitle . '">');
-        $this->out->addHTML(
-            '<img src="' . $wgMOOCImagePath . 'ic_edit.svg" width="32px" height="32px" alt="' . $btnTitle . '" />');
-        $this->out->addHTML('</a>');
-        $this->out->addHTML('</div>');
-        
-        // modal box
+
+        // add action button
+        $this->addSectionActionButton('edit', $btnTitle, $btnHref);
+        // add modal box TODO make generic function
         $this->out->addHTML('<form class="edit-form">');
         $this->out->addHTML('<textarea class="value"></textarea>');
         $this->out->addHTML('</form>');
-        
+    }
+
+    protected function addSectionActionButton($action, $btnTitle, $btnHref) {
+        global $wgMOOCImagePath;
+
+        $this->out->addHTML('<div class="btn-' . $action . '">');
+        // TODO ensure to link to the special page allowing to perform this action
+        // TODO replace href with link that allows tab-browsing with modal boxes
+        $this->out->addHTML('<a href="' . $btnHref . '" title="' . $btnTitle . '">');
+        $this->out->addHTML(
+            '<img src="' . $wgMOOCImagePath . 'ic_' . $action . '.svg" width="32px" height="32px" alt="' . $btnTitle . '" />');
+        $this->out->addHTML('</a>');
         $this->out->addHTML('</div>');
     }
 
