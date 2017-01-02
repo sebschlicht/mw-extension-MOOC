@@ -8,6 +8,15 @@ A wiki page that includes the magic word `MOOC` will be rendered as a MOOC page:
     {{#MOOC: }}
     ...
 
+## Installation
+
+1. install the dependencies:
+   * [MwEmbedSupport](https://www.mediawiki.org/wiki/Extension:MwEmbedSupport)
+   * [TimedMediaHandler](https://www.mediawiki.org/wiki/Extension:TimedMediaHandler)
+1. add the following line to your *LocalSettings.php*:
+       
+       require_once "$IP/extensions/MOOC/MOOC.php";
+
 ## Technical Information
 
 The extension is activated via a conditioned hook:
