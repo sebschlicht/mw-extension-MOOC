@@ -73,13 +73,13 @@ abstract class MoocContentRenderer {
     public function render(&$parserOutput, $item) {
         $this->parserOutput = $parserOutput;
         $this->item = $item;
+        MoocContentStructureProvider::loadMoocStructure($this->item);
 
         $this->out->addHTML('<div id="mooc">');
         
         // # navigation
         $this->out->addHTML('<div id="mooc-navigation-bar" class="col-xs-12 col-sm-3">');
-        $structure = MoocContentStructureProvider::loadMoocStructure($this->item);
-        $this->addNavigation($structure);
+        $this->addNavigation($this->item->baseItem);
         $this->out->addHTML('</div>');
         
         // # content
@@ -318,6 +318,8 @@ abstract class MoocContentRenderer {
     }
 
     /**
+     * Determines the name of the icon file for a certain section.
+     *
      * @param string $sectionKey section key
      * @return string name of the section icon file
      */
@@ -336,9 +338,9 @@ abstract class MoocContentRenderer {
     /**
      * Adds the navigation bar for the MOOC to the output.
      *
-     * @param MoocStructureItem $baseStructureItem structure information of the MOOC's base item
+     * @param MoocItem $baseItem MOOC's base item
      */
-    protected function addNavigation($baseStructureItem) {
+    protected function addNavigation($baseItem) {
         $this->out->addHTML('<div id="mooc-navigation">');
         // header
         $title = $this->loadMessage('navigation-title');
@@ -354,7 +356,7 @@ abstract class MoocContentRenderer {
         
         // content
         $this->out->addHTML('<ul class="content">');
-        $this->addNavigationItem($baseStructureItem);
+        $this->addNavigationItem($baseItem);
         $this->out->addHTML('</ul>');
         
         $this->out->addHTML('</div>');
@@ -363,11 +365,9 @@ abstract class MoocContentRenderer {
     /**
      * Adds a navigation item for a MOOC item to the navigation bar output.
      *
-     * @param MoocStructureItem $structureItem structure information of the MOOC item to add
+     * @param MoocItem $item MOOC item to add
      */
-    protected function addNavigationItem($structureItem) {
-        $item = $structureItem->item;
-        
+    protected function addNavigationItem($item) {
         $this->out->addHTML('<li>');
         $this->out->addWikiText('[[' . $item->title . '|' . $item->getName() . ']]');
         // register link for interwiki meta data
@@ -377,8 +377,8 @@ abstract class MoocContentRenderer {
         // add menu items for children - if any
         if ($item->hasChildren()) {
             $this->out->addHTML('<ul>');
-            foreach ($structureItem->children as $childStructureItem) {
-                $this->addNavigationItem($childStructureItem);
+            foreach ($item->children as $childItem) {
+                $this->addNavigationItem($childItem);
             }
             $this->out->addHTML('</ul>');
         }
