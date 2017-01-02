@@ -35,6 +35,11 @@ abstract class MoocItem {
     const JFIELD_CHILDREN = 'children';
 
     /**
+     * @var MoocItem base item of the MOOC this item belongs to
+     */
+    public $baseItem;
+
+    /**
      * @var Title page title
      */
     public $title;
@@ -71,6 +76,11 @@ abstract class MoocItem {
 
     /**
      * @var string[] names of child items
+     */
+    public $childNames;
+
+    /**
+     * @var MoocItem[] child items
      */
     public $children;
 
@@ -113,7 +123,7 @@ abstract class MoocItem {
      * @return boolean whether the item has children
      */
     public function hasChildren() {
-        return isset($this->children) && !empty($this->children);
+        return isset($this->childNames) && !empty($this->childNames);
     }
 
     /**
