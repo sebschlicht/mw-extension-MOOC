@@ -316,7 +316,7 @@ abstract class MoocContentRenderer {
      * @param string $action action the modal box is intended for
      */
     protected function addModalBox($action) {
-        $this->out->addHTML("<form class=\"$action\">");
+        $this->out->addHTML("<form class=\"$action hidden\">");
         $this->out->addHTML('<textarea class="value"></textarea>');
         $this->out->addHTML('</form>');
     }

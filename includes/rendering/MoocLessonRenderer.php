@@ -51,8 +51,9 @@ class MoocLessonRenderer extends MoocContentRenderer {
     protected function addChildUnit($unit) {
         $this->out->addHTML('<div class="child unit col-xs-12">');
 
+        $this->out->addHTML('<div class="left col-xs-12 col-sm-5">');
         // video thumbnail
-        $this->out->addHTML('<div class="video-thumbnail col-xs-12 col-sm-5">');
+        $this->out->addHTML('<div class="video-thumbnail">');
         if (isset($unit->video)) {
             // TODO re-calc max width
             $this->out->addWikiText('[[File:' . $unit->video . '|frameless|300x170px|link=' . $unit->title . ']]');
@@ -61,12 +62,13 @@ class MoocLessonRenderer extends MoocContentRenderer {
             $this->out->addHTML('<span>' . $this->loadMessage('units-no-video') . '</span>');
         }
         $this->out->addHTML('</div>');
+        $this->out->addHTML('</div>');
         $this->parserOutput->addLink($unit->title);
 
         $this->out->addHTML('<div class="col-xs-12 col-sm-7">');
 
         // links
-        $this->addChildLinkBar();
+        $this->addChildLinkBar($unit);
 
         // title
         $this->out->addHTML('<div class="title">');
@@ -74,37 +76,89 @@ class MoocLessonRenderer extends MoocContentRenderer {
         $this->out->addHTML('</div>');
 
         // learning goals
+        $this->out->addHTML('<div class="learning-goals">');
         $learningGoals = $this->generateLearningGoalsWikiText($unit);
         if ($learningGoals != null) {
             $this->out->addWikiText($learningGoals);
         } else {
             $this->out->addHTML($this->loadMessage('section-' . 'learning-goals' . '-empty-description'));
         }
+        $this->out->addHTML('</div>');
 
-        // meta TODO
+        // meta TODO add discussion meta data overlay
 
         $this->out->addHTML('</div>');
 
         $this->out->addHTML('</div>');
     }
 
-    protected function addChildLinkBar() {
-        global $wgMOOCImagePath;
-        $iconSize = '32px';
+    /**
+     * Adds the link bar to the child unit output.
+     *
+     * @param MoocUnit $unit child unit the link bar should be added for
+     */
+    protected function addChildLinkBar($unit) {
         $this->out->addHTML('<div class="links">');
 
         // video
-        $icVideo = $wgMOOCImagePath . $this->getSectionIconFilename(self::SECTION_KEY_VIDEO);
-        $titleVideo = $this->loadMessage('link-child-unit-video');
-        // TODO absolute href
-        $this->out->addHTML("<a href=\"{$this->item->title}#video\">");
-        // TODO do this in CSS only
-        $this->out->addHTML("<img src=\"$icVideo\" width=\"$iconSize\" height=\"$iconSize\" title=\"$titleVideo\" alt=\"$titleVideo\" />");
-        $this->out->addHTML("</a>");
-
-        // TODO other sections
+        $this->addChildLinkBarSectionLink($unit, self::SECTION_KEY_VIDEO);
+        // download video
+        $this->addChildLinkBarDownloadLink($unit);
+        // script
+        $this->addChildLinkBarSectionLink($unit, self::SECTION_KEY_SCRIPT);
+        // quiz
+        $this->addChildLinkBarSectionLink($unit, self::SECTION_KEY_QUIZ);
 
         $this->out->addHTML('</div>');
+    }
+
+    /**
+     * Adds the link to download the unit's video file to the child unit's link bar.
+     *
+     * @param MoocUnit $unit unit the download link is added for
+     */
+    protected function addChildLinkBarDownloadLink($unit) {
+        global $wgMOOCImagePath;
+        $icon = $wgMOOCImagePath . 'ic_download.svg';
+        $title = $this->loadMessage("link-child-unit-download-video");
+        $href = isset($unit->video) ? $this->resolveMediaUrl(Title::newFromText("Media:{$unit->video}")) : null;
+        $classes = ($href == null) ? ['disabled'] : null;
+        $this->addChildLinkBarLink($icon, $href, $title, $classes);
+    }
+
+    /**
+     * Resolves the full URL to the original file of a media.
+     *
+     * @param Title $title page title of the media file
+     * @return string full URL to the original media file
+     */
+    protected function resolveMediaUrl($title) {
+        // TODO resolve media file title to full URL to original file
+        return $title->getLinkURL();
+    }
+
+    /**
+     * Adds the link to a unit's section to the child unit link bar.
+     *
+     * @param MoocUnit $unit child unit
+     * @param string $sectionKey section key
+     */
+    protected function addChildLinkBarSectionLink($unit, $sectionKey) {
+        global $wgMOOCImagePath;
+        $icon = $wgMOOCImagePath . $this->getSectionIconFilename($sectionKey);
+        $href = "{$unit->title->getLinkURL()}#$sectionKey";
+        $title = $this->loadMessage("link-child-unit-$sectionKey");
+        $this->addChildLinkBarLink($icon, $href, $title);
+    }
+
+    protected function addChildLinkBarLink($icon, $href, $title, $classes=null) {
+        $attrClass = '';
+        if (!empty($classes)) {
+            $attrClass = ' class="' . implode(' ', $classes) . '"';
+        }
+        $this->out->addHTML("<a href=\"$href\"$attrClass>");
+        $this->out->addHTML("<img src=\"$icon\" title=\"$title\" alt=\"$title\" />");
+        $this->out->addHTML("</a>");
     }
 
     protected function addSectionActions($sectionKey, $sectionName) {

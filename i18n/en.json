@@ -32,5 +32,8 @@
   "mooc-button-save-edit": "Save",
   "mooc-button-cancel": "Cancel",
   "mooc-button-expand-section": "Click to expand",
-  "mooc-link-child-unit-video": "Jump to the video"
+  "mooc-link-child-unit-video": "Jump to the video",
+  "mooc-link-child-unit-download-video": "Download the video",
+  "mooc-link-child-unit-script": "Jump to the script",
+  "mooc-link-child-unit-quiz": "Jump to the quiz"
 }

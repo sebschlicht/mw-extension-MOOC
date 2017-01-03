@@ -32,5 +32,8 @@
   "mooc-button-save-edit": "Speichern",
   "mooc-button-cancel": "Abbrechen",
   "mooc-button-expand-section": "Hier klicken zum Ausklappen",
-  "mooc-link-child-unit-video": "Zum Video springen"
+  "mooc-link-child-unit-video": "Zum Video springen",
+  "mooc-link-child-unit-download-video": "Video herunterladen",
+  "mooc-link-child-unit-script": "Zum Skript springen",
+  "mooc-link-child-unit-quiz": "Zum Quiz springen"
 }
