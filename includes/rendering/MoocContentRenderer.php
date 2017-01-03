@@ -287,10 +287,17 @@ abstract class MoocContentRenderer {
         $btnHref = '/SpecialPage:MoocEdit?title=' . $this->item->title . '&section=' . $sectionKey;
         $btnTitle = $this->loadMessage('edit-section-button-title', $sectionName);
 
-        // add action button
         $this->addSectionActionButton('edit', $btnTitle, $btnHref);
-        // add modal box TODO make generic function
-        $this->out->addHTML('<form class="edit-form">');
+        $this->addModalBox('edit');
+    }
+
+    /**
+     * Adds the modal box for a certain action.
+     *
+     * @param string $action action the modal box is intended for
+     */
+    protected function addModalBox($action) {
+        $this->out->addHTML("<form class=\"$action\">");
         $this->out->addHTML('<textarea class="value"></textarea>');
         $this->out->addHTML('</form>');
     }
