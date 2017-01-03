@@ -33,8 +33,23 @@
   }
   
   function fillModalBox( id, content ) {
-    var modalBox = $('#mooc #' + id + '.section .header form.edit .value');
-    modalBox.val(content);
+    var $input = $('#mooc #' + id + '.section .header form.edit .value');
+    $input.val(content);
+    if ($input.is('textarea')) {
+        resizeTextarea($input);
+        $input.on('keyup', textareaValueChanged);
+    }
+  }
+
+  function textareaValueChanged(e) {
+    resizeTextarea($(e.delegateTarget));
+  }
+
+  function resizeTextarea($textarea) {
+    var numRows = $textarea.val().split(/\r*\n/).length;
+    if ($textarea.attr('rows') !== numRows) {
+      $textarea.attr('rows', numRows);
+    }
   }
   
 }( mediaWiki, jQuery ) );

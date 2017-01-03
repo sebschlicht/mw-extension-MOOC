@@ -307,20 +307,23 @@ abstract class MoocContentRenderer {
         $btnTitle = $this->loadMessage('edit-section-button-title', $sectionName);
 
         $this->addSectionActionButton('edit', $btnTitle, $btnHref);
-        $this->addModalBox('edit');
+        $this->addModalBox($sectionKey, 'edit');
     }
 
     /**
      * Adds the modal box for a certain action.
      *
+     * @param string $sectionKey section key
      * @param string $action action the modal box is intended for
      */
-    protected function addModalBox($action) {
+    protected function addModalBox($sectionKey, $action) {
+        $modalTitle = $this->loadMessage("modal-box-title-$sectionKey");
         $this->out->addHTML("<div class=\"modal-wrapper\">");
         $this->out->addHTML("<div class=\"modal-bg\"></div>");
         $this->out->addHTML("<div class=\"modal-box\">");
+        $this->out->addHTML("<h3>$modalTitle</h3>");
         $this->out->addHTML("<form class=\"$action\">");
-        $this->out->addHTML('<textarea class="value"></textarea>');
+        $this->out->addHTML('<textarea class="value" rows="1"></textarea>');
         $this->out->addHTML('</form>');
         $this->out->addHTML('</div>');
         $this->out->addHTML('</div>');
