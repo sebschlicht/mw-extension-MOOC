@@ -1,14 +1,20 @@
 ( function ( mw, $ ) {
   
   var hCollapsedSection = 200;
+  var $openedModalBox = null;
   
   // register UI event hooks
-  $('#mooc-sections .section .header .actions .btn-edit').on('click', openModalBox);
-  $('#mooc-sections .section .header .modal-box-bg').on('click', closeModalBoxes);
-  $('#mooc-sections .section .header .modal-box button.close').on('click', closeModalBoxes);
-  $('#mooc-sections .section .header .modal-box button.btn-cancel').on('click', closeModalBoxes);
-  $('#mooc-sections .section').each(function(index, element) {
-    initSection($(element));
+  // TODO efficient jQuery selectors
+  var $sections = $('#mooc-sections .section');
+  var $headers = $sections.find('.header');
+  $headers.find('.actions .btn-edit').on('click', openModalBox);
+  $headers.find('.modal-bg').on('click', closeModalBoxes);
+  $headers.find('.modal-box button.close').on('click', closeModalBoxes);
+  $headers.find('.modal-box button.btn-cancel').on('click', closeModalBoxes);
+  $sections.each(function(index, element) {
+    var $section = $(element);
+    initSection($section);
+    hideActions($section);
   });
   
   $(document).keydown(function(e){
@@ -27,28 +33,27 @@
   $('#mooc-sections .section')
     .on('mouseenter', showActions)
     .on('mouseleave', hideActions);
-  $('#mooc-sections .section .header .actions').hide();
-  
+
   // globals to make navigation bar sticky+
   var $navigationBar = $('#mooc-navigation-bar');
   var $navigation = $navigationBar.find('#mooc-navigation');
   var $navigationHeader = $navigation.find('.header');
   var marginBottom = 30;
   
-  // TODO load modal box content
-  
   function openModalBox() {
-    var $modal = $(this).parent().siblings('.modal-box-wrapper');
+    var $modal = $(this).siblings('.modal-wrapper');
     $modal.fadeIn(200);
-    $modal.find('textarea').focus();
+    $openedModalBox = $modal;
+    $modal.find('.value').focus();
     return false;
   }
   function closeModalBoxes() {
-    var $visibleModalBoxes = $('#mooc-sections .modal-box-wrapper:visible');
-    closeModalBox($visibleModalBoxes);
+    if ($openedModalBox !== null) {
+        closeModalBox($openedModalBox);
+    }
   }
   function closeModalBox($modal) {
-    $modal.find('textarea').blur();
+    $modal.find('.value').blur();
     $modal.fadeOut(200);
   }
   
@@ -137,10 +142,10 @@
   }
   
   function showActions() {
-    $(this).children('.header').children('.actions').fadeIn();
+    $(this).children('.header').children('.actions').addClass('visible');
   }
   function hideActions() {
-    $(this).children('.header').children('.actions').fadeOut();
+    $(this).children('.header').children('.actions').removeClass('visible');
   }
   
   // make navigation bar sticky+

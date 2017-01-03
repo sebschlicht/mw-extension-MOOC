@@ -37,6 +37,15 @@
 
       .actions {
         float: right;
+        .btn {
+          opacity: 0;
+          .transition(.3s, ease-out 0s, opacity);
+        }
+      }
+      .actions.visible {
+        .btn {
+          opacity: 1;
+        }
       }
       .icon {
         float: left;
@@ -78,7 +87,7 @@
       text-transform: uppercase;
       .user-select();
     }
-    .modal-box-wrapper {
+    .modal-wrapper {
       display: none;
       position: fixed;
       width: 100%;
@@ -89,7 +98,7 @@
       cursor: default;
       z-index: 1000;
       
-      .modal-box-bg {
+      .modal-bg {
         position: fixed;
         width: 100%;
         height: 100%;

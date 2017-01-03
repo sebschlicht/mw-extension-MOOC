@@ -17,19 +17,4 @@ class MOOCHooks {
      * @param Parser $parser            
      */
     public static function onParserFirstCallInit(Parser &$parser) {}
-
-    /**
-     *
-     * @param array $vars            
-     */
-    public static function onResourceLoaderGetConfigVars(array &$vars) {
-        $vars['wgMOOC'] = [
-            'userAgentName' => 'MoocBot',
-            'userAgentUrl' => 'https://en.wikiversity.org/wiki/User:Sebschlicht',
-            'userAgentMailAddress' => 'sebschlicht@uni-koblenz.de',
-            'version' => '0.1'
-        ];
-        
-        return true;
-    }
 }

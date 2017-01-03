@@ -75,6 +75,17 @@ class MoocContent extends JsonContent {
 
             $output->addModuleScripts('ext.mooc');
             $output->addModuleStyles('ext.mooc');
+
+            // pass data to JS
+            $output->addJsConfigVars([
+                'moocAgentData' => [
+                    'userAgentName' => 'MoocBot',
+                    'userAgentUrl' => 'https://en.wikiversity.org/wiki/User:Sebschlicht',
+                    'userAgentMailAddress' => 'sebschlicht@uni-koblenz.de',
+                    'version' => '0.1'
+                ],
+                'moocItem' => $this->getJsonData()
+            ]);
         } else {
             $output->setText('');
         }
