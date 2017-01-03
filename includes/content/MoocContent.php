@@ -75,8 +75,6 @@ class MoocContent extends JsonContent {
 
             $output->addModuleScripts('ext.mooc');
             $output->addModuleStyles('ext.mooc');
-            // TODO internationalization
-            $output->addCategory('Course', 0);
         } else {
             $output->setText('');
         }

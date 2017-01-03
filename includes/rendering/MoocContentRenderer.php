@@ -118,9 +118,8 @@ abstract class MoocContentRenderer {
         // ## categories
         $rootTitle = $this->item->title->getRootTitle();
         $categoryNS = $rootTitle->getNsText();
-        // TODO was this intended to add the course NS? this is done in MoocContent
-        //$this->out->addWikiText('[[Category:' . $categoryNS . ']]');
-        //$this->parserOutput->addCategory($categoryNS, 0);
+        $this->out->addWikiText('[[Category:' . $categoryNS . ']]');
+        $this->parserOutput->addCategory($categoryNS, 0);
         $categoryMooc = $categoryNS . ':' . $rootTitle->getText();
         $this->out->addWikiText('[[Category:' . $categoryMooc . ']]');
         $this->parserOutput->addCategory($categoryMooc, 1);
