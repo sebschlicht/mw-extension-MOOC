@@ -1,7 +1,7 @@
 # MOOC
 
-The Massive Open Online Course (MOOC) extension allows to create, maintain and attend online courses in a user-friendly way.
-It enhances (or rather replaces) the user interface of the MediaWiki, in order to offer the relevant functions to the user.
+The Massive Open Online Course (MOOC) extension allows to create, maintain and attend online courses in a user-friendly way.  
+It introduces the *Course* namespace where the MediaWiki user-interface is enhanced, in order to offer the relevant functions to the user.
 
 ## Installation
 
@@ -13,8 +13,9 @@ It enhances (or rather replaces) the user interface of the MediaWiki, in order t
 
 ## Technical Information
 
-Technically this extension introduces a namespace (*Course*) where courses can be stored.
-Courses that have been created using this extension still are pages using a new content model `mooc-item` which is based on *JSON*.
+Technically a course in the *Course* namespace is a page with the content model `mooc-item` (format: *JSON*) that is defined by this extension.
+
+Though possible in principle, this extension does not fully work without JavaScript on user-side.
 
 ## Files
 
