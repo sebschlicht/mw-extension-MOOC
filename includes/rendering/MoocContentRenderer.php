@@ -316,9 +316,14 @@ abstract class MoocContentRenderer {
      * @param string $action action the modal box is intended for
      */
     protected function addModalBox($action) {
-        $this->out->addHTML("<form class=\"$action hidden\">");
+        $this->out->addHTML("<div class=\"modal-wrapper\">");
+        $this->out->addHTML("<div class=\"modal-bg\"></div>");
+        $this->out->addHTML("<div class=\"modal-box\">");
+        $this->out->addHTML("<form class=\"$action\">");
         $this->out->addHTML('<textarea class="value"></textarea>');
         $this->out->addHTML('</form>');
+        $this->out->addHTML('</div>');
+        $this->out->addHTML('</div>');
     }
 
     /**
@@ -331,7 +336,7 @@ abstract class MoocContentRenderer {
     protected function addSectionActionButton($action, $btnTitle, $btnHref) {
         global $wgMOOCImagePath;
 
-        $this->out->addHTML('<div class="btn-' . $action . '">');
+        $this->out->addHTML('<div class="btn btn-' . $action . '">');
         // TODO ensure to link to the special page allowing to perform this action
         // TODO replace href with link that allows tab-browsing with modal boxes
         $this->out->addHTML('<a href="' . $btnHref . '" title="' . $btnTitle . '">');
