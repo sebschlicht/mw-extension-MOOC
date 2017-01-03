@@ -10,6 +10,11 @@
 class MoocLessonRenderer extends MoocContentRenderer {
 
     /**
+     * key of the child units section
+     */
+    const SECTION_KEY_UNITS = 'units';
+
+    /**
      * Adds the MOOC lesson sections to the output.
      */
     protected function addSections() {
@@ -22,18 +27,16 @@ class MoocLessonRenderer extends MoocContentRenderer {
     }
 
     protected function addChildrenSection() {
-        $sectionKey = 'units';
-        $this->beginSection($sectionKey);
+        $this->beginSection(self::SECTION_KEY_UNITS);
 
         if ($this->item->hasChildren()) {
             // list child units if any
             foreach ($this->item->children as $unit) {
-                echo "adding child...";
                 $this->addChildUnit($unit);
             }
         } else {
             // show info box if no child units added yet
-            $this->addEmptySectionBox($sectionKey);
+            $this->addEmptySectionBox(self::SECTION_KEY_UNITS);
         }
         // TODO add controls to add units somewhere
 
@@ -83,8 +86,7 @@ class MoocLessonRenderer extends MoocContentRenderer {
 
     protected function addSectionActions($sectionKey, $sectionName) {
         switch ($sectionKey) {
-            // TODO make this a const somewhere
-            case 'units':
+            case self::SECTION_KEY_UNITS:
                 // TODO add button "Add Unit"
 
             default:
@@ -94,7 +96,7 @@ class MoocLessonRenderer extends MoocContentRenderer {
 
     protected function getSectionIconFilename($sectionKey) {
         switch ($sectionKey) {
-            case 'units':
+            case self::SECTION_KEY_UNITS:
                 return parent::getSectionIconFilename('children');
 
             default:

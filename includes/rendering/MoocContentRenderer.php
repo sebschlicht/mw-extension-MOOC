@@ -10,6 +10,31 @@
 abstract class MoocContentRenderer {
 
     /**
+     * key of the learning goals section
+     */
+    const SECTION_KEY_LEARNING_GOALS = 'learning-goals';
+
+    /**
+     * key of the video section
+     */
+    const SECTION_KEY_VIDEO = 'video';
+
+    /**
+     * key of the script section
+     */
+    const SECTION_KEY_SCRIPT = 'script';
+
+    /**
+     * key of the quiz section
+     */
+    const SECTION_KEY_QUIZ = 'quiz';
+
+    /**
+     * key of the further reading section
+     */
+    const SECTION_KEY_FURTHER_READING = 'further-reading';
+
+    /**
      * @var ParserOutput parser output to manipulate the result
      */
     protected $parserOutput;
@@ -113,15 +138,14 @@ abstract class MoocContentRenderer {
     abstract protected function addSections();
 
     protected function addLearningGoalsSection() {
-        $sectionKey = 'learning-goals';
-        $this->beginSection($sectionKey);
+        $this->beginSection(self::SECTION_KEY_LEARNING_GOALS);
 
         $learningGoals = $this->generateLearningGoalsWikiText($this->item);
         if ($learningGoals != null) {
             $this->out->addWikiText($learningGoals);
         } else {
             // show info box if no learning goal added yet
-            $this->addEmptySectionBox($sectionKey);
+            $this->addEmptySectionBox(self::SECTION_KEY_LEARNING_GOALS);
         }
         
         $this->endSection();
@@ -139,53 +163,49 @@ abstract class MoocContentRenderer {
     }
 
     protected function addVideoSection() {
-        $sectionKey = 'video';
-        $this->beginSection($sectionKey);
+        $this->beginSection(self::SECTION_KEY_VIDEO);
         
         if ($this->item->video) {
             // show video player if video set
             $this->out->addWikiText('[[File:' . $this->item->video. '|800px]]');
         } else {
             // show info box if video not set yet
-            $this->addEmptySectionBox($sectionKey);
+            $this->addEmptySectionBox(self::SECTION_KEY_VIDEO);
         }
         
         $this->endSection();
     }
 
     protected function addScriptSection() {
-        $sectionKey = 'script';
-        $this->beginSection($sectionKey);
+        $this->beginSection(self::SECTION_KEY_SCRIPT);
         
         if ($this->item->scriptTitle->exists()) {
             // transclude script if existing
             $this->out->addWikiText('{{:' . $this->item->scriptTitle . '}}');
         } else {
             // show info box if script not created yet
-            $this->addEmptySectionBox($sectionKey, $this->item->scriptTitle);
+            $this->addEmptySectionBox(self::SECTION_KEY_SCRIPT, $this->item->scriptTitle);
         }
         
         $this->endSection();
     }
 
     protected function addQuizSection() {
-        $sectionKey = 'quiz';
-        $this->beginSection($sectionKey);
+        $this->beginSection(self::SECTION_KEY_QUIZ);
         
         if ($this->item->quizTitle->exists()) {
             // transclude quiz if existing
             $this->out->addWikiText('{{:' . $this->item->quizTitle . '}}');
         } else {
             // show info box if quiz not created yet
-            $this->addEmptySectionBox($sectionKey, $this->item->quizTitle);
+            $this->addEmptySectionBox(self::SECTION_KEY_QUIZ, $this->item->quizTitle);
         }
         
         $this->endSection();
     }
 
     protected function addFurtherReadingSection() {
-        $sectionKey = 'further-reading';
-        $this->beginSection($sectionKey);
+        $this->beginSection(self::SECTION_KEY_FURTHER_READING);
         
         if (count($this->item->furtherReading) > 0) {
             // show further reading as ordered list if any
@@ -196,7 +216,7 @@ abstract class MoocContentRenderer {
             $this->out->addWikiText($furtherReading);
         } else {
             // show info box if no further reading added yet
-            $this->addEmptySectionBox($sectionKey);
+            $this->addEmptySectionBox(self::SECTION_KEY_FURTHER_READING);
         }
         
         $this->endSection();
