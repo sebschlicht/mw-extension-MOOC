@@ -277,6 +277,12 @@ abstract class MoocContentRenderer {
         $this->addSectionActionEdit($sectionKey, $sectionName);
     }
 
+    /**
+     * Adds the edit UI elements (button, modal box) to the section header in the current output.
+     *
+     * @param string $sectionKey section key
+     * @param string $sectionName section title
+     */
     protected function addSectionActionEdit($sectionKey, $sectionName) {
         $btnHref = '/SpecialPage:MoocEdit?title=' . $this->item->title . '&section=' . $sectionKey;
         $btnTitle = $this->loadMessage('edit-section-button-title', $sectionName);
@@ -289,6 +295,13 @@ abstract class MoocContentRenderer {
         $this->out->addHTML('</form>');
     }
 
+    /**
+     * Adds an action button to the section header in the current output.
+     *
+     * @param string $action action the button is intended for
+     * @param string $btnTitle button title
+     * @param string $btnHref button target link
+     */
     protected function addSectionActionButton($action, $btnTitle, $btnHref) {
         global $wgMOOCImagePath;
 
