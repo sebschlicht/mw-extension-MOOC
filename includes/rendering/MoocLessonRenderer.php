@@ -64,11 +64,14 @@ class MoocLessonRenderer extends MoocContentRenderer {
         $this->parserOutput->addLink($unit->title);
 
         $this->out->addHTML('<div class="col-xs-12 col-sm-7">');
+
+        // links
+        $this->addChildLinkBar();
+
+        // title
         $this->out->addHTML('<div class="title">');
         $this->out->addWikiText('[[' . $unit->title . '|'. $unit->title->getSubpageText() . ']]');
         $this->out->addHTML('</div>');
-
-        // links TODO
 
         // learning goals
         $learningGoals = $this->generateLearningGoalsWikiText($unit);
@@ -81,6 +84,26 @@ class MoocLessonRenderer extends MoocContentRenderer {
         // meta TODO
 
         $this->out->addHTML('</div>');
+
+        $this->out->addHTML('</div>');
+    }
+
+    protected function addChildLinkBar() {
+        global $wgMOOCImagePath;
+        $iconSize = '32px';
+        $this->out->addHTML('<div class="links">');
+
+        // video
+        $icVideo = $wgMOOCImagePath . $this->getSectionIconFilename(self::SECTION_KEY_VIDEO);
+        $titleVideo = $this->loadMessage('link-child-unit-video');
+        // TODO absolute href
+        $this->out->addHTML("<a href=\"{$this->item->title}#video\">");
+        // TODO do this in CSS only
+        $this->out->addHTML("<img src=\"$icVideo\" width=\"$iconSize\" height=\"$iconSize\" title=\"$titleVideo\" alt=\"$titleVideo\" />");
+        $this->out->addHTML("</a>");
+
+        // TODO other sections
+
         $this->out->addHTML('</div>');
     }
 
