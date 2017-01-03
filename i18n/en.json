@@ -5,10 +5,9 @@
     ]
   },
   "mooc-desc": "Allows to create and maintain Massive Open Online Courses.",
-  "mooc-i18n-welcome": "Welcome to the localization file of the MOOC extension.",
   "mooc-navigation-title": "Navigation",
   "mooc-edit-section-button-title": "edit $1",
-  "_mooc-comment-section-names": "// SECTION NAMES AS USED WITHIN SENTENCE",
+  "_mooc-comment-section-names": "// SECTION NAMES AS USED WITHIN SENTENCES",
   "mooc-section-learning-goals": "learning goals",
   "mooc-section-learning-goals-empty-description": "There have been no learning goals set for this course yet.",
   "mooc-section-learning-goals-empty-edit-link": "Click here, to add learning goals.",
@@ -32,5 +31,6 @@
   "mooc-section-units-empty-edit-link": "Use the button \"Add Unit\" to add a unit.",
   "mooc-button-save-edit": "Save",
   "mooc-button-cancel": "Cancel",
-  "mooc-button-expand-section": "Click to expand"
+  "mooc-button-expand-section": "Click to expand",
+  "mooc-link-child-unit-video": "Jump to the video"
 }

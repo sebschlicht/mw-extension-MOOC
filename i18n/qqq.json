@@ -9,7 +9,6 @@
     ]
   },
   "mooc-desc": "{{desc|name=MOOC|url=https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC }}",
-  "mooc-i18n-welcome": "Used to greet the user when reading the i18n/??.json file.",
   "mooc-navigation-title": "Title of the navigation.",
   "mooc-section-learning-goals": "Name of the learning goals section when used within a sentence.",
   "mooc-section-learning-goals-empty-description": "Placeholder shown when the learning goals section is empty.",
@@ -34,5 +33,6 @@
   "mooc-section-units-empty-edit-link": "Text of the link to encourage viewers to add units.",
   "mooc-button-save-edit": "Label of the button that saves the edits made to a section.",
   "mooc-button-cancel": "Label of the button that cancels the current action.",
-  "mooc-button-expand-section": "Label of the button that expands the section."
+  "mooc-button-expand-section": "Label of the button that expands the section.",
+  "mooc-link-child-unit-video": "Title of the link to the child unit's videos."
 }
