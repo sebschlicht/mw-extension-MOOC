@@ -38,9 +38,6 @@
   "Hooks": {
     "ParserFirstCallInit": [
       "MOOCHooks::onParserFirstCallInit"
-    ],
-    "ResourceLoaderGetConfigVars": [
-      "MOOCHooks::onResourceLoaderGetConfigVars"
     ]
   },
   "namespaces": [
