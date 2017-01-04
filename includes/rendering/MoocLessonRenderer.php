@@ -15,6 +15,11 @@ class MoocLessonRenderer extends MoocContentRenderer {
     const SECTION_KEY_UNITS = 'units';
 
     /**
+     * add action identifier
+     */
+    const ACTION_ADD = 'add';
+
+    /**
      * Adds the MOOC lesson sections to the output.
      */
     protected function addSections() {
@@ -163,9 +168,27 @@ class MoocLessonRenderer extends MoocContentRenderer {
 
     protected function fillModalBoxForm($sectionKey, $action) {
         if ($sectionKey == self::SECTION_KEY_UNITS && $action == 'add') {
-            $this->out->addHTML('<input type="text" class="value" />');
+            $this->fillModalAddBoxForm();
         } else {
             parent::fillModalBoxForm($sectionKey, $action);
+        }
+    }
+
+    /**
+     * Fills the add form of the modal box to add units.
+     */
+    protected function fillModalAddBoxForm() {
+        $this->out->addHTML('<input type="text" class="value" />');
+    }
+
+    protected function addModalBoxActions($sectionKey, $action) {
+        if ($sectionKey == self::SECTION_KEY_UNITS && $action == self::ACTION_ADD) {
+            $titleAdd = $this->loadMessage('modal-box-button-title-add-unit');
+            $this->out->addHTML("<input type=\"submit\" class=\"btn-add btn-submit\" value=\"$titleAdd\" />");
+            $titleCancel = $this->loadMessage('modal-box-button-title-cancel');
+            $this->out->addHTML("<input type=\"button\" class=\"btn-cancel\" value=\"$titleCancel\" />");
+        } else {
+            parent::addModalBoxActions($sectionKey, $action);
         }
     }
 

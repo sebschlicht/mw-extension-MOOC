@@ -35,6 +35,11 @@ abstract class MoocContentRenderer {
     const SECTION_KEY_FURTHER_READING = 'further-reading';
 
     /**
+     * edit action identifier
+     */
+    const ACTION_EDIT = 'edit';
+
+    /**
      * @var ParserOutput parser output to manipulate the result
      */
     protected $parserOutput;
@@ -334,19 +339,47 @@ abstract class MoocContentRenderer {
         $this->out->addHTML("<h3>$modalTitle</h3>");
         $this->out->addHTML("<form class=\"$action\">");
         $this->fillModalBoxForm($sectionKey, $action);
+        $this->addModalBoxActions($sectionKey, $action);
         $this->out->addHTML('</form>');
     }
 
     /**
-     * Fills the form of a modal box.
+     * Fills the form fields to a modal box.
      *
      * @param string $sectionKey section key
      * @param string $action action the modal box is intended for
      */
     protected function fillModalBoxForm($sectionKey, $action) {
-        $this->out->addHTML('<textarea class="value" rows="1"></textarea>');
-        $titleSave = $this->loadMessage('modal-box-button-title-save');
-        $this->out->addHTML("<input type=\"submit\" class=\"btn-save\" value=\"$titleSave\" />");
+        if ($action == self::ACTION_EDIT) {
+            switch ($sectionKey) {
+                case self::SECTION_KEY_VIDEO:
+                    // simple text input field
+                    $this->out->addHTML('<input type="text" class="value" />');
+                    break;
+
+                default:
+                    // auto-growing textarea
+                    $this->out->addHTML('<textarea class="value auto-grow" rows="1"></textarea>');
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Adds the form actions to a modal box.
+     *
+     * @param string $sectionKey section key
+     * @param string $action action the modal box is intended for
+     */
+    protected function addModalBoxActions($sectionKey, $action) {
+        if ($action == self::ACTION_EDIT) {
+            switch ($sectionKey) {
+                default:
+                    $titleSave = $this->loadMessage('modal-box-button-title-save');
+                    $this->out->addHTML("<input type=\"submit\" class=\"btn-save btn-submit\" value=\"$titleSave\" />");
+                    break;
+            }
+        }
         $titleCancel = $this->loadMessage('modal-box-button-title-cancel');
         $this->out->addHTML("<input type=\"button\" class=\"btn-cancel\" value=\"$titleCancel\" />");
     }
