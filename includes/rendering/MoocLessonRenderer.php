@@ -161,6 +161,14 @@ class MoocLessonRenderer extends MoocContentRenderer {
         $this->out->addHTML("</a>");
     }
 
+    protected function fillModalBoxForm($sectionKey, $action) {
+        if ($sectionKey == self::SECTION_KEY_UNITS && $action == 'add') {
+            $this->out->addHTML('<input type="text" class="value" />');
+        } else {
+            parent::fillModalBoxForm($sectionKey, $action);
+        }
+    }
+
     /**
      * Adds the UI elements to the units section header that allow to add an unit.
      *
@@ -182,6 +190,14 @@ class MoocLessonRenderer extends MoocContentRenderer {
         } else {
             // TODO always add edit button
             parent::addSectionActions($sectionKey);
+        }
+    }
+
+    protected function getSectionActionIconFilename($action) {
+        if ($action == 'add') {
+            return "ic_$action.png";
+        } else {
+            return "ic_$action.svg";
         }
     }
 

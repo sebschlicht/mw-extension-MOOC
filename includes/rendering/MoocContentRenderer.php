@@ -315,16 +315,36 @@ abstract class MoocContentRenderer {
      * @param string $action action the modal box is intended for
      */
     protected function addModalBox($sectionKey, $action) {
-        $modalTitle = $this->loadMessage("modal-box-title-$sectionKey");
         $this->out->addHTML("<div class=\"modal-wrapper\">");
         $this->out->addHTML("<div class=\"modal-bg\"></div>");
         $this->out->addHTML("<div class=\"modal-box\">");
+        $this->addModalBoxContent($sectionKey, $action);
+        $this->out->addHTML('</div>');
+        $this->out->addHTML('</div>');
+    }
+
+    /**
+     * Adds the content of the modal box for a certain action.
+     *
+     * @param string $sectionKey section key
+     * @param string $action action the modal box is intended for
+     */
+    protected function addModalBoxContent($sectionKey, $action) {
+        $modalTitle = $this->loadMessage("modal-box-title-$sectionKey");
         $this->out->addHTML("<h3>$modalTitle</h3>");
         $this->out->addHTML("<form class=\"$action\">");
-        $this->out->addHTML('<textarea class="value" rows="1"></textarea>');
+        $this->fillModalBoxForm($sectionKey, $action);
         $this->out->addHTML('</form>');
-        $this->out->addHTML('</div>');
-        $this->out->addHTML('</div>');
+    }
+
+    /**
+     * Fills the form of a modal box.
+     *
+     * @param string $sectionKey section key
+     * @param string $action action the modal box is intended for
+     */
+    protected function fillModalBoxForm($sectionKey, $action) {
+        $this->out->addHTML('<textarea class="value" rows="1"></textarea>');
     }
 
     /**
@@ -336,15 +356,21 @@ abstract class MoocContentRenderer {
      */
     protected function addSectionActionButton($action, $btnTitle, $btnHref) {
         global $wgMOOCImagePath;
+        // TODO do this in CSS
+        $icSize = '32px';
+        $icAction = $wgMOOCImagePath . $this->getSectionActionIconFilename($action);
 
-        $this->out->addHTML('<div class="btn btn-' . $action . '">');
+        $this->out->addHTML("<div class=\"btn btn-$action\">");
         // TODO ensure to link to the special page allowing to perform this action
         // TODO replace href with link that allows tab-browsing with modal boxes
-        $this->out->addHTML('<a href="' . $btnHref . '" title="' . $btnTitle . '">');
-        $this->out->addHTML(
-            '<img src="' . $wgMOOCImagePath . 'ic_' . $action . '.svg" width="32px" height="32px" alt="' . $btnTitle . '" />');
+        $this->out->addHTML("<a href=\"$btnHref\" title=\"$btnTitle\">");
+        $this->out->addHTML("<img src=\"$icAction\" width=\"$icSize\" height=\"$icSize\" alt=\"$btnTitle\" />");
         $this->out->addHTML('</a>');
         $this->out->addHTML('</div>');
+    }
+
+    protected function getSectionActionIconFilename($action) {
+        return 'ic_' . $action . '.svg';
     }
 
     /**

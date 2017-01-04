@@ -7,7 +7,8 @@
   // TODO efficient jQuery selectors
   var $sections = $('#mooc-sections .section');
   var $headers = $sections.find('.header');
-  $headers.find('.actions .btn-edit').on('click', openModalBox);
+  $headers.find('.actions .btn-edit').on('click', openModalEditBox);
+  $headers.find('.actions .btn-add').on('click', openModalAddBox);
   $headers.find('.modal-bg').on('click', closeModalBoxes);
   $headers.find('.modal-box button.close').on('click', closeModalBoxes);
   $headers.find('.modal-box button.btn-cancel').on('click', closeModalBoxes);
@@ -15,6 +16,9 @@
     var $section = $(element);
     initSection($section);
     hideActions($section);
+
+    // TODO make this work: open parental section
+    $section.find('.content .edit-link').on('click', openModalEditBox);
   });
   
   $(document).keydown(function(e){
@@ -39,9 +43,24 @@
   var $navigation = $navigationBar.find('#mooc-navigation');
   var $navigationHeader = $navigation.find('.header');
   var marginBottom = 30;
-  
-  function openModalBox() {
-    var $modal = $(this).siblings('.modal-wrapper');
+
+  function openModalEditBox() {
+    return openModalBox($(this), 'edit');
+  }
+
+  function openModalAddBox() {
+    return openModalBox($(this), 'add');
+  }
+
+  function openModalBox($btn, action) {
+    var $modal = $btn.siblings('.modal-wrapper');
+    if ($modal.length > 1) {
+      // filter by action if multiple modal boxes available
+      $modal = $modal.filter(function(index, $el) {
+        return ($el.find('form.' + action).length > 1);
+      });
+    }
+
     $modal.fadeIn(200);
     $openedModalBox = $modal;
     $modal.find('.value').focus();
@@ -51,6 +70,7 @@
     if ($openedModalBox !== null) {
         closeModalBox($openedModalBox);
     }
+    return false;
   }
   function closeModalBox($modal) {
     $modal.find('.value').blur();
