@@ -307,7 +307,7 @@ abstract class MoocContentRenderer {
      */
     protected function addSectionActionEdit($sectionKey) {
         $btnHref = '/SpecialPage:MoocEdit?title=' . $this->item->title . '&section=' . $sectionKey;
-        $btnTitle = $this->loadMessage("section-$sectionKey-button-title-edit");
+        $btnTitle = $this->loadMessage("section-$sectionKey-edit-title");
 
         $this->addSectionActionButton('edit', $btnTitle, $btnHref);
         $this->addModalBox($sectionKey, 'edit');
@@ -335,7 +335,7 @@ abstract class MoocContentRenderer {
      * @param string $action action the modal box is intended for
      */
     protected function addModalBoxContent($sectionKey, $action) {
-        $modalTitle = $this->loadMessage("modal-box-title-$sectionKey");
+        $modalTitle = $this->loadMessage("section-$sectionKey-$action-title");
         $this->out->addHTML("<h3>$modalTitle</h3>");
         $this->out->addHTML("<form class=\"$action\">");
         $this->fillModalBoxForm($sectionKey, $action);
@@ -375,12 +375,12 @@ abstract class MoocContentRenderer {
         if ($action == self::ACTION_EDIT) {
             switch ($sectionKey) {
                 default:
-                    $titleSave = $this->loadMessage('modal-box-button-title-save');
+                    $titleSave = $this->loadMessage('modal-button-title-save');
                     $this->out->addHTML("<input type=\"submit\" class=\"btn-save btn-submit\" value=\"$titleSave\" />");
                     break;
             }
         }
-        $titleCancel = $this->loadMessage('modal-box-button-title-cancel');
+        $titleCancel = $this->loadMessage('modal-button-title-cancel');
         $this->out->addHTML("<input type=\"button\" class=\"btn-cancel\" value=\"$titleCancel\" />");
     }
 

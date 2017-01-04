@@ -183,9 +183,9 @@ class MoocLessonRenderer extends MoocContentRenderer {
 
     protected function addModalBoxActions($sectionKey, $action) {
         if ($sectionKey == self::SECTION_KEY_UNITS && $action == self::ACTION_ADD) {
-            $titleAdd = $this->loadMessage('modal-box-button-title-add-unit');
+            $titleAdd = $this->loadMessage('modal-button-title-add');
             $this->out->addHTML("<input type=\"submit\" class=\"btn-add btn-submit\" value=\"$titleAdd\" />");
-            $titleCancel = $this->loadMessage('modal-box-button-title-cancel');
+            $titleCancel = $this->loadMessage('modal-button-title-cancel');
             $this->out->addHTML("<input type=\"button\" class=\"btn-cancel\" value=\"$titleCancel\" />");
         } else {
             parent::addModalBoxActions($sectionKey, $action);
@@ -200,7 +200,7 @@ class MoocLessonRenderer extends MoocContentRenderer {
     protected function addSectionActionAdd($sectionKey) {
         // TODO link to add unit function instead
         $btnHref = '/SpecialPage:MoocEdit?title=' . $this->item->title . '&section=' . $sectionKey;
-        $btnTitle = $this->loadMessage("section-$sectionKey-button-title-add");
+        $btnTitle = $this->loadMessage("section-$sectionKey-add-title");
 
         $this->addSectionActionButton('add', $btnTitle, $btnHref);
         $this->addModalBox($sectionKey, 'add');
