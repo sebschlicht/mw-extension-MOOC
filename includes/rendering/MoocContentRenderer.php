@@ -100,7 +100,7 @@ abstract class MoocContentRenderer {
         $this->item = $item;
         MoocContentStructureProvider::loadMoocStructure($this->item);
 
-        $this->out->addHTML('<div id="mooc">');
+        $this->out->addHTML('<div id="mooc" class="container-fluid">');
         
         // # navigation
         $this->out->addHTML('<div id="mooc-navigation-bar" class="col-xs-12 col-sm-3">');
@@ -111,7 +111,7 @@ abstract class MoocContentRenderer {
         $this->out->addHTML('<div id="mooc-content" class="col-xs-12 col-sm-9">');
         
         // ## sections
-        $this->out->addHTML('<div id="mooc-sections">');
+        $this->out->addHTML('<div id="mooc-sections" class="row">');
         $this->addSections();
         $this->out->addHTML('</div>');
         
@@ -257,7 +257,7 @@ abstract class MoocContentRenderer {
             $classes .= ' default-collapsed';
         }
         
-        $this->out->addHTML('<div id="' . $sectionKey . '" class="' . $classes . '">');
+        $this->out->addHTML('<div id="' . $sectionKey . '" class="' . $classes . ' col-xs-12">');
         $this->addSectionHeader($sectionKey);
         $this->out->addHTML('<div class="content">');
     }
@@ -268,19 +268,19 @@ abstract class MoocContentRenderer {
      * @param string $sectionKey section key
      */
     protected function addSectionHeader($sectionKey) {
-        $sectionName = $this->loadMessage('section-' . $sectionKey);
+        $sectionTitle = $this->loadMessage("section-$sectionKey-title");
         $this->out->addHTML('<div class="header">');
         
         // actions
         $this->out->addHTML('<div class="actions">');
-        $this->addSectionActions($sectionKey, $sectionName);
+        $this->addSectionActions($sectionKey);
         $this->out->addHTML('</div>');
         
         // icon
         $this->addSectionIcon($sectionKey);
         
         // heading
-        $this->out->addHTML('<h2>' . ucfirst($sectionName) . '</h2>');
+        $this->out->addHTML("<h2>$sectionTitle</h2>");
         
         $this->out->addHTML('</div>');
     }
@@ -289,22 +289,20 @@ abstract class MoocContentRenderer {
      * Adds the action buttons for a section header to the output.
      *
      * @param string $sectionKey section key
-     * @param string $sectionName section title
      */
-    protected function addSectionActions($sectionKey, $sectionName) {
-        // add edit button
-        $this->addSectionActionEdit($sectionKey, $sectionName);
+    protected function addSectionActions($sectionKey) {
+        // edit section content
+        $this->addSectionActionEdit($sectionKey);
     }
 
     /**
-     * Adds the edit UI elements (button, modal box) to the section header in the current output.
+     * Adds the UI elements to the units section header that allow to edit the section content.
      *
      * @param string $sectionKey section key
-     * @param string $sectionName section title
      */
-    protected function addSectionActionEdit($sectionKey, $sectionName) {
+    protected function addSectionActionEdit($sectionKey) {
         $btnHref = '/SpecialPage:MoocEdit?title=' . $this->item->title . '&section=' . $sectionKey;
-        $btnTitle = $this->loadMessage('edit-section-button-title', $sectionName);
+        $btnTitle = $this->loadMessage("section-$sectionKey-button-title-edit");
 
         $this->addSectionActionButton('edit', $btnTitle, $btnHref);
         $this->addModalBox($sectionKey, 'edit');

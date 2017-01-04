@@ -120,7 +120,7 @@ class MoocLessonRenderer extends MoocContentRenderer {
     protected function addChildLinkBarDownloadLink($unit) {
         global $wgMOOCImagePath;
         $icon = $wgMOOCImagePath . 'ic_download.svg';
-        $title = $this->loadMessage("link-child-unit-download-video");
+        $title = $this->loadMessage("section-units-unit-link-download-video");
         $href = isset($unit->video) ? $this->resolveMediaUrl(Title::newFromText("Media:{$unit->video}")) : null;
         $classes = ($href == null) ? ['disabled'] : null;
         $this->addChildLinkBarLink($icon, $href, $title, $classes);
@@ -147,7 +147,7 @@ class MoocLessonRenderer extends MoocContentRenderer {
         global $wgMOOCImagePath;
         $icon = $wgMOOCImagePath . $this->getSectionIconFilename($sectionKey);
         $href = "{$unit->title->getLinkURL()}#$sectionKey";
-        $title = $this->loadMessage("link-child-unit-$sectionKey");
+        $title = $this->loadMessage("section-units-unit-link-$sectionKey");
         $this->addChildLinkBarLink($icon, $href, $title);
     }
 
@@ -161,13 +161,27 @@ class MoocLessonRenderer extends MoocContentRenderer {
         $this->out->addHTML("</a>");
     }
 
-    protected function addSectionActions($sectionKey, $sectionName) {
-        switch ($sectionKey) {
-            case self::SECTION_KEY_UNITS:
-                // TODO add button "Add Unit"
+    /**
+     * Adds the UI elements to the units section header that allow to add an unit.
+     *
+     * @param string $sectionKey section key
+     */
+    protected function addSectionActionAdd($sectionKey) {
+        // TODO link to add unit function instead
+        $btnHref = '/SpecialPage:MoocEdit?title=' . $this->item->title . '&section=' . $sectionKey;
+        $btnTitle = $this->loadMessage("section-$sectionKey-button-title-add");
 
-            default:
-                parent::addSectionActions($sectionKey, $sectionName);
+        $this->addSectionActionButton('add', $btnTitle, $btnHref);
+        $this->addModalBox($sectionKey, 'add');
+    }
+
+    protected function addSectionActions($sectionKey) {
+        if ($sectionKey == self::SECTION_KEY_UNITS) {
+            // add unit
+            $this->addSectionActionAdd($sectionKey);
+        } else {
+            // TODO always add edit button
+            parent::addSectionActions($sectionKey);
         }
     }
 
