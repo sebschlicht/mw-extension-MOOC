@@ -7,20 +7,27 @@
   // TODO efficient jQuery selectors
   var $sections = $('#mooc-sections .section');
   var $headers = $sections.find('.header');
+
+  // open modal boxes via action buttons
   $headers.find('.actions .btn-edit').on('click', openModalEditBox);
   $headers.find('.actions .btn-add').on('click', openModalAddBox);
+  // close modal boxes via background, close and cancel
   $headers.find('.modal-bg').on('click', closeModalBoxes);
   $headers.find('.modal-box button.close').on('click', closeModalBoxes);
   $headers.find('.modal-box button.btn-cancel').on('click', closeModalBoxes);
   $sections.each(function(index, element) {
     var $section = $(element);
+
+    // collapse sections and hide action buttons
     initSection($section);
     hideActions($section);
 
-    // TODO make this work: open parental section
+    // register links in empty sections
     $section.find('.content .edit-link').on('click', openModalEditBox);
+    $section.find('.content .add-link').on('click', openModalAddBox);
   });
-  
+
+  // close modal box on key ESC down
   $(document).keydown(function(e){
     e = e || window.event;
     var isEscape = false;
@@ -33,27 +40,60 @@
       closeModalBoxes();
     }
   });
-  
+
+  // show/hide actions if mouse is inside/outside the respective section
   $('#mooc-sections .section')
     .on('mouseenter', showActions)
     .on('mouseleave', hideActions);
 
-  // globals to make navigation bar sticky+
-  var $navigationBar = $('#mooc-navigation-bar');
-  var $navigation = $navigationBar.find('#mooc-navigation');
-  var $navigationHeader = $navigation.find('.header');
-  var marginBottom = 30;
+  /**
+   * Shows the action buttons of a section.
+   */
+  function showActions() {
+    $(this).children('.header').children('.actions').addClass('visible');
+  }
 
+  /**
+   * Hides the action buttons of a section.
+   */
+  function hideActions() {
+    $(this).children('.header').children('.actions').removeClass('visible');
+  }
+
+  /*
+   * ##########################
+   * Open and close modal boxes
+   * ##########################
+   */
+
+  /**
+   * Opens the modal edit box of a section when an element in the section has been clicked.
+   *
+   * @returns {boolean} whether the mouse event should be delegated or not
+   */
   function openModalEditBox() {
     return openModalBox($(this), 'edit');
   }
 
+  /**
+   * Opens the modal add box of a section when an element in the section has been clicked.
+   *
+   * @returns {boolean} whether the mouse event should be delegated or not
+   */
   function openModalAddBox() {
     return openModalBox($(this), 'add');
   }
 
-  function openModalBox($btn, action) {
-    var $modal = $btn.siblings('.modal-wrapper');
+  /**
+   * Opens a modal box of a section.
+   *
+   * @param $element element in the section that has been clicked
+   * @param action action the modal box should be opened for
+   * @returns {boolean} whether the mouse event should be delegated or not
+   */
+  function openModalBox($element, action) {
+    var $section = $element.parents('.section');
+    var $modal = $section.find('.header .modal-wrapper');
     if ($modal.length > 1) {
       // filter by action if multiple modal boxes available
       $modal = $modal.filter(function(index, $el) {
@@ -66,17 +106,35 @@
     $modal.find('.value').focus();
     return false;
   }
+
+  /**
+   * Closes the currently open modal box - if any.
+   *
+   * @returns {boolean} whether the mouse event should be delegated or not
+   */
   function closeModalBoxes() {
     if ($openedModalBox !== null) {
         closeModalBox($openedModalBox);
     }
     return false;
   }
+
+  /**
+   * Closes a modal box.
+   *
+   * @param $modal modal box
+   */
   function closeModalBox($modal) {
     $modal.find('.value').blur();
     $modal.fadeOut(200);
   }
-  
+
+  /*
+   * ############################
+   * Collapse and expand sections
+   * ############################
+   */
+
   function initSection($section) {
     // make section collapsable
     if (isSectionCollapsable($section)) {
@@ -161,13 +219,12 @@
     $expander.on('click', expandClickedSection);
   }
   
-  function showActions() {
-    $(this).children('.header').children('.actions').addClass('visible');
-  }
-  function hideActions() {
-    $(this).children('.header').children('.actions').removeClass('visible');
-  }
-  
+  // globals to make navigation bar sticky+
+  var $navigationBar = $('#mooc-navigation-bar');
+  var $navigation = $navigationBar.find('#mooc-navigation');
+  var $navigationHeader = $navigation.find('.header');
+  var marginBottom = 30;
+
   // make navigation bar sticky+
   $(window).scroll(function() {
     var y = $(window).scrollTop();
