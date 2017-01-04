@@ -345,6 +345,10 @@ abstract class MoocContentRenderer {
      */
     protected function fillModalBoxForm($sectionKey, $action) {
         $this->out->addHTML('<textarea class="value" rows="1"></textarea>');
+        $titleSave = $this->loadMessage('modal-box-button-title-save');
+        $this->out->addHTML("<input type=\"submit\" class=\"btn-save\" value=\"$titleSave\" />");
+        $titleCancel = $this->loadMessage('modal-box-button-title-cancel');
+        $this->out->addHTML("<input type=\"button\" class=\"btn-cancel\" value=\"$titleCancel\" />");
     }
 
     /**

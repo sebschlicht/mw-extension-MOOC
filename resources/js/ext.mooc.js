@@ -13,8 +13,8 @@
   $headers.find('.actions .btn-add').on('click', openModalAddBox);
   // close modal boxes via background, close and cancel
   $headers.find('.modal-bg').on('click', closeModalBoxes);
-  $headers.find('.modal-box button.close').on('click', closeModalBoxes);
-  $headers.find('.modal-box button.btn-cancel').on('click', closeModalBoxes);
+  $headers.find('.modal-box .btn-close').on('click', closeModalBoxes);
+  $headers.find('.modal-box .btn-cancel').on('click', closeModalBoxes);
   $sections.each(function(index, element) {
     var $section = $(element);
 
