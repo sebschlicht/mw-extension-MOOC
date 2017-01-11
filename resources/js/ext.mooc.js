@@ -4,8 +4,7 @@
   var $openedModalBox = null;
   
   // register UI event hooks
-  // TODO efficient jQuery selectors
-  var $sections = $('#mooc-sections .section');
+  var $sections = $('#mooc-sections').find('.section');
   var $headers = $sections.find('.header');
 
   // open modal boxes via action buttons
@@ -42,7 +41,7 @@
   });
 
   // show/hide actions if mouse is inside/outside the respective section
-  $('#mooc-sections .section')
+  $sections
     .on('mouseenter', showActions)
     .on('mouseleave', hideActions);
 

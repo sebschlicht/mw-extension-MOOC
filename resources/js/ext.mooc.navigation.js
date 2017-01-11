@@ -7,6 +7,7 @@
   var marginBottom = 30;
 
   // make navigation bar sticky+
+  //TODO make navigation bar unsticky when screen width too low
   $(window).scroll(function() {
     var y = $(window).scrollTop();
     var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
