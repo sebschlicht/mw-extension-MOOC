@@ -18,42 +18,44 @@
   } );
 
   function registerApiCalls() {
-    $( '#units.section .header form.add .btn-submit' ).on('click', function() {
-      var $btn = $(this);
-      var $form = $btn.parent('form');
-      var $value = $form.find('.value');
-      // TODO validate
-      var $name = $value.val();
-      var title = mw.config.get('wgPageName') + '/' + $name;
-      console.log('creating ' + title);
+    $( '#units.section .header form.add .btn-submit' ).on('click', addUnitToCurrentLesson);
+  }
 
-      var $api = new mw.Api();
-      $api.edit(title, {
-        action: 'edit',
-        createonly: true,
-        summary: 'Adding the lesson "' + $name + '".',
-        text: '{"type":"unit"}',
-        // TODO badformat why?
-        //contentformat: 'application/json',
-        // TODO currently not possible when logged out (or even non-admin?)
-        contentmodel: 'mooc-item'
-      }).then(function (json) {
-        // TODO setup mw loggingg
-        console.log(json);
-      }).fail(function (code, result) {
-        if (code === "http") {
-          console.log("HTTP error: " + result.textStatus); // result.xhr contains the jqXHR object
-          console.log(result);
-        } else if (code === "ok-but-empty") {
-          console.log("Got an empty response from the server");
-        } else {
-          console.log("API error: " + code);
-          console.log(result);
-        }
-      });
+  function addUnitToCurrentLesson() {
+    var $form = $(this).parent('form');
+    var unitName = $form.find('.value').val();
+    // TODO validate unit name
 
-      return false;
+    return apiAddUnitToLesson(mw.config.get('wgPageName'), unitName);
+  }
+
+  function apiAddUnitToLesson(lessonTitle, unitName) {
+    var unitTitle = lessonTitle + '/' + unitName;
+    mw.log('adding unit ' + unitName + ' (' + unitTitle + ') to lesson ' + lessonTitle);
+
+    //TODO summary localization
+    var $api = new mw.Api();
+    $api.create(unitTitle, {
+      summary: 'Adding the unit "' + unitName + '".',
+      text: '{"type":"unit"}',
+      // TODO badformat why?
+      //contentformat: 'application/json',
+      // TODO currently not possible when logged out (or even non-admin?)
+      contentmodel: 'mooc-item'
+    }).then(function (json) {
+      mw.log('The unit has been added successfully. Response:');
+      mw.log(json);
+    }).fail(function (code, result) {
+      mw.log.warn('Failed to add the unit! Cause:');
+      if (code === "http") {
+        mw.log.warn("HTTP error: " + result.textStatus); // result.xhr contains the jqXHR object
+      } else {
+        mw.log.warn("API error: " + code);
+      }
+      mw.log.warn(result);
     });
+
+    return false;
   }
   
   // TODO: if possible, we should load the VisualEditor instead
