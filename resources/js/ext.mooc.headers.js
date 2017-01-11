@@ -5,6 +5,15 @@
   var $sections = $('#mooc-sections').find('.section');
   var $activeSection = null;
 
+  // make section headers absolute for stickyness
+  //TODO make this a separate LESS file and pack JS and LESS to an own module
+  $sections.each( function() {
+    var $section = $(this);
+    var $sectionHeader = $section.children('.header');
+    $sectionHeader.css('position', 'absolute').css('top', 0).css('width', '100%');
+    $section.css('padding-top', $sectionHeader.outerHeight());
+  } );
+
   function setActiveSection($section) {
     if ($activeSection !== null) {
       setSectionActive($activeSection, false);
@@ -35,11 +44,7 @@
   }
 
   function trailSectionHeader($header, sectionHeight, isFixed) {
-    if (isFixed) {
-      $header.css('position', 'absolute');
-      $header.css('width', '100%');
-      $header.removeClass('fixed');
-    }
+    resetSectionHeader($header, isFixed);
     $header.css('top', sectionHeight - $header.outerHeight());
     $header.addClass('trailing');
   }
