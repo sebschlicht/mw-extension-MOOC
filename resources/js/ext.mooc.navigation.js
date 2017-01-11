@@ -1,6 +1,7 @@
 ( function ( mw, $ ) {
 
   // globals to make navigation bar sticky+
+  var $window = $(window);
   var $navigationBar = $('#mooc-navigation-bar');
   var $navigation = $navigationBar.find('#mooc-navigation');
   var $navigationHeader = $navigation.find('.header');
@@ -8,8 +9,8 @@
 
   // make navigation bar sticky+
   //TODO make navigation bar unsticky when screen width too low
-  $(window).scroll(function() {
-    var y = $(window).scrollTop();
+  $window.scroll(function() {
+    var y = $window.scrollTop();
     var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
     var rootTop = $navigationBar.offset().top;
     var maxY = rootTop + $navigation.outerHeight();
@@ -106,10 +107,10 @@
   }
 
   // repair navigation bar when window is resized
-  $(window).resize(function() {
+  $window.resize(function() {
     resetNavBarHeader($navigationHeader);
     resetNavBar($navigation);
-    $(window).scroll();
+    $window.scroll();
   });
 
 }( mediaWiki, jQuery ) );

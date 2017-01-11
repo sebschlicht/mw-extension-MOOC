@@ -64,6 +64,7 @@
    * Open and close modal boxes
    * ##########################
    */
+  //TODO do avoid intereference with MediaWiki interface we could move the modal to root in DOM when opening
 
   /**
    * Opens the modal edit box of a section when an element in the section has been clicked.
