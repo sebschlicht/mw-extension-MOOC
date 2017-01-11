@@ -28,6 +28,7 @@
   "mooc-section-units-unit-link-script": "Title of the link to the unit's script section.",
   "mooc-section-units-unit-link-quiz": "Title of the link to the unit's quiz section.",
   "mooc-section-lessons-title": "Title of the lessons section.",
+  "mooc-lesson-add-unit-summary": "Edit summary when adding a unit to a lesson. Parameters: 1. name of the unit",
   "mooc-modal-button-title-save": "Label of the button to save the changes made in the modal box.",
   "mooc-modal-button-title-add": "Label of the button to add the item specified in the modal box.",
   "mooc-modal-button-title-cancel": "Label of the button to close the modal box and cancel the current action.",

@@ -13,12 +13,14 @@
   // fill modal boxes with item content
   fillModalBoxes( item );
   
-  mw.loader.using( 'mediawiki.api.edit', registerApiCalls, function() {
-    console.error( 'failed to load mw.Api' );
+  mw.loader.using( [ 'mediawiki.api.messages', 'mediawiki.jqueryMsg', 'mediawiki.api.edit'], registerApiCalls, function() {
+    mw.log.error( 'Failed to load MediaWiki modules to initialize MOOC extension!' );
   } );
 
   function registerApiCalls() {
-    $( '#units.section .header form.add .btn-submit' ).on('click', addUnitToCurrentLesson);
+    new mw.Api().loadMessagesIfMissing( ['mooc-lesson-add-unit-summary'] ).then( function() {
+      $( '#units.section .header form.add .btn-submit' ).on('click', addUnitToCurrentLesson);
+    } );
   }
 
   function addUnitToCurrentLesson() {
@@ -36,16 +38,17 @@
     //TODO summary localization
     var $api = new mw.Api();
     $api.create(unitTitle, {
-      summary: 'Adding the unit "' + unitName + '".',
+      summary: mw.message( 'mooc-lesson-add-unit-summary', unitName ).text(),
       text: '{"type":"unit"}',
       // TODO badformat why?
       //contentformat: 'application/json',
-      // TODO currently not possible when logged out (or even non-admin?)
+      // TODO currently not possible when logged out (or even if logged-in as non-admin?)
       contentmodel: 'mooc-item'
     }).then(function (json) {
       mw.log('The unit has been added successfully. Response:');
       mw.log(json);
-      //TODO reload to update children?!
+      //TODO force purge of cache once enabled
+      reloadPage();
     }).fail(function (code, response) {
       mw.log.warn('Failed to add the unit! Cause:');
       mw.log.warn(response.error);
@@ -58,6 +61,10 @@
     });
 
     return false;
+  }
+
+  function reloadPage() {
+    window.location.reload(true);
   }
   
   // TODO: if possible, we should load the VisualEditor instead
