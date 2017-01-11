@@ -8,6 +8,7 @@
   function setActiveSection($section) {
     if ($activeSection !== null) {
       setSectionActive($activeSection, false);
+      resetSectionHeader($activeSection.children('.header'));
     }
     if ($section !== null) {
       setSectionActive($section, true);
@@ -44,7 +45,7 @@
   }
 
   function resetSectionHeader($header, isFixed) {
-    if (isFixed) {
+    if (isFixed || (isFixed === undefined && $header.hasClass('fixed'))) {
       $header.css('position', 'absolute');
       $header.css('width', '100%');
       $header.removeClass('fixed');
@@ -62,7 +63,7 @@
       var $section = $(this);
       var $sectionHeader = $section.children('.header');
       var sectionTop = $section.offset().top;
-      var sectionHeight = $section.height();
+      var sectionHeight = $section.outerHeight();
       var isActive = $section.hasClass('active');
       var isFixed = $sectionHeader.hasClass('fixed');
 
@@ -77,7 +78,7 @@
           }
         } else {// header reached section bottom
           if (!$sectionHeader.hasClass('trailing')) {
-            trailSectionHeader($sectionHeader, $section.height(), isFixed);
+            trailSectionHeader($sectionHeader, sectionHeight, isFixed);
           }
         }
       } else { // inactive section
