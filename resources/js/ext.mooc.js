@@ -93,6 +93,8 @@
    */
   function openModalBox($element, action) {
     var $section = $element.parents('.section');
+    // increase section z-index to bring modal in foreground
+    $section.css('z-index', 2);
     var $modal = $section.find('.header .modal-wrapper');
     if ($modal.length > 1) {
       // filter by action if multiple modal boxes available
@@ -125,6 +127,9 @@
    * @param $modal modal box
    */
   function closeModalBox($modal) {
+    // reset section z-index
+    var $section = $modal.parents('.section');
+    $section.css('z-index', '');
     $modal.find('.value').blur();
     $modal.fadeOut(200);
   }
