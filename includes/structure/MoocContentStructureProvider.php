@@ -57,6 +57,7 @@ class MoocContentStructureProvider {
 
 
         // load structure from item titles
+        //TODO this requires the items to be sorted by title while children arrays MUST maintain the original creation ordering
         $rootItem = array_shift( $items );
         $prevLesson = null;
         foreach ( $items as $item ) {
