@@ -45,14 +45,16 @@
     }).then(function (json) {
       mw.log('The unit has been added successfully. Response:');
       mw.log(json);
-    }).fail(function (code, result) {
+      //TODO reload to update children?!
+    }).fail(function (code, response) {
       mw.log.warn('Failed to add the unit! Cause:');
+      mw.log.warn(response.error);
+      mw.log(response);
+
       if (code === "http") {
-        mw.log.warn("HTTP error: " + result.textStatus); // result.xhr contains the jqXHR object
-      } else {
-        mw.log.warn("API error: " + code);
+        mw.log.warn("HTTP error: " + response.textStatus); // result.xhr contains the jqXHR object
       }
-      mw.log.warn(result);
+      //TODO show the user that the process has failed!
     });
 
     return false;
