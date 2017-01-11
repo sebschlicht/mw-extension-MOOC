@@ -75,11 +75,6 @@ abstract class MoocItem {
     public $furtherReading;
 
     /**
-     * @var string[] names of child items
-     */
-    public $childNames;
-
-    /**
      * @var MoocItem[] child items
      */
     public $children;
@@ -123,7 +118,7 @@ abstract class MoocItem {
      * @return boolean whether the item has children
      */
     public function hasChildren() {
-        return isset($this->childNames) && !empty($this->childNames);
+        return isset($this->children) && !empty($this->children);
     }
 
     /**
