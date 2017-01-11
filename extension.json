@@ -68,6 +68,7 @@
       "scripts": [
         "resources/js/ext.mooc.js",
         "resources/js/ext.mooc.navigation.js",
+        "resources/js/ext.mooc.headers.js",
         "resources/js/ext.mooc.edit.js",
         "resources/js/jquery-ui.min.js"
       ],
