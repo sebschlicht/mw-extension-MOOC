@@ -1,0 +1,114 @@
+( function ( mw, $ ) {
+
+  // globals to make navigation bar sticky+
+  var $navigationBar = $('#mooc-navigation-bar');
+  var $navigation = $navigationBar.find('#mooc-navigation');
+  var $navigationHeader = $navigation.find('.header');
+  var marginBottom = 30;
+
+  // make navigation bar sticky+
+  $(window).scroll(function() {
+    var y = $(window).scrollTop();
+    var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    var rootTop = $navigationBar.offset().top;
+    var maxY = rootTop + $navigation.outerHeight();
+
+    var isNavigationFixed = $navigation.hasClass('fixed');
+    var isNavigationHeaderFixed = $navigationHeader.hasClass('fixed');
+    var isNavigationTrailing = $navigation.hasClass('trailing');
+
+    if (y >= rootTop) {// navigation bar is (about to scroll) out of view
+      if (h - marginBottom >= $navigation.outerHeight()) {// navigation fits view
+        if (!isNavigationFixed) {
+          fixNavBar($navigation);
+        }
+      } else {// navigation too large
+        if (!isNavigationHeaderFixed) {// fix navigation header
+          fixNavBarHeader($navigationHeader);
+        }
+        if (y + h >= maxY + marginBottom) {// bottom reached, disable scrolling
+          if (!isNavigationTrailing) {
+            preventNavBarScrolling($navigation, marginBottom);
+          }
+        } else {// content available, activate scrolling (again)
+          if (isNavigationTrailing) {
+            resetNavBar($navigation);
+          }
+        }
+      }
+    } else {
+      if (isNavigationHeaderFixed) {
+        resetNavBarHeader($navigationHeader);
+      }
+      if (isNavigationFixed) {
+        resetNavBar($navigation);
+      }
+    }
+  });
+
+  /**
+   * Fixes the navigation bar header.
+   *
+   * @param $header header jQuery-element
+   */
+  function fixNavBarHeader($header) {
+    $header.css('width', $header.outerWidth());
+    $header.parent().css('padding-top', $header.outerHeight());
+    $header.addClass('fixed');
+  }
+
+  /**
+   * Unfixes the navigation bar header.
+   * @param $header header jQuery-element
+   */
+  function resetNavBarHeader($header) {
+    $header.removeClass('fixed');
+    $header.css('width', '');
+    $header.parent().css('padding-top', '0');
+  }
+
+  /**
+   * Fixes the navigation bar.
+   *
+   * @param $navigation navigation bar jQuery-element
+   */
+  function fixNavBar($navigation) {
+    $navigation.removeClass('trailing');
+    $navigation.css('width', $navigation.outerWidth());
+    $navigation.css('top', 0);
+    $navigation.addClass('fixed');
+  }
+
+  /**
+   * Prevents the navigation bar from scrolling out of view.
+   *
+   * @param $navigation navigation bar jQuery-element
+   * @param marginBottom margin to keep to the lower window frame border
+   */
+  function preventNavBarScrolling($navigation, marginBottom) {
+    $navigation.css('width', $navigation.outerWidth());
+    $navigation.css('top', '');
+    $navigation.css('bottom', marginBottom);
+    $navigation.addClass('trailing');
+  }
+
+  /**
+   * Unfixes the navigation bar.
+   *
+   * @param $navigation navigation bar jQuery-element
+   */
+  function resetNavBar($navigation) {
+    $navigation.removeClass('fixed');
+    $navigation.removeClass('trailing');
+    $navigation.css('width', '');
+    $navigation.css('bottom', '');
+  }
+
+  // repair navigation bar when window is resized
+  $(window).resize(function() {
+    resetNavBarHeader($navigationHeader);
+    resetNavBar($navigation);
+    $(window).scroll();
+  });
+
+}( mediaWiki, jQuery ) );
