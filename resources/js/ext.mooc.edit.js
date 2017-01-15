@@ -41,6 +41,40 @@
   }
 
   /**
+   * Saves an item.
+   *
+   * @param title item title
+   * @param item item
+   * @returns {boolean} whether the mouse event should be delegated or not
+   */
+  function apiSaveItem ( title, item ) {
+    var itemJson = JSON.stringify( item );
+    mw.log( 'saving item ' + title + ': ' +  itemJson);
+
+    new mw.Api().edit( title, function () {
+      return {
+        summary: 'TODO',
+        text: itemJson
+      };
+    } ).then( function( json ) {
+      mw.log( 'The item has been saved successfully. Response:' );
+      mw.log( json );
+      reloadPage();
+    } ).fail( function ( code, response ) {
+      mw.log.warn( 'Failed to save the item! Cause:' );
+      mw.log.warn( response.error );
+      mw.log( response );
+
+      if ( code === "http" ) {
+        mw.log.warn( "HTTP error: " + response.textStatus ); // result.xhr contains the jqXHR object
+      }
+      //TODO show the user that the process has failed!
+    } );
+
+    return false;
+  }
+
+  /**
    * Adds an unit to a lesson using the MediaWiki API in the background.
    *
    * @param lessonTitle title of the lesson
@@ -51,8 +85,7 @@
     var unitTitle = lessonTitle + '/' + unitName;
     mw.log( 'adding unit ' + unitName + ' (' + unitTitle + ') to lesson ' + lessonTitle );
 
-    var $api = new mw.Api();
-    $api.create( unitTitle, {
+    new mw.Api().create( unitTitle, {
       summary: mw.message( 'mooc-lesson-add-unit-summary', unitName ).text(),
       text: '{"type":"unit"}',
       // TODO currently not possible when logged out (or even if logged-in as non-admin?)
@@ -60,7 +93,6 @@
     } ).then( function ( json ) {
       mw.log( 'The unit has been added successfully. Response:' );
       mw.log( json );
-      //TODO force purge of cache once enabled
       reloadPage();
     } ).fail( function ( code, response ) {
       mw.log.warn( 'Failed to add the unit! Cause:' );
@@ -78,6 +110,7 @@
 
   /**
    * Reloads the current page, triggering a new HTTP GET request.
+   * TODO force purge of cache once enabled
    */
   function reloadPage() {
     window.location.reload( true );
@@ -109,10 +142,13 @@
    */
   function fillModalBox( section, item ) {
     var $form = $( '#mooc' ).find( '#' + section ).find( '.header form.edit' );
+    var $btnSave = $form.find( '.btn-save' );
+
     switch ( section ) {
       case 'learning-goals':
       case 'further-reading':
         buildHtmlList( $form.find( 'ol.value' ), item[section] );
+        $btnSave.on( 'click', onSaveItem );
         break;
 
       default:
@@ -126,6 +162,49 @@
         }
         break;
     }
+  }
+
+  /**
+   * jQuery-callback to apply the changes made via the modal edit box to the item and save these changes into the item page.
+   *
+   * @param e click event
+   * @returns {boolean} whether the mouse event should be delegated or not
+   */
+  function onSaveItem( e ) {
+    var $btnSave = $( e.target );
+    var $form = $btnSave.parents( 'form' );
+    var section = $form.parents( '.section' ).attr( 'id' );
+
+    // apply changes to item
+    switch ( section ) {
+      case 'learning-goals':
+      case 'further-reading':
+        item[section] = buildList( $form.find( 'ol.value' ) );
+        break;
+    }
+
+    // save item
+    return apiSaveItem( mw.config.get( 'wgPageName' ), item );
+  }
+
+  /**
+   * Transforms a HTML list into a list of values.
+   * The values are extracted from the input fields in each HTML list item.
+   * Empty values will be dropped.
+   *
+   * @param $list HTML list jQuery-element
+   * @returns {Array} list of values in the HTML list item's input fields
+   */
+  function buildList( $list ) {
+    var list = [];
+    $list.children().each( function ( i, e ) {
+      var $item = $( e );
+      var value = $item.find( '.value' ).val().trim();
+      if ( value.length > 0 ) {
+        list.push( value );
+      }
+    } );
+    return list;
   }
 
   /**
@@ -145,6 +224,7 @@
     } else {
       addListItem( $list, '' );
     }
+    // TODO focus last input field and set cursor to end on showModal
   }
 
   /**
@@ -199,7 +279,7 @@
       $nextInput.focus();
       if ( focusNextItem ) {
         // move selection to start
-        $nextInput[0].setSelectionRange(0, 0);
+        $nextInput[0].setSelectionRange( 0, 0 );
       }
 
       $listItem.remove();
