@@ -23,7 +23,7 @@
    */
   function registerApiCalls() {
     new mw.Api().loadMessagesIfMissing( ['mooc-lesson-add-unit-summary'] ).then( function () {
-      $( '#units' ).find( '.section .header form.add .btn-submit' ).on( 'click', addUnitToCurrentLesson );
+      $( '#units' ).find( '.header form.add .btn-submit' ).on( 'click', addUnitToCurrentLesson );
     } );
   }
 
@@ -91,36 +91,169 @@
    * @param item MOOC item being currently displayed
    */
   function fillModalBoxes( item ) {
-    var htmlListSeparator = '';
-    function arrayToHtmlList( a ) {
-      if ( a === undefined || a.length === 0 ) {
-        return '';
-      }
-      return htmlListSeparator + a.join( '\n' + htmlListSeparator ) + '\n';
-    }
-    
-    fillModalBox( 'learning-goals', arrayToHtmlList( item['learning-goals'] ) );
-    fillModalBox( 'video', item.video );
+    // learning goals
+    fillModalBox( 'learning-goals', item );
+    // video
+    fillModalBox( 'video', item );
     //TODO script
     //TODO quiz
-    fillModalBox( 'further-reading', arrayToHtmlList( item['further-reading'] ) );
+    // further reading
+    fillModalBox( 'further-reading', item );
   }
 
   /**
    * Fills the modal edit box of a section with content.
    *
-   * @param id section id
-   * @param content content to be filled in the form element of the modal that holds the value
+   * @param section section id
+   * @param item item holding the content
    */
-  function fillModalBox( id, content ) {
-    var $input = $( '#mooc' ).find( '#' + id ).find( '.section .header form.edit .value' );
-    $input.val( content );
+  function fillModalBox( section, item ) {
+    var $form = $( '#mooc' ).find( '#' + section ).find( '.header form.edit' );
+    switch ( section ) {
+      case 'learning-goals':
+      case 'further-reading':
+        buildHtmlList( $form.find( 'ol.value' ), item[section] );
+        break;
 
-    // register resizing for textareas
-    if ( $input.is( 'textarea.auto-grow ') ) {
-        resizeTextarea( $input );
-        $input.on( 'keyup', textareaValueChanged );
+      default:
+        var $input = $form.find( '.value' );
+        $input.val( item[section] );
+
+        // register resizing for textareas
+        if ( $input.is( 'textarea.auto-grow ') ) {
+          resizeTextarea( $input );
+          $input.on( 'keyup', textareaValueChanged );
+        }
+        break;
     }
+  }
+
+  /**
+   * Transforms a list of values into HTML list items with input fields containing the values.
+   * These list items are injected into the specified HTML list, after its previous items have been removed.
+   * One list items will be added to the list at least - even if the specified value list is empty.
+   *
+   * @param $list list jQuery-element
+   * @param items items to be filled in the list item input fields
+   */
+  function buildHtmlList( $list, items ) {
+    $list.empty();
+    if ( items.length > 0 ) {
+      for ( var i = 0; i < items.length; i++ ) {
+        addListItem( $list, items[i] );
+      }
+    } else {
+      addListItem( $list, '' );
+    }
+  }
+
+  /**
+   * Adds an item to a list.
+   * If there is a previous item specified, it will be inserted hereafter.
+   * Otherwise it will be added to the end of the list.
+   *
+   * @param $list list to add the item to
+   * @param value input field value
+   * @param $prev (optional) previous list item
+   * @returns {*} input field jQuery-element
+   */
+  function addListItem( $list, value, $prev ) {
+    var $input = $( '<input>', {
+      'class': 'form-control value',
+      'type': 'text',
+      'value': value
+    } );
+    $input.on( 'keydown', onListItemInputKeyDown);
+
+    var $listItem = $( '<li>' ).append($input);
+    if ( $prev === undefined ) {
+      $list.append($listItem);
+    } else {
+      $prev.after($listItem);
+    }
+    $input.focus();
+
+    return $input;
+  }
+
+  /**
+   * Removes a list item if there still are other items to work with.
+   *
+   * @param $listItem list item jQuery-element
+   * @param focusNextItem whether to focus the next item instead of the previous one
+   * @returns {boolean} whether the list item has been removed or not
+   */
+  function removeListItem( $listItem, focusNextItem ) {
+    // remove only if other list items available
+    if ( $listItem.siblings().length > 0 ) {
+      // select list item to be focused next
+      // TODO set cursor position to start/end
+      var $nextListItem = $listItem.prev();
+      focusNextItem = focusNextItem || ( $nextListItem.length === 0 );
+      if ( focusNextItem ) {
+        $nextListItem = $listItem.next();
+      }
+
+      // set focus to input field of next list item
+      var $nextInput = $nextListItem.find( 'input.value' );
+      $nextInput.focus();
+      if ( focusNextItem ) {
+        // move selection to start
+        $nextInput[0].setSelectionRange(0, 0);
+      }
+
+      $listItem.remove();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * jQuery-callback to insert/remove list items when a key is pressed down in a list item input.
+   *
+   * @param e keydown event
+   * @returns {boolean} whether to further delegate the event or not
+   */
+  function onListItemInputKeyDown ( e ) {
+    var $input = null;
+    switch ( e.which ) {
+      // Backspace
+      case 8:
+        $input = $( this );
+        if ( $input.val().length === 0 ) {
+          removeListItem( getListItem( $input ), false );
+          e.preventDefault();
+          return false;
+        }
+        break;
+
+      // Enter
+      case 13:
+        var $listItem = getListItem( $( this ) );
+        addListItem( $listItem.parent(), '', $listItem);
+        e.preventDefault();
+        return false;
+
+      // Delete
+      case 46:
+        $input = $( this );
+        if ( $input.val().length === 0 ) {
+          removeListItem( getListItem( $input ), true );
+          e.preventDefault();
+          return false;
+        }
+        break;
+    }
+  }
+
+  /**
+   * Retrieves the parent list item containing the input field specified.
+   *
+   * @param $input input field
+   * @returns {*} list item jQuery-element
+   */
+  function getListItem( $input ) {
+    return $input.parent( 'li' );
   }
 
   /**
