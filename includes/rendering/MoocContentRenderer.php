@@ -337,9 +337,13 @@ abstract class MoocContentRenderer {
     protected function addModalBoxContent($sectionKey, $action) {
         $modalTitle = $this->loadMessage("section-$sectionKey-$action-title");
         $this->out->addHTML("<h3>$modalTitle</h3>");
-        $this->out->addHTML("<form class=\"$action\">");
+        $this->out->addHTML("<form class=\"$action container-fluid\">");
+        $this->out->addHTML("<div class=\"form-group row\">");
         $this->fillModalBoxForm($sectionKey, $action);
+        $this->out->addHTML('</div>');
+        $this->out->addHTML("<div class=\"form-group row\">");
         $this->addModalBoxActions($sectionKey, $action);
+        $this->out->addHTML('</div>');
         $this->out->addHTML('</form>');
     }
 
@@ -355,6 +359,12 @@ abstract class MoocContentRenderer {
                 case self::SECTION_KEY_VIDEO:
                     // simple text input field
                     $this->out->addHTML('<input type="text" class="value" />');
+                    break;
+
+                // ordered lists
+                case self::SECTION_KEY_LEARNING_GOALS:
+                case self::SECTION_KEY_FURTHER_READING:
+                    $this->out->addHTML('<ol class="value"></ol>');
                     break;
 
                 default:
