@@ -190,11 +190,11 @@
    */
   function initModalEditBox( section, item ) {
     var $form = $( '#mooc' ).find( '#' + section ).find( '.header form.edit' );
+    fillModalBoxForm( $form, section, item );
     var $btnSave = $form.find( '.btn-save' );
     $btnSave.on( 'click', onSaveItem );
     var $btnReset = $form.find( '.btn-reset' );
     $btnReset.on( 'click', onResetModal );
-    fillModalBoxForm( $form, section, item );
   }
 
   /**
