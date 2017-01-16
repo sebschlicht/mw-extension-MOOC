@@ -10,9 +10,6 @@
     }
   });
 
-  // fill modal boxes with item content
-  fillModalBoxes( item );
-
   // register API calls when resources ready
   mw.loader.using( [ 'mediawiki.api.messages', 'mediawiki.jqueryMsg', 'mediawiki.api.edit'], registerApiCalls, function () {
     mw.log.error( 'Failed to load MediaWiki modules to initialize MOOC extension!' );
@@ -23,6 +20,9 @@
    */
   function registerApiCalls() {
     new mw.Api().loadMessagesIfMissing( ['mooc-lesson-add-unit-summary'] ).then( function () {
+      // initialize modal edit boxes
+      initModalEditBoxes( item );
+
       $( '#units' ).find( '.header form.add .btn-submit' ).on( 'click', addUnitToCurrentLesson );
     } );
   }
@@ -41,20 +41,64 @@
   }
 
   /**
+   * Gets the raw content of a page.
+   *
+   * @param title page title
+   * @returns {*} jQuery-promise on the AJAX GET request
+   */
+  function apiGetRawPage( title ) {
+    return new mw.Api().get( {
+      'action': 'query',
+      'prop': 'revisions',
+      'rvprop': 'content',
+      'titles': title
+    } ).then( function ( json ) {
+      mw.log( 'The page has been retrieved successfully. Response:' );
+      mw.log( json );
+      return getFirstPageRevisionContent( json );
+    } ).fail( function ( code, response ) {
+      mw.log.warn( 'Failed to save the item! Cause:' );
+      mw.log.warn( response.error );
+      mw.log( response );
+
+      if ( code === "http" ) {
+        mw.log.warn( "HTTP error: " + response.textStatus ); // result.xhr contains the jqXHR object
+      }
+      //TODO show the user that the process has failed!
+    } );
+  }
+
+  /**
+   * Extracts the content of the first revision of the first page in a revisions query response.
+   *
+   * @param json revisions query response
+   * @returns {string|null} content of the first revision of the first page in the revisions query response
+   */
+  function getFirstPageRevisionContent( json ) {
+    if ( 'query' in json && 'pages' in json.query ) {
+      var pages = json.query.pages;
+      if ( pages.length > 0 ) {
+        return pages[0].revisions[0]['*'];
+      }
+    }
+    return null;
+  }
+
+  /**
    * Saves an item.
    *
    * @param title item title
    * @param item item
    * @returns {boolean} whether the mouse event should be delegated or not
    */
-  function apiSaveItem ( title, item ) {
+  function apiSaveItem( title, item ) {
     var itemJson = JSON.stringify( item );
     mw.log( 'saving item ' + title + ': ' +  itemJson);
 
     new mw.Api().edit( title, function () {
       return {
-        summary: 'TODO',
-        text: itemJson
+        'summary': 'TODO',
+        'text': itemJson
       };
     } ).then( function( json ) {
       mw.log( 'The item has been saved successfully. Response:' );
@@ -86,10 +130,10 @@
     mw.log( 'adding unit ' + unitName + ' (' + unitTitle + ') to lesson ' + lessonTitle );
 
     new mw.Api().create( unitTitle, {
-      summary: mw.message( 'mooc-lesson-add-unit-summary', unitName ).text(),
-      text: '{"type":"unit"}',
+      'summary': mw.message( 'mooc-lesson-add-unit-summary', unitName ).text(),
+      'text': '{"type":"unit"}',
       // TODO currently not possible when logged out (or even if logged-in as non-admin?)
-      contentmodel: 'mooc-item'
+      'contentmodel': 'mooc-item'
     } ).then( function ( json ) {
       mw.log( 'The unit has been added successfully. Response:' );
       mw.log( json );
@@ -117,49 +161,66 @@
   }
   
   /**
-   * Fills the modal edit boxes with content from the currently displayed MOOC item.
-   *
+   * Initializes the modal edit box that allow users to edit the item being currently displayed.
    * TODO: if possible, we should load the VisualEditor instead
    *
    * @param item MOOC item being currently displayed
    */
-  function fillModalBoxes( item ) {
+  function initModalEditBoxes( item ) {
     // learning goals
-    fillModalBox( 'learning-goals', item );
+    initModalEditBox( 'learning-goals', item );
     // video
-    fillModalBox( 'video', item );
-    //TODO script
-    //TODO quiz
+    initModalEditBox( 'video', item );
+    // script
+    initModalEditBox( 'script', item );
+    // quiz
+    initModalEditBox( 'quiz', item );
     // further reading
-    fillModalBox( 'further-reading', item );
+    initModalEditBox( 'further-reading', item );
   }
 
   /**
-   * Fills the modal edit box of a section with content.
+   * Initializes a modal edit box.
    *
    * @param section section id
    * @param item item holding the content
    */
-  function fillModalBox( section, item ) {
+  function initModalEditBox( section, item ) {
     var $form = $( '#mooc' ).find( '#' + section ).find( '.header form.edit' );
     var $btnSave = $form.find( '.btn-save' );
+    fillModalBoxForm( $form, section, item );
+    $btnSave.on( 'click', onSaveItem );
+  }
 
+  /**
+   * Fills the form fields of a modal edit box with the content from an item's section.
+   *
+   * @param $form edit form jQuery-element
+   * @param section section id
+   * @param item item holding the content
+   */
+  function fillModalBoxForm( $form, section, item ) {
     switch ( section ) {
       case 'learning-goals':
       case 'further-reading':
+        // fill ordered list with section list items
         buildHtmlList( $form.find( 'ol.value' ), item[section] );
-        $btnSave.on( 'click', onSaveItem );
+        break;
+
+      case 'script':
+      case 'quiz':
+        // enable textarea to grow automatically and inject remote page content
+        var $textarea = $form.find( 'textarea.value' );
+        $textarea.on( 'input', onTextareaValueChanged );
+        apiGetRawPage( item[section] ).then( function ( content ) {
+          $textarea.val( content );
+          resizeTextarea( $textarea );
+        } );
         break;
 
       default:
-        var $input = $form.find( '.value' );
-        $input.val( item[section] );
-
-        // register resizing for textareas
-        if ( $input.is( 'textarea.auto-grow ') ) {
-          resizeTextarea( $input );
-          $input.on( 'keyup', textareaValueChanged );
-        }
+        // inject section content into input field
+        $form.find( 'input.value' ).val( item[section] );
         break;
     }
   }
@@ -171,7 +232,7 @@
    * @returns {boolean} whether the mouse event should be delegated or not
    */
   function onSaveItem( e ) {
-    var $btnSave = $( e.target );
+    var $btnSave = $( e.delegateTarget );
     var $form = $btnSave.parents( 'form' );
     var section = $form.parents( '.section' ).attr( 'id' );
 
@@ -217,7 +278,7 @@
    */
   function buildHtmlList( $list, items ) {
     $list.empty();
-    if ( items.length > 0 ) {
+    if ( items !== undefined && items.length > 0 ) {
       for ( var i = 0; i < items.length; i++ ) {
         addListItem( $list, items[i] );
       }
@@ -339,9 +400,9 @@
   /**
    * jQuery-callback to resize the textarea when its value has been changed.
    *
-   * @param e keyup event
+   * @param e input event
    */
-  function textareaValueChanged( e ) {
+  function onTextareaValueChanged( e ) {
     resizeTextarea( $( e.delegateTarget ) );
   }
 
