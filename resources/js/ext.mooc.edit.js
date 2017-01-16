@@ -2,6 +2,8 @@
   
   var extConfig = mw.config.get( 'moocAgentData' );
   var item = mw.config.get( 'moocItem' );
+  mw.log( 'MOOC item being rendered:' );
+  mw.log( item );
   
   // setup user agent for API requests
   $.ajaxSetup({
@@ -47,6 +49,7 @@
    * @returns {*} jQuery-promise on the AJAX GET request
    */
   function apiGetRawPage( title ) {
+    mw.log( 'loading raw content of page ' + title );
     return new mw.Api().get( {
       'action': 'query',
       'prop': 'revisions',
@@ -212,9 +215,15 @@
         // enable textarea to grow automatically and inject remote page content
         var $textarea = $form.find( 'textarea.value' );
         $textarea.on( 'input', onTextareaValueChanged );
-        apiGetRawPage( item[section] ).then( function ( content ) {
+        var $btnSave = $form.find( '.btn-save' );
+        $btnSave.prop( 'disabled', true );
+        // download remote page content
+        var title = mw.config.get( 'wgPageName' ) + '/' + section;
+        apiGetRawPage( title ).then( function ( content ) {
+          item[section] = content;
           $textarea.val( content );
           resizeTextarea( $textarea );
+          $btnSave.prop( 'disabled', false );
         } );
         break;
 

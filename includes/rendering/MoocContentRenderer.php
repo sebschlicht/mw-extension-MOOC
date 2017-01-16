@@ -386,7 +386,7 @@ abstract class MoocContentRenderer {
             switch ($sectionKey) {
                 default:
                     $titleSave = $this->loadMessage('modal-button-title-save');
-                    $this->out->addHTML("<input type=\"submit\" class=\"btn-save btn-submit\" value=\"$titleSave\" />");
+                    $this->out->addHTML("<input type=\"submit\" class=\"btn-save btn-submit\" value=\"$titleSave\" disabled/>");
                     break;
             }
         }
