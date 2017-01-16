@@ -386,12 +386,14 @@ abstract class MoocContentRenderer {
             switch ($sectionKey) {
                 default:
                     $titleSave = $this->loadMessage('modal-button-title-save');
-                    $this->out->addHTML("<input type=\"submit\" class=\"btn-save btn-submit\" value=\"$titleSave\" disabled/>");
+                    $this->out->addHTML("<input type=\"submit\" class=\"btn btn-save btn-submit\" value=\"$titleSave\" disabled/>");
                     break;
             }
         }
         $titleCancel = $this->loadMessage('modal-button-title-cancel');
-        $this->out->addHTML("<input type=\"button\" class=\"btn-cancel\" value=\"$titleCancel\" />");
+        $this->out->addHTML("<input type=\"button\" class=\"btn btn-cancel\" value=\"$titleCancel\" />");
+        $titleReset = $this->loadMessage('modal-button-title-reset');
+        $this->out->addHTML("<input type=\"reset\" class=\"btn btn-reset\" value=\"$titleReset\" />");
     }
 
     /**

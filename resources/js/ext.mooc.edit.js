@@ -24,7 +24,7 @@
     new mw.Api().loadMessagesIfMissing( ['mooc-lesson-add-unit-summary'] ).then( function () {
       // initialize modal edit boxes
       initModalEditBoxes( item );
-
+      // initialize modal add box
       $( '#units' ).find( '.header form.add .btn-submit' ).on( 'click', addUnitToCurrentLesson );
     } );
   }
@@ -191,8 +191,10 @@
   function initModalEditBox( section, item ) {
     var $form = $( '#mooc' ).find( '#' + section ).find( '.header form.edit' );
     var $btnSave = $form.find( '.btn-save' );
-    fillModalBoxForm( $form, section, item );
     $btnSave.on( 'click', onSaveItem );
+    var $btnReset = $form.find( '.btn-reset' );
+    $btnReset.on( 'click', onResetModal );
+    fillModalBoxForm( $form, section, item );
   }
 
   /**
@@ -214,17 +216,22 @@
       case 'quiz':
         // enable textarea to grow automatically and inject remote page content
         var $textarea = $form.find( 'textarea.value' );
-        $textarea.on( 'input', onTextareaValueChanged );
-        var $btnSave = $form.find( '.btn-save' );
-        $btnSave.prop( 'disabled', true );
-        // download remote page content
-        var title = mw.config.get( 'wgPageName' ) + '/' + section;
-        apiGetRawPage( title ).then( function ( content ) {
-          item[section] = content;
-          $textarea.val( content );
+        if ( item[section] === undefined ) {
+          $textarea.on( 'input', onTextareaValueChanged );
+          var $btnSave = $form.find( '.btn-save' );
+          $btnSave.prop( 'disabled', true );
+          // download remote page content
+          var title = mw.config.get( 'wgPageName' ) + '/' + section;
+          apiGetRawPage( title ).then( function ( content ) {
+            item[section] = content;
+            $textarea.val( content );
+            resizeTextarea( $textarea );
+            $btnSave.prop( 'disabled', false );
+          } );
+        } else {
+          $textarea.val( item[section] );
           resizeTextarea( $textarea );
-          $btnSave.prop( 'disabled', false );
-        } );
+        }
         break;
 
       default:
@@ -255,6 +262,23 @@
 
     // save item
     return apiSaveItem( mw.config.get( 'wgPageName' ), item );
+  }
+
+  /**
+   * jQuery-callback to reset the modal box to show the item content when the reset button is clicked.
+   *
+   * @param e click event
+   * @returns {boolean} whether the mouse event should be delegated or not
+   */
+  function onResetModal( e ) {
+    var $btnReset = $( e.delegateTarget );
+    var $form = $btnReset.parents( 'form' );
+    var section = $form.parents( '.section' ).attr( 'id' );
+
+    // load value from item
+    fillModalBoxForm( $form, section, item );
+
+    return true;
   }
 
   /**
