@@ -29,6 +29,7 @@
 	"mooc-modal-button-title-save": "Speichern",
 	"mooc-modal-button-title-add": "Hinzufügen",
 	"mooc-modal-button-title-cancel": "Abbrechen",
+	"mooc-modal-button-title-reset": "Zurücksetzen",
 	"_mooc-comment-section-<section>-empty-...": "// Infotexte und Links für noch leere Sektionen.",
 	"mooc-section-learning-goals-empty-description": "Die Lernziele dieses Kurses wurden noch nicht angegeben.",
 	"mooc-section-learning-goals-empty-edit-link": "Klicken Sie hier, um Lernziele hinzuzufügen.",

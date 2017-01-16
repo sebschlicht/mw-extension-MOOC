@@ -184,9 +184,9 @@ class MoocLessonRenderer extends MoocContentRenderer {
     protected function addModalBoxActions($sectionKey, $action) {
         if ($sectionKey == self::SECTION_KEY_UNITS && $action == self::ACTION_ADD) {
             $titleAdd = $this->loadMessage('modal-button-title-add');
-            $this->out->addHTML("<input type=\"submit\" class=\"btn-add btn-submit\" value=\"$titleAdd\" />");
+            $this->out->addHTML("<input type=\"submit\" class=\"btn btn-add btn-submit\" value=\"$titleAdd\" />");
             $titleCancel = $this->loadMessage('modal-button-title-cancel');
-            $this->out->addHTML("<input type=\"button\" class=\"btn-cancel\" value=\"$titleCancel\" />");
+            $this->out->addHTML("<input type=\"button\" class=\"btn btn-cancel\" value=\"$titleCancel\" />");
         } else {
             parent::addModalBoxActions($sectionKey, $action);
         }

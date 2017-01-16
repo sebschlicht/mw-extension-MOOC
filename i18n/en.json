@@ -29,6 +29,7 @@
 	"mooc-modal-button-title-save": "Save",
 	"mooc-modal-button-title-add": "Add",
 	"mooc-modal-button-title-cancel": "Cancel",
+	"mooc-modal-button-title-reset": "Reset",
 	"_mooc-comment-section-<section>-empty-...": "// Info texts and links for empty sections.",
 	"mooc-section-learning-goals-empty-description": "There have been no learning goals set for this course yet.",
 	"mooc-section-learning-goals-empty-edit-link": "Click here, to add learning goals.",
