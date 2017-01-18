@@ -39,14 +39,20 @@
     var unitName = $form.find( '.value' ).val();
     // TODO validate unit name
 
-    return apiAddUnitToLesson( mw.config.get( 'wgPageName' ), unitName );
+    // TODO show loading indicator
+    // create unit
+    apiAddUnitToLesson( mw.config.get( 'wgPageName' ), unitName ).then( function () {
+      // reload page on success
+      reloadPage();
+    } );
+    return false;
   }
 
   /**
    * Gets the raw content of a page.
    *
    * @param title page title
-   * @returns {*} jQuery-promise on the AJAX GET request
+   * @returns {*} jQuery-promise on the AJAX request
    */
   function apiGetRawPage( title ) {
     mw.log( 'loading raw content of page ' + title );
@@ -88,27 +94,25 @@
   }
 
   /**
-   * Saves an item.
+   * Saves a Wikipage.
    *
-   * @param title item title
-   * @param item item
-   * @returns {boolean} whether the mouse event should be delegated or not
+   * @param title page title
+   * @param content page content
+   * @param summary edit summary
+   * @returns {*} jQuery-promise on the AJAX request
    */
-  function apiSaveItem( title, item ) {
-    var itemJson = JSON.stringify( item );
-    mw.log( 'saving item ' + title + ': ' +  itemJson);
-
-    new mw.Api().edit( title, function () {
+  function apiSavePage( title, content, summary ) {
+    mw.log( 'saving page ' + title );
+    return new mw.Api().edit( title, function () {
       return {
-        'summary': 'TODO',
-        'text': itemJson
+        'summary': summary,
+        'text': content
       };
     } ).then( function( json ) {
-      mw.log( 'The item has been saved successfully. Response:' );
+      mw.log( 'The page has been saved successfully. Response:' );
       mw.log( json );
-      reloadPage();
     } ).fail( function ( code, response ) {
-      mw.log.warn( 'Failed to save the item! Cause:' );
+      mw.log.warn( 'Failed to save the page! Cause:' );
       mw.log.warn( response.error );
       mw.log( response );
 
@@ -117,8 +121,18 @@
       }
       //TODO show the user that the process has failed!
     } );
+  }
 
-    return false;
+  /**
+   * Saves an item.
+   *
+   * @param title item title
+   * @param item item
+   * @param summary edit summary
+   * @returns {*} jQuery-promise on the AJAX request
+   */
+  function apiSaveItem( title, item, summary ) {
+    return apiSavePage( title, JSON.stringify( item ), summary );
   }
 
   /**
@@ -126,13 +140,13 @@
    *
    * @param lessonTitle title of the lesson
    * @param unitName name of the unit to be added
-   * @returns {boolean} whether the mouse event should be delegated or not
+   * @returns {*} jQuery-promise on the AJAX request
    */
   function apiAddUnitToLesson( lessonTitle, unitName ) {
     var unitTitle = lessonTitle + '/' + unitName;
     mw.log( 'adding unit ' + unitName + ' (' + unitTitle + ') to lesson ' + lessonTitle );
 
-    new mw.Api().create( unitTitle, {
+    return new mw.Api().create( unitTitle, {
       'summary': mw.message( 'mooc-lesson-add-unit-summary', unitName ).text(),
       'text': '{"type":"unit"}',
       // TODO currently not possible when logged out (or even if logged-in as non-admin?)
@@ -151,8 +165,6 @@
       }
       //TODO show the user that the process has failed!
     } );
-
-    return false;
   }
 
   /**
@@ -252,16 +264,41 @@
     var $form = $btnSave.parents( 'form' );
     var section = $form.parents( '.section' ).attr( 'id' );
 
-    // apply changes to item
+    // apply changes
+    var saveItem = false;
+    var editSummary =  mw.message( 'mooc-section-' + section + '-save-summary' ).text();
     switch ( section ) {
+      case 'video':
+        item[section] = $form.find( '.value' ).val();
+        saveItem = true;
+        break;
+
       case 'learning-goals':
       case 'further-reading':
         item[section] = buildList( $form.find( 'ol.value' ) );
+        saveItem = true;
+        break;
+
+      case 'script':
+      case 'quiz':
+        item[section] = $form.find( '.value' ).val();
+        // TODO show loading indicator
+        apiSavePage( item[section + 'Title'], item[section], editSummary ).then( function ( ) {
+          // reload page on success
+          reloadPage();
+        } );
         break;
     }
 
-    // save item
-    return apiSaveItem( mw.config.get( 'wgPageName' ), item );
+    if ( saveItem ) {
+      // TODO show loading indicator
+      // save item
+      apiSaveItem( mw.config.get( 'wgPageName' ), item, editSummary ).then( function ( ) {
+        // reload page on success
+        reloadPage();
+      } );
+    }
+    return false;
   }
 
   /**
