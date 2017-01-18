@@ -19,7 +19,6 @@
     "MoocContentRenderer": "includes/rendering/MoocContentRenderer.php",
     "MoocLessonRenderer": "includes/rendering/MoocLessonRenderer.php",
     "MoocUnitRenderer": "includes/rendering/MoocUnitRenderer.php",
-    "MoocStructureItem": "includes/structure/MoocStructureItem.php",
     "MoocContentStructureProvider": "includes/structure/MoocContentStructureProvider.php",
     "SpecialHelloWorld": "specials/SpecialHelloWorld.php"
   },
@@ -73,7 +72,6 @@
         "resources/js/jquery-ui.min.js"
       ],
       "styles": [
-        "resources/bootstrap.min.css",
         "resources/less/ext.mooc.less"
       ]
     }
