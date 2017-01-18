@@ -4,7 +4,7 @@
   var item = mw.config.get( 'moocItem' );
   mw.log( 'MOOC item being rendered:' );
   mw.log( item );
-  
+
   // setup user agent for API requests
   $.ajaxSetup({
     beforeSend: function ( request ) {
@@ -35,7 +35,7 @@
    * @returns {boolean} whether the mouse event should be delegated or not
    */
   function addUnitToCurrentLesson() {
-    var $form = $( this ).parent( 'form' );
+    var $form = $( this ).parents( 'form.add' );
     var unitName = $form.find( '.value' ).val();
     // TODO validate unit name
 
@@ -85,16 +85,55 @@
    */
   function getFirstPageRevisionContent( json ) {
     if ( 'query' in json && 'pages' in json.query ) {
-      var pages = json.query.pages;
-      if ( pages.length > 0 ) {
-        return pages[0].revisions[0]['*'];
+      var page = null;
+      for ( var key in json.query.pages ) {
+        page = json.query.pages[key];
+        if ( 'revisions' in page ) {
+          if ( page.revisions.length > 0 && '*' in page.revisions[0] ) {
+            return page.revisions[0]['*'];
+          }
+        }
       }
     }
     return null;
   }
 
   /**
-   * Saves a Wikipage.
+   * Creates a non-existing Wikipage.
+   *
+   * @param title page title
+   * @param content page content
+   * @param summary create summary
+   * @param params additional parameters for the API create request
+   * @returns {*} jQuery-promise on the AJAX request
+   */
+  function apiCreatePage( title, content, summary, params ) {
+    mw.log( 'creating page ' + title + ' (' + summary + '):\n' + content );
+    var createParams = {
+      'summary': summary,
+      'text': content
+    };
+    if ( params !== undefined && params !== null ) {
+      createParams = $.extend( createParams, params );
+    }
+
+    return new mw.Api().create( title, createParams ).then( function ( json ) {
+      mw.log( 'The page has been added successfully. Response:' );
+      mw.log( json );
+    } ).fail( function ( code, response ) {
+      mw.log.warn( 'Failed to create the page!' );
+      mw.log( response );
+      mw.log.warn( 'Cause: ' + response.error );
+
+      if ( code === "http" ) {
+        mw.log.warn( "HTTP error: " + response.textStatus ); // result.xhr contains the jqXHR object
+      }
+      //TODO show the user that the process has failed!
+    } );
+  }
+
+  /**
+   * Saves an existing Wikipage.
    *
    * @param title page title
    * @param content page content
@@ -102,7 +141,7 @@
    * @returns {*} jQuery-promise on the AJAX request
    */
   function apiSavePage( title, content, summary ) {
-    mw.log( 'saving page ' + title );
+    mw.log( 'saving page ' + title + ' (' + summary + '):\n' + content );
     return new mw.Api().edit( title, function () {
       return {
         'summary': summary,
@@ -112,9 +151,9 @@
       mw.log( 'The page has been saved successfully. Response:' );
       mw.log( json );
     } ).fail( function ( code, response ) {
-      mw.log.warn( 'Failed to save the page! Cause:' );
-      mw.log.warn( response.error );
+      mw.log.warn( 'Failed to save the page!' );
       mw.log( response );
+      mw.log.warn( 'Cause: ' + response.error );
 
       if ( code === "http" ) {
         mw.log.warn( "HTTP error: " + response.textStatus ); // result.xhr contains the jqXHR object
@@ -144,27 +183,14 @@
    */
   function apiAddUnitToLesson( lessonTitle, unitName ) {
     var unitTitle = lessonTitle + '/' + unitName;
+    var content = '{"type":"unit"}';
+    var summary = mw.message( 'mooc-lesson-add-unit-summary', unitName ).text();
+
     mw.log( 'adding unit ' + unitName + ' (' + unitTitle + ') to lesson ' + lessonTitle );
-
-    return new mw.Api().create( unitTitle, {
-      'summary': mw.message( 'mooc-lesson-add-unit-summary', unitName ).text(),
-      'text': '{"type":"unit"}',
-      // TODO currently not possible when logged out (or even if logged-in as non-admin?)
-      'contentmodel': 'mooc-item'
-    } ).then( function ( json ) {
-      mw.log( 'The unit has been added successfully. Response:' );
-      mw.log( json );
-      reloadPage();
-    } ).fail( function ( code, response ) {
-      mw.log.warn( 'Failed to add the unit! Cause:' );
-      mw.log.warn( response.error );
-      mw.log( response );
-
-      if ( code === "http" ) {
-        mw.log.warn( "HTTP error: " + response.textStatus ); // result.xhr contains the jqXHR object
-      }
-      //TODO show the user that the process has failed!
-    } );
+    return apiCreatePage( unitTitle, content, summary, {
+        // TODO currently not possible when logged out (or even if logged-in as non-admin?)
+        'contentmodel': 'mooc-item'
+      });
   }
 
   /**
@@ -217,11 +243,13 @@
    * @param item item holding the content
    */
   function fillModalBoxForm( $form, section, item ) {
+    var $btnSave = $form.find( '.btn-save' );
     switch ( section ) {
       case 'learning-goals':
       case 'further-reading':
         // fill ordered list with section list items
         buildHtmlList( $form.find( 'ol.value' ), item[section] );
+        $btnSave.prop( 'disabled', false );
         break;
 
       case 'script':
@@ -229,12 +257,13 @@
         // enable textarea to grow automatically and inject remote page content
         var $textarea = $form.find( 'textarea.value' );
         if ( item[section] === undefined ) {
+          mw.log( 'registering hooks on auto-growing textarea: ' + $textarea.length );
           $textarea.on( 'input', onTextareaValueChanged );
-          var $btnSave = $form.find( '.btn-save' );
           $btnSave.prop( 'disabled', true );
           // download remote page content
           var title = mw.config.get( 'wgPageName' ) + '/' + section;
           apiGetRawPage( title ).then( function ( content ) {
+            mw.log( section + ( ( content !== null ) ? ' loaded' : ' is empty' ) );
             item[section] = content;
             $textarea.val( content );
             resizeTextarea( $textarea );
@@ -249,6 +278,7 @@
       default:
         // inject section content into input field
         $form.find( 'input.value' ).val( item[section] );
+        $btnSave.prop( 'disabled', false );
         break;
     }
   }
@@ -281,12 +311,20 @@
 
       case 'script':
       case 'quiz':
+        var externalPageExists = ( item[section] !== undefined && item[section] !== null );
         item[section] = $form.find( '.value' ).val();
         // TODO show loading indicator
-        apiSavePage( item[section + 'Title'], item[section], editSummary ).then( function ( ) {
-          // reload page on success
-          reloadPage();
-        } );
+        if ( externalPageExists ) {
+          apiSavePage( item[section + 'Title'], item[section], editSummary ).then( function ( ) {
+            // reload page on success
+            reloadPage();
+          } );
+        } else {
+          apiCreatePage( item[section + 'Title'], item[section], editSummary ).then( function ( ) {
+            // reload page on success
+            reloadPage();
+          } );
+        }
         break;
     }
 
