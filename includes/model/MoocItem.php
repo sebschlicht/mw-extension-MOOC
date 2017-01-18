@@ -25,6 +25,15 @@ abstract class MoocItem {
     const JFIELD_VIDEO = 'video';
 
     /**
+     * JSON field identifier for the script page title
+     */
+    const JFIELD_SCRIPT_TITLE = 'scriptTitle';
+    /**
+     * JSON field identifier for the quiz page title
+     */
+    const JFIELD_QUIZ_TITLE = 'quizTitle';
+
+    /**
      * JSON field identifier for further reading material
      */
     const JFIELD_FURTHER_READING = 'further-reading';
@@ -85,7 +94,7 @@ abstract class MoocItem {
      * @param Title $title page title
      * @param array $moocContentJson JSON (associative array) representing a MOOC item
      */
-    public function __construct($title, $moocContentJson) {
+    public function __construct( $title, $moocContentJson ) {
         // TODO completely separate Title from MoocItem?
         $this->setTitle($title);
 
@@ -101,9 +110,9 @@ abstract class MoocItem {
      */
     public function setTitle($title) {
         $this->title = $title;
-        if ($title != null) {
-            $this->scriptTitle = Title::newFromText($title . '/script');
-            $this->quizTitle = Title::newFromText($title . '/quiz');
+        if ( $title != null ) {
+            $this->scriptTitle = Title::newFromText( $title . '/script' );
+            $this->quizTitle = Title::newFromText( $title . '/quiz' );
         }
     }
 
@@ -111,14 +120,14 @@ abstract class MoocItem {
      * @return string name of the item (extracted from page title)
      */
     public function getName() {
-        return ($this->title == null) ? null : $this->title->getSubpageText();
+        return ( $this->title == null ) ? null : $this->title->getSubpageText();
     }
 
     /**
      * @return boolean whether the item has children
      */
     public function hasChildren() {
-        return isset($this->children) && !empty($this->children);
+        return isset( $this->children ) && !empty( $this->children );
     }
 
     /**
@@ -128,22 +137,38 @@ abstract class MoocItem {
      * @param array $moocContentJson JSON (associative array) representing a MOOC item
      * @return MoocItem MOOC item instance or null on error
      */
-    public static function loadItemFromJson($title, $moocContentJson) {
-        if (!array_key_exists(self::JFIELD_TYPE, $moocContentJson)) {
+    public static function loadItemFromJson( $title, $moocContentJson ) {
+        if ( !array_key_exists( self::JFIELD_TYPE, $moocContentJson ) ) {
             return null;
         }
 
         $type = $moocContentJson[self::JFIELD_TYPE];
-        switch ($type) {
+        switch ( $type ) {
             case MoocUnit::ITEM_TYPE_UNIT:
-                return new MoocUnit($title, $moocContentJson);
+                return new MoocUnit( $title, $moocContentJson );
 
             case MoocLesson::ITEM_TYPE_LESSON:
-                return new MoocLesson($title, $moocContentJson);
+                return new MoocLesson( $title, $moocContentJson );
 
             // unknown MOOC item type
             default:
                 return null;
         }
+    }
+
+    /**
+     * Converts this MOOC item into JSON content.
+     *
+     * @return array JSON (associative array) representing a MOOC item
+     */
+    public function toJson() {
+        return [
+            self::JFIELD_TYPE => $this->type,
+            self::JFIELD_LEARNING_GOALS => $this->learningGoals,
+            self::JFIELD_VIDEO => $this->video,
+            self::JFIELD_SCRIPT_TITLE => $this->scriptTitle->getFullText(),
+            self::JFIELD_QUIZ_TITLE => $this->quizTitle->getFullText(),
+            self::JFIELD_FURTHER_READING => $this->furtherReading
+        ];
     }
 }
