@@ -84,7 +84,7 @@ class MoocContent extends JsonContent {
                     'userAgentMailAddress' => 'sebschlicht@uni-koblenz.de',
                     'version' => '0.1'
                 ],
-                'moocItem' => $this->getJsonData()
+                'moocItem' => $this->item->toJson()
             ]);
         } else {
             $output->setText('');
