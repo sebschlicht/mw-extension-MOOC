@@ -21,6 +21,7 @@ class MoocContentStructureProvider {
         $rootPageTitle = $renderedItem->title->getRootTitle()->getDBkey();
         //TODO we know the ID pretty well
         $namespace = $renderedItem->title->getNamespace();
+        $contentModelId = MoocContent::CONTENT_MODEL_MOOC_ITEM;
 
         $db = wfGetDB(DB_SLAVE);
         $res = $db->select( array(
@@ -30,7 +31,7 @@ class MoocContentStructureProvider {
             ), array(
                 'page_title',
                 'old_text'
-            ), "page_title LIKE '$rootPageTitle%' AND page_namespace = '$namespace'",
+            ), "page_title LIKE '$rootPageTitle%' AND page_namespace = '$namespace' AND page_content_model = '$contentModelId'",
             __METHOD__, array(
                 'ORDER_BY' => 'page_title ASC'
             ), array(
@@ -50,9 +51,11 @@ class MoocContentStructureProvider {
         $items = [];
         foreach ( $res as $row ) {
             $contentModel = new MoocContent( $row->old_text );
-            $item = $contentModel->loadItem();
-            $item->setTitle( Title::newFromText( $row->page_title, $namespace ) );
-            array_push( $items, $item );
+            if ( $contentModel->isValid() ) {
+                $item = $contentModel->loadItem();
+                $item->setTitle( Title::newFromText( $row->page_title, $namespace ) );
+                array_push( $items, $item );
+            }
         }
 
 
