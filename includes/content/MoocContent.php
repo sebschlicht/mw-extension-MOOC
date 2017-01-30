@@ -76,6 +76,11 @@ class MoocContent extends JsonContent {
             $output->addModuleScripts('ext.mooc');
             $output->addModuleStyles('ext.mooc');
 
+            // load Bootstrap styles
+            $bootstrapMan = Bootstrap\BootstrapManager::getInstance();
+            $bootstrapMan->addAllBootstrapModules();
+            $output->addModuleStyles('ext.bootstrap.styles');
+
             // pass data to JS
             $output->addJsConfigVars([
                 'moocAgentData' => [
