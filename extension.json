@@ -73,7 +73,6 @@
         "resources/js/jquery-ui.min.js"
       ],
       "styles": [
-        "resources/bootstrap.min.css",
         "resources/less/ext.mooc.less"
       ]
     }

@@ -8,6 +8,7 @@ It introduces the *Course* namespace where the MediaWiki user-interface is enhan
 1. install the dependencies
    * [MwEmbedSupport](https://www.mediawiki.org/wiki/Extension:MwEmbedSupport)
    * [TimedMediaHandler](https://www.mediawiki.org/wiki/Extension:TimedMediaHandler)
+   * [Bootstrap 3](https://www.mediawiki.org/wiki/Extension:Bootstrap)
 1. and additionally append the following line to your *LocalSettings.php*:
    `require_once "$IP/extensions/MOOC/MOOC.php";`
 
