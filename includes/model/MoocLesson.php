@@ -20,6 +20,8 @@ class MoocLesson extends MoocItem {
      */
     public function __construct($title, $moocContentJson) {
         parent::__construct($title, $moocContentJson);
-        $this->childNames = $moocContentJson[self::JFIELD_CHILDREN];
+        if (array_key_exists(self::JFIELD_CHILDREN, $moocContentJson)) {
+            $this->childNames = $moocContentJson[self::JFIELD_CHILDREN];
+        }
     }
 }

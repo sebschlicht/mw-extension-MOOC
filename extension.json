@@ -7,7 +7,7 @@
   ],
   "url": "https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC",
   "descriptionmsg": "mooc-desc",
-  "license-name": "GPL v2",
+  "license-name": "GPL-2.0",
   "type": "other",
   "AutoloadClasses": {
     "MOOCHooks": "MOOC.hooks.php",
@@ -19,7 +19,6 @@
     "MoocContentRenderer": "includes/rendering/MoocContentRenderer.php",
     "MoocLessonRenderer": "includes/rendering/MoocLessonRenderer.php",
     "MoocUnitRenderer": "includes/rendering/MoocUnitRenderer.php",
-    "MoocStructureItem": "includes/structure/MoocStructureItem.php",
     "MoocContentStructureProvider": "includes/structure/MoocContentStructureProvider.php",
     "SpecialHelloWorld": "specials/SpecialHelloWorld.php"
   },
