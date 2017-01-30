@@ -100,9 +100,15 @@ abstract class MoocItem {
 
         // common MOOC item fields
         $this->type = $moocContentJson[self::JFIELD_TYPE];
-        $this->video = $moocContentJson[self::JFIELD_VIDEO];
-        $this->learningGoals = $moocContentJson[self::JFIELD_LEARNING_GOALS];
-        $this->furtherReading = $moocContentJson[self::JFIELD_FURTHER_READING];
+        if (array_key_exists(self::JFIELD_VIDEO, $moocContentJson)) {
+            $this->video = $moocContentJson[self::JFIELD_VIDEO];
+        }
+        if (array_key_exists(self::JFIELD_LEARNING_GOALS, $moocContentJson)) {
+            $this->learningGoals = $moocContentJson[self::JFIELD_LEARNING_GOALS];
+        }
+        if (array_key_exists(self::JFIELD_FURTHER_READING, $moocContentJson)) {
+            $this->furtherReading = $moocContentJson[self::JFIELD_FURTHER_READING];
+        }
     }
 
     /**
