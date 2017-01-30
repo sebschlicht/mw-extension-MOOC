@@ -5,6 +5,10 @@
  */
 if (function_exists('wfLoadExtension')) {
     wfLoadExtension('MOOC');
+
+    if ( !defined( 'BS_VERSION' ) ) {
+        die( '<b>Error:</b> The <a href="https://www.mediawiki.org/wiki/Extension:MOOC">MOOC</a> extension depends on the Bootstrap extension. You need to install the <a href="https://www.mediawiki.org/wiki/Extension:Bootstrap">Bootstrap</a> extension first.' );
+    }
     
     // Keep i18n globals so mergeMessageFileList.php doesn't break
     $wgMessagesDirs['MOOC'] = __DIR__ . '/i18n';
