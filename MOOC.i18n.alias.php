@@ -11,16 +11,5 @@ $specialPageAliases = [];
  * English (English)
  */
 $specialPageAliases['en'] = [
-    'Mooc' => [
-        'Course'
-    ]
-];
-
-/**
- * German (Deutsch)
- */
-$specialPageAliases['de'] = [
-    'Mooc' => [
-        'Kurs'
-    ]
+    'HelloWorld' => 'HelloWorld',
 ];
