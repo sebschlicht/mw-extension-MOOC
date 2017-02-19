@@ -19,10 +19,19 @@ Though possible in principle, this extension does not fully work without JavaScr
 
 ## Files
 
-This extension mainly consists of the following files:
-* `MOOC.php` - MediaWiki entry point
-* `MOOC.hooks.php` - extension initialization
-* `resources/ext.mooc.css` - stylesheet for MOOC pages
+Technically, this extension mainly consists of the following files:
+* PHP:
+  * `includes/content/MoocContent.php` - content type handler for MOOC items
+  * `includes/structure/MoocContentStructureProvider.php` - MOOC structure loader
+  * `includes/model/MoocItem.php` - basic MOOC item model
+  * `includes/rendering/MoocContentRenderer.php` - basic MOOC item renderer
+* JavaScript:
+  * `resources/js/ext.mooc.js` - general UI
+  * `resources/js/ext.mooc.edit.js` - MOOC item editing (e.g. MW.API wrappers)
+  * `resources/js/ext.mooc.navigation.js` - sticky navigation
+  * `resources/js/ext.mooc.headers.js` - sticky section headers
+* Stylesheet:
+  * `resources/less/ext.mooc.less` - stylesheet for MOOC pages
 
 ## Links
 
