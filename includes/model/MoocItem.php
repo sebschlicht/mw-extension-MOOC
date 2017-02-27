@@ -7,12 +7,7 @@
  *
  * @file
  */
-abstract class MoocItem {
-
-    /**
-     * JSON field identifier for the MOOC item type
-     */
-    const JFIELD_TYPE = 'type';
+abstract class MoocItem extends MoocEntity {
 
     /**
      * JSON field identifier for learning goals
@@ -47,16 +42,6 @@ abstract class MoocItem {
      * @var MoocItem base item of the MOOC this item belongs to
      */
     public $baseItem;
-
-    /**
-     * @var Title page title
-     */
-    public $title;
-
-    /**
-     * @var string type of the MOOC item
-     */
-    public $type;
 
     /**
      * @var string[] learning goals that should be fulfilled at the end of this item
@@ -96,17 +81,17 @@ abstract class MoocItem {
      */
     public function __construct( $title, $moocContentJson ) {
         // TODO completely separate Title from MoocItem?
-        $this->setTitle($title);
+        parent::__construct( $title, $moocContentJson );
+        $this->setTitle( $title );
 
         // common MOOC item fields
-        $this->type = $moocContentJson[self::JFIELD_TYPE];
-        if (array_key_exists(self::JFIELD_VIDEO, $moocContentJson)) {
+        if ( array_key_exists( self::JFIELD_VIDEO, $moocContentJson ) ) {
             $this->video = $moocContentJson[self::JFIELD_VIDEO];
         }
-        if (array_key_exists(self::JFIELD_LEARNING_GOALS, $moocContentJson)) {
+        if ( array_key_exists( self::JFIELD_LEARNING_GOALS, $moocContentJson ) ) {
             $this->learningGoals = $moocContentJson[self::JFIELD_LEARNING_GOALS];
         }
-        if (array_key_exists(self::JFIELD_FURTHER_READING, $moocContentJson)) {
+        if ( array_key_exists( self::JFIELD_FURTHER_READING, $moocContentJson ) ) {
             $this->furtherReading = $moocContentJson[self::JFIELD_FURTHER_READING];
         }
     }
@@ -114,7 +99,7 @@ abstract class MoocItem {
     /**
      * @param $title Title page title
      */
-    public function setTitle($title) {
+    public function setTitle( $title ) {
         $this->title = $title;
         if ( $title != null ) {
             $this->scriptTitle = Title::newFromText( $title . '/script' );
@@ -136,37 +121,6 @@ abstract class MoocItem {
         return isset( $this->children ) && !empty( $this->children );
     }
 
-    /**
-     * Loads a MOOC item from JSON content.
-     *
-     * @param Title $title title of the MOOC item page
-     * @param array $moocContentJson JSON (associative array) representing a MOOC item
-     * @return MoocItem MOOC item instance or null on error
-     */
-    public static function loadItemFromJson( $title, $moocContentJson ) {
-        if ( !array_key_exists( self::JFIELD_TYPE, $moocContentJson ) ) {
-            return null;
-        }
-
-        $type = $moocContentJson[self::JFIELD_TYPE];
-        switch ( $type ) {
-            case MoocUnit::ITEM_TYPE_UNIT:
-                return new MoocUnit( $title, $moocContentJson );
-
-            case MoocLesson::ITEM_TYPE_LESSON:
-                return new MoocLesson( $title, $moocContentJson );
-
-            // unknown MOOC item type
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * Converts this MOOC item into JSON content.
-     *
-     * @return array JSON (associative array) representing a MOOC item
-     */
     public function toJson() {
         return [
             self::JFIELD_TYPE => $this->type,

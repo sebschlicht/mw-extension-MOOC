@@ -53,8 +53,10 @@ class MoocContentStructureProvider {
             $contentModel = new MoocContent( $row->old_text );
             if ( $contentModel->isValid() ) {
                 $item = $contentModel->loadItem();
-                $item->setTitle( Title::newFromText( $row->page_title, $namespace ) );
-                array_push( $items, $item );
+                if ( $item instanceof MoocItem ) {
+                    $item->setTitle( Title::newFromText( $row->page_title, $namespace ) );
+                    array_push( $items, $item );
+                }
             }
         }
 

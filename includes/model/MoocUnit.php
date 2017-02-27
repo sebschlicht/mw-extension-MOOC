@@ -10,7 +10,7 @@
 class MoocUnit extends MoocItem {
 
     /**
-     * MOOC item type for units
+     * MOOC entity type for units
      */
-    const ITEM_TYPE_UNIT = 'unit';
+    const ENTITY_TYPE_UNIT = 'unit';
 }

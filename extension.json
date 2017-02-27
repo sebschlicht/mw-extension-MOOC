@@ -13,6 +13,10 @@
     "MOOCHooks": "MOOC.hooks.php",
     "MoocContent": "includes/content/MoocContent.php",
     "MoocContentHandler": "includes/content/MoocContentHandler.php",
+    "MoocEntity": "includes/model/MoocEntity.php",
+    "MoocResource": "includes/model/MoocResource.php",
+    "MoocScript": "includes/model/MoocScript.php",
+    "MoocQuiz": "includes/model/MoocQuiz.php",
     "MoocItem": "includes/model/MoocItem.php",
     "MoocLesson": "includes/model/MoocLesson.php",
     "MoocUnit": "includes/model/MoocUnit.php",
@@ -35,8 +39,14 @@
     "MOOCNamespaces": "MOOC.namespaces.php"
   },
   "Hooks": {
-    "ParserFirstCallInit": [
-      "MOOCHooks::onParserFirstCallInit"
+    "EditFormInitialText": [
+      "MOOCHooks::onEditFormInitialText"
+    ],
+    "EditPageGetPreviewContent": [
+      "MOOCHooks::onEditPageGetPreviewContent"
+    ],
+    "PageContentSave": [
+      "MOOCHooks::onPageContentSave"
     ]
   },
   "namespaces": [
@@ -45,7 +55,8 @@
       "constant": "NS_MOOC",
       "name": "Mooc",
       "subpages": true,
-      "content": true
+      "content": true,
+      "defaultcontentmodel": "mooc-item"
     },
     {
       "id": 351,
