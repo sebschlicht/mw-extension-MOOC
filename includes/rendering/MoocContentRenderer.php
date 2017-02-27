@@ -69,10 +69,10 @@ abstract class MoocContentRenderer {
     protected static function getRenderer($type) {
         // TODO use some registration process for flexibility
         switch($type) {
-            case MoocUnit::ITEM_TYPE_UNIT:
+            case MoocUnit::ENTITY_TYPE_UNIT:
                 return new MoocUnitRenderer();
 
-            case MoocLesson::ITEM_TYPE_LESSON:
+            case MoocLesson::ENTITY_TYPE_LESSON:
                 return new MoocLessonRenderer();
 
             default:
