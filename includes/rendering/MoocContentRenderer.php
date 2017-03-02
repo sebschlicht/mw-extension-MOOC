@@ -75,6 +75,9 @@ abstract class MoocContentRenderer {
             case MoocLesson::ENTITY_TYPE_LESSON:
                 return new MoocLessonRenderer();
 
+            case MoocOverview::ENTITY_TYPE_MOOC:
+                return new MoocOverviewRenderer();
+
             default:
                 return null;
         }

@@ -32,20 +32,24 @@ class MoocLessonRenderer extends MoocContentRenderer {
     }
 
     protected function addChildrenSection() {
-        $this->beginSection(self::SECTION_KEY_UNITS);
+        $this->beginSection( self::SECTION_KEY_UNITS );
 
-        if ($this->item->hasChildren()) {
-            // list child units if any
-            foreach ($this->item->children as $unit) {
-                $this->addChildUnit($unit);
-            }
-        } else {
-            // show info box if no child units added yet
-            $this->addEmptySectionBox(self::SECTION_KEY_UNITS);
-        }
+        $this->addUnitsSectionContent( $this->item );
         // TODO add controls to add units somewhere
 
         $this->endSection();
+    }
+
+    protected function addUnitsSectionContent( $lesson ) {
+        if ( $lesson->hasChildren() ) {
+            // list child units if any
+            foreach ( $lesson->children as $unit ) {
+                $this->addChildUnit( $unit );
+            }
+        } else {
+            // show info box if no child units added yet
+            $this->addEmptySectionBox( self::SECTION_KEY_UNITS );
+        }
     }
 
     /**
@@ -166,19 +170,12 @@ class MoocLessonRenderer extends MoocContentRenderer {
         $this->out->addHTML("</a>");
     }
 
-    protected function fillModalBoxForm($sectionKey, $action) {
-        if ($sectionKey == self::SECTION_KEY_UNITS && $action == 'add') {
-            $this->fillModalAddBoxForm();
+    protected function fillModalBoxForm( $sectionKey, $action ) {
+        if ( $sectionKey == self::SECTION_KEY_UNITS && $action == self::ACTION_ADD ) {
+            $this->out->addHTML( '<input type="text" class="value" />' );
         } else {
-            parent::fillModalBoxForm($sectionKey, $action);
+            parent::fillModalBoxForm( $sectionKey, $action );
         }
-    }
-
-    /**
-     * Fills the add form of the modal box to add units.
-     */
-    protected function fillModalAddBoxForm() {
-        $this->out->addHTML('<input type="text" class="value" />');
     }
 
     protected function addModalBoxActions($sectionKey, $action) {

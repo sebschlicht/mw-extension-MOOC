@@ -21,10 +21,13 @@
    * Registers the API calls with the corresponding UI elements.
    */
   function registerApiCalls() {
-    new mw.Api().loadMessagesIfMissing( ['mooc-lesson-add-unit-summary'] ).then( function () {
+    new mw.Api().loadMessagesIfMissing( [
+      'mooc-overview-add-lesson-summary', 'mooc-lesson-add-unit-summary'
+    ] ).then( function () {
       // initialize modal edit boxes
       initModalEditBoxes( item );
-      // initialize modal add box
+      // initialize modal add boxes
+      $( '#lessons' ).find( '.header form.add .btn-submit' ).on( 'click', addLessonToCurrentMooc );
       $( '#units' ).find( '.header form.add .btn-submit' ).on( 'click', addUnitToCurrentLesson );
     } );
   }
@@ -42,6 +45,25 @@
     // TODO show loading indicator
     // create unit
     apiAddUnitToLesson( mw.config.get( 'wgPageName' ), unitName ).then( function () {
+      // reload page on success
+      reloadPage();
+    } );
+    return false;
+  }
+
+  /**
+   * Adds the lesson specified by the modal add lesson box to the MOOC represented by this page.
+   *
+   * @returns {boolean} whether the mouse event should be delegated or not
+   */
+  function addLessonToCurrentMooc() {
+    var $form = $( this ).parents( 'form.add' );
+    var lessonName = $form.find( '.value' ).val();
+    // TODO validate lesson name
+
+    // TODO show loading indicator
+    // create lesson
+    apiAddLessonToMooc( mw.config.get( 'wgPageName' ), lessonName ).then( function () {
       // reload page on success
       reloadPage();
     } );
@@ -187,10 +209,22 @@
     var summary = mw.message( 'mooc-lesson-add-unit-summary', unitName ).text();
 
     mw.log( 'adding unit ' + unitName + ' (' + unitTitle + ') to lesson ' + lessonTitle );
-    return apiCreatePage( unitTitle, content, summary, {
-        // TODO currently not possible when logged out (or even if logged-in as non-admin?)
-        'contentmodel': 'mooc-item'
-      });
+    return apiCreatePage( unitTitle, content, summary );
+  }
+
+  /**
+   * Adds a lesson to a MOOC using the MediaWiki API in the background.
+   * @param moocTitle title of the MOOC
+   * @param lessonName name of the lesson to be added
+   * @returns {*} jQuery-promise on the AJAX request
+   */
+  function apiAddLessonToMooc( moocTitle, lessonName ) {
+    var lessonTitle = moocTitle + '/' + lessonName;
+    var content = '{"type":"mooc"}';
+    var summary = mw.message( 'mooc-overview-add-lesson-summary', lessonName ).text();
+
+    mw.log( 'adding lesson ' + lessonName + ' (' + lessonTitle + ') to MOOC ' + moocTitle );
+    return apiCreatePage( lessonTitle, content, summary );
   }
 
   /**
@@ -208,16 +242,18 @@
    * @param item MOOC item being currently displayed
    */
   function initModalEditBoxes( item ) {
-    // learning goals
-    initModalEditBox( 'learning-goals', item );
-    // video
-    initModalEditBox( 'video', item );
-    // script
-    initModalEditBox( 'script', item );
-    // quiz
-    initModalEditBox( 'quiz', item );
-    // further reading
-    initModalEditBox( 'further-reading', item );
+    if ( item.type !== 'mooc' ) {
+      // learning goals
+      initModalEditBox( 'learning-goals', item );
+      // video
+      initModalEditBox( 'video', item );
+      // script
+      initModalEditBox( 'script', item );
+      // quiz
+      initModalEditBox( 'quiz', item );
+      // further reading
+      initModalEditBox( 'further-reading', item );
+    }
   }
 
   /**
@@ -386,7 +422,7 @@
    */
   function buildHtmlList( $list, items ) {
     $list.empty();
-    if ( items !== undefined && items.length > 0 ) {
+    if ( items !== undefined && items !== null && items.length > 0 ) {
       for ( var i = 0; i < items.length; i++ ) {
         addListItem( $list, items[i] );
       }

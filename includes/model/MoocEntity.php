@@ -64,6 +64,9 @@ abstract class MoocEntity {
             case MoocLesson::ENTITY_TYPE_LESSON:
                 return new MoocLesson( $title, $moocContentJson );
 
+            case MoocOverview::ENTITY_TYPE_MOOC:
+                return new MoocOverview( $title, $moocContentJson );
+
             case MoocScript::ENTITY_TYPE_SCRIPT:
                 return new MoocScript( $title, $moocContentJson );
 
