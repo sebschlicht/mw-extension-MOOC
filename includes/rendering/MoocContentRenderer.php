@@ -188,7 +188,8 @@ abstract class MoocContentRenderer {
             $this->out->addWikiText('{{:' . $this->item->scriptTitle . '}}');
         } else {
             // show info box if script not created yet
-            $this->addEmptySectionBox(self::SECTION_KEY_SCRIPT, $this->item->scriptTitle);
+            // TODO pass link to edit script resource page
+            $this->addEmptySectionBox( self::SECTION_KEY_SCRIPT );
         }
         
         $this->endSection();
@@ -202,7 +203,8 @@ abstract class MoocContentRenderer {
             $this->out->addWikiText('{{:' . $this->item->quizTitle . '}}');
         } else {
             // show info box if quiz not created yet
-            $this->addEmptySectionBox(self::SECTION_KEY_QUIZ, $this->item->quizTitle);
+            // TODO pass link to edit quiz resource page
+            $this->addEmptySectionBox( self::SECTION_KEY_QUIZ );
         }
         
         $this->endSection();
@@ -230,16 +232,18 @@ abstract class MoocContentRenderer {
      * Adds an info box emphasising users to contribute to a currently empty section to the output.
      *
      * @param string $sectionKey key of the empty section
-     * @param array ...$params additional parameters passed to the message loading of the info box description
+     * @param string $editHref edit link
      */
-    protected function addEmptySectionBox($sectionKey, ...$params) {
+    protected function addEmptySectionBox( $sectionKey, $editHref = null ) {
         // TODO can we automatically prefix classes/ids? at least in LESS?
         $this->out->addHTML('<div class="section-empty-box">');
-        
+
         $this->out->addHTML('<span class="description">');
-        $this->out->addHTML($this->loadMessage('section-' . $sectionKey . '-empty-description', $params));
+        $this->out->addHTML( $this->loadMessage( 'section-' . $sectionKey . '-empty-description' ) );
         $this->out->addHTML('</span> ');
-        $this->out->addHTML('<a class="edit-link">');
+
+        $editHrefAttr = ( $editHref === null ) ? '' : 'href="' . $editHref . '"';
+        $this->out->addHTML( '<a class="edit-link"' . $editHrefAttr . '>' );
         $this->out->addHTML($this->loadMessage('section-' . $sectionKey . '-empty-edit-link'));
         $this->out->addHTML('</a>');
         // TODO do we need an additional text to point at external resources such as /script or general hints?
@@ -509,12 +513,14 @@ abstract class MoocContentRenderer {
      * Loads a message in context of the MOOC extension.
      *
      * @param string $key message key
-     * @param array ...$params message parameters
+     * @param mixed $params,... additional message parameters
      * @return string internationalized message built
      */
-    protected function loadMessage($key, ...$params) {
+    protected function loadMessage( $key /*...*/ ) {
+        $params = func_get_args();
+        array_shift( $params );
         $key = 'mooc-' . $key;
-        $wfMessage = wfMessage($key, $params);
+        $wfMessage = wfMessage( $key, $params );
         return $wfMessage->text();
     }
 }
