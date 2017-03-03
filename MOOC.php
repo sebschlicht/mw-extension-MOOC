@@ -11,7 +11,6 @@ if (function_exists('wfLoadExtension')) {
     $wgExtensionMessagesFiles['MOOCAlias'] = __DIR__ . '/MOOC.i18n.alias.php';
     $wgExtensionMessagesFiles['MOOCNamespaces'] = __DIR__ . '/MOOC.namespaces.php';
     
-    // TODO how to include boostrap other than shipping => composer?!
     // TODO get out how to include jquery.ui.effects (includes easing) other than shipping
     
     $wgMOOCSectionConfig = [

@@ -82,6 +82,7 @@ class MoocContent extends JsonContent {
                 $output->setEnableOOUI( true );
                 $output->addModuleScripts( 'ext.mooc' );
                 $output->addModuleStyles( 'ext.mooc' );
+                $output->addModuleStyles( 'ext.bootstrap.styles' );
 
                 $output->setText( MoocContentRenderer::renderItem( $output, $this->entity ) );
 
