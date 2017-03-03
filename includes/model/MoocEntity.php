@@ -26,52 +26,77 @@ abstract class MoocEntity {
     public $type;
 
     /**
-     * Creates a new MOOC entity from JSON.
+     * Creates an empty MOOC entity.
      *
+     * @param string $type entity type identifier
      * @param Title $title page title
-     * @param array $moocContentJson JSON (associative array) representing a MOOC entity
      */
-    public function __construct( $title, $moocContentJson ) {
+    public function __construct( $type, $title = null ) {
+        $this->type = $type;
         // TODO completely separate page Title from MOOC entities?
         $this->title = $title;
-        $this->type = $moocContentJson[self::JFIELD_TYPE];
     }
+
+    /**
+     * Loads the entity fields from a JSON array.
+     *
+     * @param array $jsonArray associative array (e.g. from json_decode)
+     */
+    abstract protected function loadJson( $jsonArray );
 
     /**
      * Converts this MOOC entity into JSON content.
      *
      * @return array JSON (associative array) representing a MOOC entity
      */
-    abstract function toJson();
+    abstract public function toJson();
 
     /**
-     * Loads a MOOC entity from JSON content.
+     * Loads a MOOC entity from a JSON array.
      *
-     * @param Title $title title of the MOOC entity page
-     * @param array $moocContentJson JSON (associative array) representing a MOOC entity
-     * @return MoocEntity MOOC entity instance or null on error
+     * @param array $jsonArray associative array (e.g. from json_decode)
+     * @param Title $title page title
+     * @return MoocLesson|MoocOverview|MoocQuiz|MoocScript|MoocUnit|null MOOC entity or <i>null</i> if the entity type
+     * was not specified or is unknown
      */
-    public static function loadFromJson( $title, $moocContentJson ) {
-        if ( !array_key_exists( self::JFIELD_TYPE, $moocContentJson ) ) {
+    public static function fromJson( $jsonArray, $title = null ) {
+        // extract entity type
+        if ( !array_key_exists( self::JFIELD_TYPE, $jsonArray ) ) {
             return null;
         }
+        $type = $jsonArray[self::JFIELD_TYPE];
 
-        $type = $moocContentJson[self::JFIELD_TYPE];
+        // instantiate entity by type and load values from JSON array
+        $entity = self::instantiate( $type, $title );
+        if ( $entity !== null ) {
+            $entity->loadJson( $jsonArray );
+        }
+        return $entity;
+    }
+
+    /**
+     * Instantiates a MOOC entity by its type.
+     *
+     * @param string $type MOOC entity type identifier
+     * @param Title $title page title
+     * @return MoocLesson|MoocOverview|MoocQuiz|MoocScript|MoocUnit|null MOOC entity or <i>null</i> if type is unknown
+     */
+    protected static function instantiate ( $type, $title = null ) {
         switch ( $type ) {
             case MoocUnit::ENTITY_TYPE_UNIT:
-                return new MoocUnit( $title, $moocContentJson );
+                return new MoocUnit( $type, $title );
 
             case MoocLesson::ENTITY_TYPE_LESSON:
-                return new MoocLesson( $title, $moocContentJson );
+                return new MoocLesson( $type, $title );
 
             case MoocOverview::ENTITY_TYPE_MOOC:
-                return new MoocOverview( $title, $moocContentJson );
+                return new MoocOverview( $type, $title );
 
             case MoocScript::ENTITY_TYPE_SCRIPT:
-                return new MoocScript( $title, $moocContentJson );
+                return new MoocScript( $type, $title );
 
             case MoocQuiz::ENTITY_TYPE_QUIZ:
-                return new MoocQuiz( $title, $moocContentJson );
+                return new MoocQuiz( $type, $title );
 
             // unknown MOOC entity type
             default:

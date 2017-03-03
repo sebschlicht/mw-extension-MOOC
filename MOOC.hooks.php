@@ -12,6 +12,20 @@
 class MOOCHooks {
 
     /**
+     * Fills the edit form of a MOOC page with the MOOC overview JSON to allow fluent creates of MOOCs.
+     *
+     * @param string $text text to pre-fill the edit form with
+     * @param Title $title title of the new page
+     */
+    public static function onEditFormPreloadText( &$text, &$title ) {
+        if ( $title->getContentModel() === MoocContent::CONTENT_MODEL_MOOC_ITEM ) {
+            if ( $title->equals( $title->getRootTitle() ) ) {
+                $text = json_encode( ( new MoocOverview() )->toJson() );
+            }
+        }
+    }
+
+    /**
      * Transforms a MOOC resource into Wikitext to allow users to edit its content.
      *
      * @param EditPage $editPage edit page
