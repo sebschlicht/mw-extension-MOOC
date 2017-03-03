@@ -1,6 +1,33 @@
 {
-  "name": "Universität Koblenz-Landau/mooc",
+  "name": "Universitaet_Koblenz-Landau/mooc",
   "type": "mediawiki-extension",
+  "description": "Provides the MOOC interface to create, maintain and use Massive Open Online Courses",
+  "keywords"   : [
+    "wiki",
+    "MediaWiki",
+    "extension",
+    "MOOC",
+    "Bootstrap"
+  ],
+  "homepage"   : "https://www.mediawiki.org/wiki/Extension:MOOC",
+  "license"    : "GPL-3.0+",
+  "authors"    : [
+    {
+      "name" : "Sebastian Schlicht",
+      "email": "sebastian@jablab.de",
+      "role" : "Developer"
+    },
+    {
+      "name" : "René Pickhardt",
+      "role" : "Manager"
+    }
+  ],
+  "support"    : {
+    "wiki"  : "https://www.mediawiki.org/wiki/Extension:MOOC",
+    "forum" : "https://www.mediawiki.org/wiki/Extension_talk:MOOC",
+    "source": "https://github.com/wikimedia/mediawiki-extensions-MOOC",
+    "issues": "https://phabricator.wikimedia.org/tag/mooc-interface/"
+  },
   "require-dev": {
 	"jakub-onderka/php-parallel-lint": "0.9.2",
 	"mediawiki/mediawiki-codesniffer": "0.6.0"
@@ -16,5 +43,9 @@
 	"php": ">=5.6",
 	"composer/installers": ">1.0.12",
 	"mediawiki/bootstrap": "~1.1"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "prepend-autoloader": false
   }
 }

@@ -7,7 +7,7 @@
   ],
   "url": "https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC",
   "descriptionmsg": "mooc-desc",
-  "license-name": "GPL-2.0",
+  "license-name": "GPL-3.0+",
   "type": "other",
   "AutoloadClasses": {
     "MOOCHooks": "MOOC.hooks.php",
