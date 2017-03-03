@@ -44,6 +44,9 @@
     "EditFormInitialText": [
       "MOOCHooks::onEditFormInitialText"
     ],
+    "EditFormPreloadText": [
+      "MOOCHooks::onEditFormPreloadText"
+    ],
     "EditPageGetPreviewContent": [
       "MOOCHooks::onEditPageGetPreviewContent"
     ],

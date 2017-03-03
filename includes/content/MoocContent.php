@@ -34,7 +34,7 @@ class MoocContent extends JsonContent {
      * @return MoocEntity MOOC entity loaded from the content
      */
     public function loadItem() {
-        return MoocEntity::loadFromJson( null, (array) parent::getData()->getValue() );
+        return MoocEntity::fromJson( (array) parent::getData()->getValue() );
     }
 
     /**
@@ -82,6 +82,10 @@ class MoocContent extends JsonContent {
                 $output->setEnableOOUI( true );
                 $output->addModuleScripts( 'ext.mooc' );
                 $output->addModuleStyles( 'ext.mooc' );
+
+                // add Bootstrap
+                $bootstrapManager = \Bootstrap\BootstrapManager::getInstance();
+                $bootstrapManager->addAllBootstrapModules();
                 $output->addModuleStyles( 'ext.bootstrap.styles' );
 
                 $output->setText( MoocContentRenderer::renderItem( $output, $this->entity ) );

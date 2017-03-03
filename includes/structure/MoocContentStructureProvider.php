@@ -31,7 +31,8 @@ class MoocContentStructureProvider {
             ), array(
                 'page_title',
                 'old_text'
-            ), "page_title LIKE '$rootPageTitle%' AND page_namespace = '$namespace' AND page_content_model = '$contentModelId'",
+            ), "(page_title = '$rootPageTitle' OR page_title LIKE '$rootPageTitle/%')"
+                . " AND page_namespace = '$namespace' AND page_content_model = '$contentModelId'",
             __METHOD__, array(
                 'ORDER_BY' => 'page_title ASC'
             ), array(
@@ -64,6 +65,22 @@ class MoocContentStructureProvider {
         // load structure from item titles
         //TODO this requires the items to be sorted by title while children arrays MUST maintain the original creation ordering
         $rootItem = array_shift( $items );
+        if ( $rootItem === null ) {
+            // the MOOC is not existing yet -> simulate MOOC overview and parental lesson, if necessary
+            if ( $renderedItem instanceof  MoocOverview ) {
+                $rootItem = $renderedItem;
+            } else {
+                $rootItem = new MoocOverview( $renderedItem->title->getRootTitle() );
+
+                // create parental lesson if unit
+                if ( $renderedItem instanceof MoocUnit ) {
+                    $lesson = new MoocLesson( $renderedItem->title->getBaseTitle() );
+                    array_push( $items, $lesson );
+                }
+                array_push( $items, $renderedItem );
+            }
+        }
+
         $prevLesson = null;
         foreach ( $items as $item ) {
             // determine item parent
