@@ -73,38 +73,34 @@ abstract class MoocItem extends MoocEntity {
      */
     public $children;
 
-    /**
-     * Creates a new MOOC item from JSON.
-     *
-     * @param Title $title page title
-     * @param array $moocContentJson JSON (associative array) representing a MOOC item
-     */
-    public function __construct( $title, $moocContentJson ) {
-        // TODO completely separate Title from MoocItem?
-        parent::__construct( $title, $moocContentJson );
-        $this->setTitle( $title );
+    public function __construct( $type, $title = null ) {
+        parent::__construct( $type, $title );
 
-        // common MOOC item fields
-        if ( array_key_exists( self::JFIELD_VIDEO, $moocContentJson ) ) {
-            $this->video = $moocContentJson[self::JFIELD_VIDEO];
+        // set script and quiz title
+        $this->setTitle( $title );
+    }
+
+    protected function loadJson( $jsonArray ) {
+        if ( array_key_exists( self::JFIELD_VIDEO, $jsonArray ) ) {
+            $this->video = $jsonArray[self::JFIELD_VIDEO];
         }
-        if ( array_key_exists( self::JFIELD_LEARNING_GOALS, $moocContentJson ) ) {
-            $this->learningGoals = $moocContentJson[self::JFIELD_LEARNING_GOALS];
+        if ( array_key_exists( self::JFIELD_LEARNING_GOALS, $jsonArray ) ) {
+            $this->learningGoals = $jsonArray[self::JFIELD_LEARNING_GOALS];
         }
-        if ( array_key_exists( self::JFIELD_FURTHER_READING, $moocContentJson ) ) {
-            $this->furtherReading = $moocContentJson[self::JFIELD_FURTHER_READING];
+        if ( array_key_exists( self::JFIELD_FURTHER_READING, $jsonArray ) ) {
+            $this->furtherReading = $jsonArray[self::JFIELD_FURTHER_READING];
         }
     }
 
     /**
+     * Sets the title and updates the titles of potentially associated resources.
+     *
      * @param $title Title page title
      */
     public function setTitle( $title ) {
         $this->title = $title;
-        if ( $title != null ) {
-            $this->scriptTitle = Title::newFromText( $title . '/script' );
-            $this->quizTitle = Title::newFromText( $title . '/quiz' );
-        }
+        $this->scriptTitle = ( $title === null ) ? null : Title::newFromText( $title . '/script' );
+        $this->quizTitle = ( $title === null ) ? null : Title::newFromText( $title . '/quiz' );
     }
 
     /**
@@ -126,8 +122,6 @@ abstract class MoocItem extends MoocEntity {
             self::JFIELD_TYPE => $this->type,
             self::JFIELD_LEARNING_GOALS => $this->learningGoals,
             self::JFIELD_VIDEO => $this->video,
-            self::JFIELD_SCRIPT_TITLE => $this->scriptTitle->getFullText(),
-            self::JFIELD_QUIZ_TITLE => $this->quizTitle->getFullText(),
             self::JFIELD_FURTHER_READING => $this->furtherReading
         ];
     }

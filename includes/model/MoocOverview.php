@@ -14,6 +14,10 @@ class MoocOverview extends MoocItem {
      */
     const ENTITY_TYPE_MOOC = 'mooc';
 
+    public function __construct( $title = null ) {
+        parent::__construct( self::ENTITY_TYPE_MOOC, $title );
+    }
+
     public function toJson() {
         return [
             self::JFIELD_TYPE => $this->type,

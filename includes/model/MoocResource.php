@@ -21,16 +21,10 @@ abstract class MoocResource extends MoocEntity {
      */
     public $content;
 
-    /**
-     * @param Title $title resource page title
-     * @param mixed $moocContentJson JSON (associative array) representing a MOOC resource
-     */
-    public function __construct( $title, $moocContentJson ) {
-        parent::__construct( $title, $moocContentJson );
-
+    protected function loadJson( $jsonArray ) {
         // resource file content - if any
-        if ( array_key_exists( self::JFIELD_CONTENT, $moocContentJson ) ) {
-            $this->content = $moocContentJson[self::JFIELD_CONTENT];
+        if ( array_key_exists( self::JFIELD_CONTENT, $jsonArray ) ) {
+            $this->content = $jsonArray[self::JFIELD_CONTENT];
         }
     }
 

@@ -193,6 +193,9 @@
    * @returns {*} jQuery-promise on the AJAX request
    */
   function apiSaveItem( title, item, summary ) {
+    // remove temporary values TODO is there a better way to do this? prevents to extend the JSON by these fields
+    delete item.script;
+    delete item.quiz;
     return apiSavePage( title, JSON.stringify( item ), summary );
   }
 
@@ -220,7 +223,7 @@
    */
   function apiAddLessonToMooc( moocTitle, lessonName ) {
     var lessonTitle = moocTitle + '/' + lessonName;
-    var content = '{"type":"mooc"}';
+    var content = '{"type":"lesson"}';
     var summary = mw.message( 'mooc-overview-add-lesson-summary', lessonName ).text();
 
     mw.log( 'adding lesson ' + lessonName + ' (' + lessonTitle + ') to MOOC ' + moocTitle );
