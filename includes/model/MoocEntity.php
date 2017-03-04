@@ -34,7 +34,23 @@ abstract class MoocEntity {
     public function __construct( $type, $title = null ) {
         $this->type = $type;
         // TODO completely separate page Title from MOOC entities?
+        $this->setTitle( $title );
+    }
+
+    /**
+     * Sets the page title.
+     *
+     * @param Title $title page title
+     */
+    public function setTitle( $title ) {
         $this->title = $title;
+    }
+
+    /**
+     * @return bool whether the entity has child entities
+     */
+    public function hasChildren() {
+        return false;
     }
 
     /**

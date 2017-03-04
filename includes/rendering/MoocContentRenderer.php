@@ -184,11 +184,11 @@ abstract class MoocContentRenderer {
     }
 
     protected function addScriptSection() {
-        $this->beginSection(self::SECTION_KEY_SCRIPT);
-        
-        if ($this->item->scriptTitle->exists()) {
-            // transclude script if existing
-            $this->out->addWikiText('{{:' . $this->item->scriptTitle . '}}');
+        $this->beginSection( self::SECTION_KEY_SCRIPT );
+
+        // add script if existing
+        if ( $this->item->script !== null ) {
+            $this->out->addWikiText( $this->item->script->content );
         } else {
             // show info box if script not created yet
             // TODO pass link to edit script resource page
@@ -199,11 +199,11 @@ abstract class MoocContentRenderer {
     }
 
     protected function addQuizSection() {
-        $this->beginSection(self::SECTION_KEY_QUIZ);
-        
-        if ($this->item->quizTitle->exists()) {
-            // transclude quiz if existing
-            $this->out->addWikiText('{{:' . $this->item->quizTitle . '}}');
+        $this->beginSection( self::SECTION_KEY_QUIZ );
+
+        // add quiz if existing
+        if ( $this->item->quiz !== null ) {
+            $this->out->addWikiText( $this->item->quiz->content );
         } else {
             // show info box if quiz not created yet
             // TODO pass link to edit quiz resource page
@@ -365,7 +365,7 @@ abstract class MoocContentRenderer {
             switch ($sectionKey) {
                 case self::SECTION_KEY_VIDEO:
                     // simple text input field
-                    $this->out->addHTML('<input type="text" class="value" />');
+                    $this->out->addHTML( '<input type="text" class="value form-control" />' );
                     break;
 
                 // ordered lists
@@ -376,7 +376,7 @@ abstract class MoocContentRenderer {
 
                 default:
                     // auto-growing textarea
-                    $this->out->addHTML('<textarea class="value auto-grow" rows="1"></textarea>');
+                    $this->out->addHTML( '<textarea class="value auto-grow form-control" rows="1"></textarea>' );
                     break;
             }
         }
@@ -494,22 +494,32 @@ abstract class MoocContentRenderer {
      *
      * @param MoocItem $item MOOC item to add
      */
-    protected function addNavigationItem($item) {
-        $this->out->addHTML('<li>');
-        $this->out->addWikiText('[[' . $item->title . '|' . $item->getName() . ']]');
+    protected function addNavigationItem( $item ) {
+        $this->out->addHTML( '<li>' );
+        $this->out->addWikiText( '[[' . $item->title . '|' . $item->getName() . ']]' );
         // register link for interwiki meta data
-        $this->parserOutput->addLink($item->title);
+        $this->parserOutput->addLink( $item->title );
         // TODO do this for next/previous links and displayed children as well
         
         // add menu items for children - if any
-        if ($item->hasChildren()) {
-            $this->out->addHTML('<ul>');
+        if ( $item->hasChildren() ) {
+            // limit to MoocItems
+            $children = [];
             foreach ($item->children as $childItem) {
-                $this->addNavigationItem($childItem);
+                if ( $childItem instanceof MoocItem ) {
+                    array_push( $children, $childItem );
+                }
             }
-            $this->out->addHTML('</ul>');
+
+            if ( !empty( $children ) ) {
+                $this->out->addHTML( '<ul>' );
+                foreach ( $children as $childItem ) {
+                    $this->addNavigationItem( $childItem );
+                }
+                $this->out->addHTML( '</ul>' );
+            }
         }
-        $this->out->addHTML('</li>');
+        $this->out->addHTML( '</li>' );
     }
 
     /**

@@ -54,13 +54,11 @@ class MoocContentStructureProvider {
             $contentModel = new MoocContent( $row->old_text );
             if ( $contentModel->isValid() ) {
                 $item = $contentModel->loadItem();
-                if ( $item instanceof MoocItem ) {
-                    $item->setTitle( Title::newFromText( $row->page_title, $namespace ) );
-                    array_push( $items, $item );
-                }
+                $item->setTitle( Title::newFromText( $row->page_title, $namespace ) );
+                // this adds the rendered item as well
+                array_push( $items, $item );
             }
         }
-
 
         // load structure from item titles
         //TODO this requires the items to be sorted by title while children arrays MUST maintain the original creation ordering
@@ -81,11 +79,12 @@ class MoocContentStructureProvider {
             }
         }
 
+        // build item hierarchy
         $prevLesson = null;
         foreach ( $items as $item ) {
             // determine item parent
             $parent = $rootItem;
-            if ($prevLesson != null && $item->title->isSubpageOf( $prevLesson->title )) {
+            if ( $prevLesson !== null && $item->title->isSubpageOf( $prevLesson->title ) ) {
                 // child unit of previous lesson
                 $parent = $prevLesson;
             } else {
@@ -93,11 +92,21 @@ class MoocContentStructureProvider {
                 $prevLesson = $item;
             }
 
-            // register item as child of parent
-            if ( !isset( $parent->children ) ) {
-                $parent->children = [];
+            if ( $item instanceof MoocItem ) {
+                // register item as child of parent
+                if ( !isset( $parent->children ) ) {
+                    $parent->children = [];
+                }
+                array_push( $parent->children, $item );
+            } elseif ( $item instanceof MoocResource
+                && $parent->title !== null && $parent->title->equals( $renderedItem->title ) ) {
+                // register resource to rendered item
+                if ( $item instanceof MoocScript ) {
+                    $renderedItem->script = $item;
+                } else if ( $item instanceof MoocQuiz ) {
+                    $renderedItem->quiz = $item;
+                }
             }
-            array_push( $parent->children, $item );
         }
         $renderedItem->baseItem = $rootItem;
 
