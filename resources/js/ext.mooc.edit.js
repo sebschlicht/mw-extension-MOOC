@@ -71,56 +71,6 @@
   }
 
   /**
-   * Gets the raw content of a page.
-   *
-   * @param title page title
-   * @returns {*} jQuery-promise on the AJAX request
-   */
-  function apiGetRawPage( title ) {
-    mw.log( 'loading raw content of page ' + title );
-    return new mw.Api().get( {
-      'action': 'query',
-      'prop': 'revisions',
-      'rvprop': 'content',
-      'titles': title
-    } ).then( function ( json ) {
-      mw.log( 'The page has been retrieved successfully. Response:' );
-      mw.log( json );
-      return getFirstPageRevisionContent( json );
-    } ).fail( function ( code, response ) {
-      mw.log.warn( 'Failed to save the item! Cause:' );
-      mw.log.warn( response.error );
-      mw.log( response );
-
-      if ( code === "http" ) {
-        mw.log.warn( "HTTP error: " + response.textStatus ); // result.xhr contains the jqXHR object
-      }
-      //TODO show the user that the process has failed!
-    } );
-  }
-
-  /**
-   * Extracts the content of the first revision of the first page in a revisions query response.
-   *
-   * @param json revisions query response
-   * @returns {string|null} content of the first revision of the first page in the revisions query response
-   */
-  function getFirstPageRevisionContent( json ) {
-    if ( 'query' in json && 'pages' in json.query ) {
-      var page = null;
-      for ( var key in json.query.pages ) {
-        page = json.query.pages[key];
-        if ( 'revisions' in page ) {
-          if ( page.revisions.length > 0 && '*' in page.revisions[0] ) {
-            return page.revisions[0]['*'];
-          }
-        }
-      }
-    }
-    return null;
-  }
-
-  /**
    * Creates a non-existing Wikipage.
    *
    * @param title page title
@@ -193,10 +143,33 @@
    * @returns {*} jQuery-promise on the AJAX request
    */
   function apiSaveItem( title, item, summary ) {
-    // remove temporary values TODO is there a better way to do this? prevents to extend the JSON by these fields
+    // remove temporary values
     delete item.script;
     delete item.quiz;
     return apiSavePage( title, JSON.stringify( item ), summary );
+  }
+
+  /**
+   * Saves or creates a resource entity.
+   *
+   * @param title resource entity page title
+   * @param content resource file content
+   * @param summary edit summary
+   * @param create flag whether to create the page
+   * @param type type of the resource entity that should be created
+   * @returns {*} jQuery-promise on the AJAX request
+   */
+  function apiSaveResourceEntity( title, content, summary, create, type ) {
+    if ( create === true && type !== undefined && type !== null ) {
+      // the content needs to validate against MoocResource when creating the page
+      content = JSON.stringify({
+        'type': type,
+        'content': content
+      });
+      return apiCreatePage( title, content, summary );
+    } else {
+      return apiSavePage( title, content, summary );
+    }
   }
 
   /**
@@ -272,6 +245,8 @@
     $btnSave.on( 'click', onSaveItem );
     var $btnReset = $form.find( '.btn-reset' );
     $btnReset.on( 'click', onResetModal );
+    var $autoGrowingTextarea = $form.find( 'textarea.auto-grow' );
+    $autoGrowingTextarea.on( 'input', onTextareaValueChanged );
   }
 
   /**
@@ -293,25 +268,13 @@
 
       case 'script':
       case 'quiz':
-        // enable textarea to grow automatically and inject remote page content
-        var $textarea = $form.find( 'textarea.value' );
-        if ( item[section] === undefined ) {
-          mw.log( 'registering hooks on auto-growing textarea: ' + $textarea.length );
-          $textarea.on( 'input', onTextareaValueChanged );
-          $btnSave.prop( 'disabled', true );
-          // download remote page content
-          var title = mw.config.get( 'wgPageName' ) + '/' + section;
-          apiGetRawPage( title ).then( function ( content ) {
-            mw.log( section + ( ( content !== null ) ? ' loaded' : ' is empty' ) );
-            item[section] = content;
-            $textarea.val( content );
-            resizeTextarea( $textarea );
-            $btnSave.prop( 'disabled', false );
-          } );
-        } else {
-          $textarea.val( item[section] );
+        // inject resource file content, if any, and resize textarea
+        if ( item[section] !== null ) {
+          var $textarea = $form.find( 'textarea.value' );
+          $textarea.val( item[section].content );
           resizeTextarea( $textarea );
         }
+        $btnSave.prop( 'disabled', false );
         break;
 
       default:
@@ -350,20 +313,17 @@
 
       case 'script':
       case 'quiz':
-        var externalPageExists = ( item[section] !== undefined && item[section] !== null );
-        item[section] = $form.find( '.value' ).val();
         // TODO show loading indicator
-        if ( externalPageExists ) {
-          apiSavePage( item[section + 'Title'], item[section], editSummary ).then( function ( ) {
-            // reload page on success
-            reloadPage();
-          } );
-        } else {
-          apiCreatePage( item[section + 'Title'], item[section], editSummary ).then( function ( ) {
-            // reload page on success
-            reloadPage();
-          } );
-        }
+        var resourcePageTitle = mw.config.get( 'wgPageName' ) + '/' + section;
+        var resourcePageContent = $form.find( '.value' ).val();
+        var resourcePageExists = ( item[section] !== null );
+
+        // save/create the resource entity to its page
+        apiSaveResourceEntity( resourcePageTitle, resourcePageContent, editSummary,
+          !resourcePageExists, section ).then( function ( ) {
+          // reload page on success
+          reloadPage();
+        } );
         break;
     }
 

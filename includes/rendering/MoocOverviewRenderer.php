@@ -67,7 +67,7 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
 
     protected function fillModalBoxForm( $sectionKey, $action ) {
         if ( $sectionKey == self::SECTION_KEY_LESSONS && $action == self::ACTION_ADD ) {
-            $this->out->addHTML( '<input type="text" class="value" />' );
+            $this->out->addHTML( '<input type="text" class="value form-control" />' );
         } else {
             parent::fillModalBoxForm( $sectionKey, $action );
         }
