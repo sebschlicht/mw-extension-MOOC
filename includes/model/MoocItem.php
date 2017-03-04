@@ -20,13 +20,13 @@ abstract class MoocItem extends MoocEntity {
     const JFIELD_VIDEO = 'video';
 
     /**
-     * JSON field identifier for the script page title
+     * JSON field identifier for the script
      */
-    const JFIELD_SCRIPT_TITLE = 'scriptTitle';
+    const JFIELD_SCRIPT = 'script';
     /**
-     * JSON field identifier for the quiz page title
+     * JSON field identifier for the quiz
      */
-    const JFIELD_QUIZ_TITLE = 'quizTitle';
+    const JFIELD_QUIZ = 'quiz';
 
     /**
      * JSON field identifier for further reading material
@@ -54,14 +54,14 @@ abstract class MoocItem extends MoocEntity {
     public $video;
 
     /**
-     * @var Title title of the script associated with this item
+     * @var MoocResource|null script associated with this item
      */
-    public $scriptTitle;
+    public $script;
 
     /**
-     * @var Title title of the quiz associated with this item
+     * @var MoocResource|null quiz associated with this item
      */
-    public $quizTitle;
+    public $quiz;
 
     /**
      * @var string[] resources of further reading
@@ -75,9 +75,6 @@ abstract class MoocItem extends MoocEntity {
 
     public function __construct( $type, $title = null ) {
         parent::__construct( $type, $title );
-
-        // set script and quiz title
-        $this->setTitle( $title );
     }
 
     protected function loadJson( $jsonArray ) {
@@ -92,13 +89,8 @@ abstract class MoocItem extends MoocEntity {
         }
     }
 
-    /**
-     * Sets the title and updates the titles of potentially associated resources.
-     *
-     * @param $title Title page title
-     */
     public function setTitle( $title ) {
-        $this->title = $title;
+        parent::setTitle( $title );
         $this->scriptTitle = ( $title === null ) ? null : Title::newFromText( $title . '/script' );
         $this->quizTitle = ( $title === null ) ? null : Title::newFromText( $title . '/quiz' );
     }
@@ -114,7 +106,7 @@ abstract class MoocItem extends MoocEntity {
      * @return boolean whether the item has children
      */
     public function hasChildren() {
-        return isset( $this->children ) && !empty( $this->children );
+        return !empty( $this->children );
     }
 
     public function toJson() {
@@ -122,6 +114,8 @@ abstract class MoocItem extends MoocEntity {
             self::JFIELD_TYPE => $this->type,
             self::JFIELD_LEARNING_GOALS => $this->learningGoals,
             self::JFIELD_VIDEO => $this->video,
+            self::JFIELD_SCRIPT => ( $this->script !== null ) ? $this->script->toJson() : null,
+            self::JFIELD_QUIZ => ( $this->quiz !== null ) ? $this->quiz->toJson() : null,
             self::JFIELD_FURTHER_READING => $this->furtherReading
         ];
     }
