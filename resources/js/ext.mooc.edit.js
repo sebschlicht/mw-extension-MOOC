@@ -13,7 +13,7 @@
   });
 
   // register API calls when resources ready
-  mw.loader.using( [ 'mediawiki.api.messages', 'mediawiki.jqueryMsg', 'mediawiki.api.edit'], registerApiCalls, function () {
+  mw.loader.using( [ 'mediawiki.api.messages', 'mediawiki.jqueryMsg', 'mediawiki.api.edit' ], registerApiCalls, function () {
     mw.log.error( 'Failed to load MediaWiki modules to initialize MOOC extension!' );
   } );
 
@@ -239,14 +239,25 @@
    * @param item item holding the content
    */
   function initModalEditBox( section, item ) {
+    // fill modal boxes with initial item values, if necessary
     var $form = $( '#mooc' ).find( '#' + section ).find( '.header form.edit' );
     fillModalBoxForm( $form, section, item );
+
+    // hook save button click event to save item
     var $btnSave = $form.find( '.btn-save' );
     $btnSave.on( 'click', onSaveItem );
+
+    // hook form reset event to reset values to item values
     var $btnReset = $form.find( '.btn-reset' );
     $btnReset.on( 'click', onResetModal );
+
+    // hook textarea resizing on content change and resize to match content
     var $autoGrowingTextarea = $form.find( 'textarea.auto-grow' );
     $autoGrowingTextarea.on( 'input', onTextareaValueChanged );
+    $autoGrowingTextarea.each ( function( index, ele ) {
+      var $textarea = $( ele );
+      resizeTextarea( $textarea );
+    } );
   }
 
   /**
@@ -257,30 +268,32 @@
    * @param item item holding the content
    */
   function fillModalBoxForm( $form, section, item ) {
-    var $btnSave = $form.find( '.btn-save' );
     switch ( section ) {
       case 'learning-goals':
       case 'further-reading':
         // fill ordered list with section list items
         buildHtmlList( $form.find( 'ol.value' ), item[section] );
-        $btnSave.prop( 'disabled', false );
         break;
 
       case 'script':
       case 'quiz':
-        // inject resource file content, if any, and resize textarea
-        if ( item[section] !== null ) {
-          var $textarea = $form.find( 'textarea.value' );
-          $textarea.val( item[section].content );
-          resizeTextarea( $textarea );
+        // pre-filled on server-side but update and resize if necessary
+        var $textarea = $form.find( 'textarea.value' );
+        var resourceContent = ( item[section] === null ) ? null : item[section].content;
+        if ( $textarea.val() !== resourceContent ) {
+          $textarea.val( resourceContent );
+          if ( $textarea.is( '.auto-grow' ) ) {
+            resizeTextarea( $textarea );
+          }
         }
-        $btnSave.prop( 'disabled', false );
         break;
 
       default:
-        // inject section content into input field
-        $form.find( 'input.value' ).val( item[section] );
-        $btnSave.prop( 'disabled', false );
+        // pre-filled on server-side but update if necessary
+        var $value = $form.find( '.value' );
+        if ( $value.val() !== item[section] ) {
+          $value.val( item[section] );
+        }
         break;
     }
   }
