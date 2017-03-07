@@ -7,6 +7,8 @@
   var $sections = $( '#mooc-sections' ).find( '.section' );
   var $headers = $sections.find( '.header' );
 
+  // hide action buttons
+  $headers.find( '.actions' ).addClass( 'hidden-actions' );
   // open modal boxes via action buttons
   $headers.find( '.actions .btn-edit' ).on( 'click', openModalEditBox );
   $headers.find( '.actions .btn-add' ).on( 'click', openModalAddBox );
@@ -14,17 +16,95 @@
   $headers.find( '.modal-bg' ).on( 'click', closeModalBoxes );
   $headers.find( '.modal-box .btn-close' ).on( 'click', closeModalBoxes );
   $headers.find( '.modal-box .btn-cancel' ).on( 'click', closeModalBoxes );
-  $sections.each( function ( index, element ) {
-    var $section = $( element );
 
-    // collapse sections and hide action buttons
-    initSection( $section );
-    hideActions( $section );
+  // register hooks using jQuery easing when module loaded
+  mw.loader.using( [ 'oojs-ui' ], function () {
+    $sections.each( function ( index, element ) {
+      var $section = $( element );
 
-    // register links in empty sections
-    $section.find( '.content .edit-link' ).on( 'click', openModalEditBox );
-    $section.find( '.content .add-link' ).on( 'click', openModalAddBox );
-  });
+      // collapse sections and hide action buttons
+      initSection( $section );
+      hideActions( $section );
+
+      // register links in empty sections
+      $section.find( '.content .edit-link' ).on( 'click', openModalEditBox );
+      $section.find( '.content .add-link' ).on( 'click', openModalAddBox );
+    });
+  }, function () {
+    mw.log.error( 'Failed to load MediaWiki modules to initialize MOOC extension!' );
+  } );
+
+  // make units and their video download buttons clickable
+  $sections.find( '.child.unit' ).each( function ( index, ele ) {
+    var $unit = $( ele );
+    var $videoThumbnail = $unit.find( '.video-thumbnail' );
+    $videoThumbnail.on( 'click', browseToClickedUnit );
+
+    var $unitVideoDownloadLink = $unit.find( '.links .download-video' );
+    if ( !$unitVideoDownloadLink.hasClass( 'disabled' ) ) {
+      // extract link of source video
+      var $unitVideo = $videoThumbnail.find( 'video' );
+      var sourceVideoLink = extractSourceVideoLink( $unitVideo );
+      if ( sourceVideoLink !== null ) {
+        // inject video link
+        $unitVideoDownloadLink.attr( 'href', sourceVideoLink );
+      }
+
+      // make video a thumb
+      var unitVideoThumbSrc = $unitVideo.attr( 'poster' );
+      var $unitVideoThumbLink = $( '<a>', {
+        'href': getUnitLinkHref( $unit )
+      } );
+      var $unitVideoThumb = $( '<img>', {
+        'src': unitVideoThumbSrc
+      } );
+      $unitVideoThumbLink.append( $unitVideoThumb );
+      $unitVideo.replaceWith( $unitVideoThumbLink );
+    }
+  } );
+
+  /**
+   * Extracts the source video link via its 'src' attribute.
+   *
+   * @param $video video object
+   * @returns {*} link to the source video or null
+   */
+  function extractSourceVideoLink( $video ) {
+    var sourceVideoLink = null;
+    $video.children( 'source' ).each( function ( index, ele ) {
+      var $source = $( ele );
+      if ( $source.attr( 'data-shorttitle' ).endsWith( 'source' ) ) {
+        sourceVideoLink = $source.attr( 'src' );
+      }
+    } );
+    return sourceVideoLink;
+  }
+
+  /**
+   * Browses to a unit that contains the element that has been clicked.
+   */
+  function browseToClickedUnit() {
+    var $unit = $( this ).parents( '.unit' );
+    var unitUrl = getUnitLinkHref( $unit );
+    if ( unitUrl !== null ) {
+      window.location.href = unitUrl;
+    }
+  }
+
+  /**
+   * Extracts the URL of a unit via its title.
+   *
+   * @param $unit unit
+   * @returns {string} URL of the unit or null on error
+   */
+  function getUnitLinkHref( $unit ) {
+    var $unitLink = $unit.find( '.title a' );
+    if ( $unitLink.length === 1 ) {
+      return $unitLink.attr( 'href' );
+    }
+    mw.log.warn( 'Failed to retrieve the URL of the unit specified!' );
+    return null;
+  }
 
   // close modal box on key ESC down
   $( document ).keydown( function ( e ) {
@@ -49,14 +129,14 @@
    * Shows the action buttons of a section.
    */
   function showActions() {
-    $( this ).children( '.header' ).children( '.actions' ).addClass( 'visible' );
+    $( this ).children( '.header' ).children( '.actions' ).removeClass( 'hidden-actions' );
   }
 
   /**
    * Hides the action buttons of a section.
    */
   function hideActions() {
-    $( this ).children( '.header' ).children( '.actions' ).removeClass( 'visible' );
+    $( this ).children( '.header' ).children( '.actions' ).addClass( 'hidden-actions' );
   }
 
   /*
@@ -150,6 +230,8 @@
   function initSection( $section ) {
     // make section collapsable
     if ( isSectionCollapsable( $section ) ) {
+      var $content = $section.children( '.content' );
+      $content.css( 'max-height', $content.outerHeight() + 'px' );
       enableSectionCollapseUI( $section );
     }
     
@@ -205,9 +287,10 @@
     
     var $content = $section.children( '.content' );
     $content.stop().css( 'max-height', hCollapsedSection + 'px' );
-    var $expander = $section.children( '.expander' );
-    $expander.stop().hide().fadeIn();
-    
+
+    var $expander = $content.children( '.expander' );
+    $expander.addClass( 'active' );
+
     // enable UI to expand section
     enableSectionExpandUI( $section );
   }
@@ -222,15 +305,23 @@
     $section.addClass( 'collapsable' );
     var $header = $section.children( '.header' );
     $header.off( 'click' ).on( 'click', collapseClickedSection );
+    var $content = $section.children( '.content' );
+    $content.off( 'click' );
   }
 
   /**
    * Expands the section that contains the element that is being clicked on.
    *
-   * jQuery-callback for click.
+   * @param e click event
    */
-  function expandClickedSection() {
-    var $section = $( this ).parent();
+  function expandClickedSection( e ) {
+    var $hookTarget = $( this );
+    var $target = $( e.target );
+    // except if clicking at child element of header (e.g. modal box)
+    if ( $hookTarget.is( '.header' ) && !$target.is ( '.header' ) ) {
+      return;
+    }
+    var $section = $target.parents( '.section' );
     expandSection( $section );
   }
 
@@ -252,9 +343,8 @@
       'max-height': contentHeight + 'px'
     }, 300, 'easeInQuint' );
     
-    // TODO add this via classes and let CSS3 do its work!
-    var $expander = $section.children( '.expander' );
-    $expander.stop().show().fadeOut();
+    var $expander = $content.children( '.expander' );
+    $expander.removeClass( 'active' );
     
     enableSectionCollapseUI( $section );
   }
@@ -269,8 +359,8 @@
     $section.addClass( 'expandable' );
     var $header = $section.children( '.header' );
     $header.off( 'click' ).on( 'click', expandClickedSection );
-    var $expander = $section.children( '.expander' );
-    $expander.on( 'click', expandClickedSection );
+    var $content = $section.children( '.content' );
+    $content.on( 'click', expandClickedSection );
   }
   
   // hide MW UI
@@ -283,7 +373,7 @@
   $mwNavButton.attr( 'src', '/mediawiki-vagrant.png' );
   $mwNavButton.on( 'click', mwNavigationButtonClicked );
   //$mwNavButton.insertBefore( $mwNavigation );
-  //hideMwNavigation( $mwNavigation );
+  hideMwNavigation( $mwNavigation );
   
   function mwNavigationButtonClicked() {
     if ( $mwNavigation.hasClass( 'hidden' ) ) {

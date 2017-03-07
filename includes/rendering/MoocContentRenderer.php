@@ -361,11 +361,12 @@ abstract class MoocContentRenderer {
      * @param string $action action the modal box is intended for
      */
     protected function fillModalBoxForm($sectionKey, $action) {
-        if ($action == self::ACTION_EDIT) {
-            switch ($sectionKey) {
+        if ( $action == self::ACTION_EDIT ) {
+            switch ( $sectionKey ) {
+                // video
                 case self::SECTION_KEY_VIDEO:
                     // simple text input field
-                    $this->out->addHTML( '<input type="text" class="value form-control" />' );
+                    $this->out->addHTML( '<input type="text" class="value form-control" value="' . $this->item->video . '" />' );
                     break;
 
                 // ordered lists
@@ -374,9 +375,17 @@ abstract class MoocContentRenderer {
                     $this->out->addHTML('<ol class="value"></ol>');
                     break;
 
-                default:
+                // external resources
+                case self::SECTION_KEY_SCRIPT:
+                case self::SECTION_KEY_QUIZ:
                     // auto-growing textarea
-                    $this->out->addHTML( '<textarea class="value auto-grow form-control" rows="1"></textarea>' );
+                    $entity = ( $sectionKey === self::SECTION_KEY_SCRIPT ) ? $this->item->script : $this->item->quiz;
+                    $textareaValue = ( $entity === null ) ? '' : $entity->content;
+                    $this->out->addHTML( '<textarea class="value auto-grow form-control" rows="1">' . $textareaValue . '</textarea>' );
+                    break;
+
+                default:
+                    // unknown form components, leave empty
                     break;
             }
         }
@@ -393,7 +402,7 @@ abstract class MoocContentRenderer {
             switch ($sectionKey) {
                 default:
                     $titleSave = $this->loadMessage('modal-button-title-save');
-                    $this->out->addHTML("<input type=\"submit\" class=\"btn btn-save btn-submit\" value=\"$titleSave\" disabled/>");
+                    $this->out->addHTML("<input type=\"submit\" class=\"btn btn-save btn-submit\" value=\"$titleSave\"/>");
                     break;
             }
         }
@@ -458,8 +467,12 @@ abstract class MoocContentRenderer {
      * Finishes the current section output.
      */
     protected function endSection() {
-        $this->out->addHTML('</div>');
-        $this->out->addHTML('</div>');
+        // add section expander
+        $this->out->addHTML( '<div class="expander">' . $this->loadMessage( 'button-expand-section' ) . '</div>' );
+
+        // finish section
+        $this->out->addHTML( '</div>' );
+        $this->out->addHTML( '</div>' );
     }
 
     /**

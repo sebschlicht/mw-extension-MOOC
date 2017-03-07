@@ -23,6 +23,7 @@
   "mooc-section-units-unit-link-download-video": "Download the video",
   "mooc-section-units-unit-link-script": "Jump to the script",
   "mooc-section-units-unit-link-quiz": "Jump to the quiz",
+  "mooc-unit-no-video": "No video available.",
   "mooc-section-lessons-title": "Lessons",
   "mooc-section-lessons-add-title": "Add lesson",
   "mooc-lesson-add-unit-summary": "Unit \"$1\" added to the lesson.",

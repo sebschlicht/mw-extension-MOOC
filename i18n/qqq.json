@@ -27,6 +27,7 @@
   "mooc-section-units-unit-link-download-video": "Title of the link to download the unit's video.",
   "mooc-section-units-unit-link-script": "Title of the link to the unit's script section.",
   "mooc-section-units-unit-link-quiz": "Title of the link to the unit's quiz section.",
+  "mooc-unit-no-video": "Alternative text for the thumbnail of a unit when no video is available.",
   "mooc-section-lessons-title": "Title of the lessons section.",
   "mooc-section-lessons-add-title": "Title of the button to add a lesson.",
   "mooc-lesson-add-unit-summary": "Edit summary when adding an unit to a lesson. Parameters: 1. unit name",

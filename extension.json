@@ -74,11 +74,6 @@
   },
   "ResourceModules": {
     "ext.mooc": {
-      "dependencies": [
-        "mediawiki.jqueryMsg",
-        "jquery.ui.core",
-        "oojs-ui-core"
-      ],
       "position": "top",
       "scripts": [
         "resources/js/ext.mooc.js",
@@ -89,6 +84,14 @@
       ],
       "styles": [
         "resources/less/ext.mooc.less"
+      ],
+      "messages": [
+        "mooc-overview-add-lesson-summary",
+        "mooc-lesson-add-unit-summary"
+      ],
+      "dependencies": [
+        "mediawiki.jqueryMsg",
+        "oojs-ui-core"
       ]
     }
   },

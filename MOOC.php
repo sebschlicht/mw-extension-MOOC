@@ -10,7 +10,10 @@ if (function_exists('wfLoadExtension')) {
     $wgMessagesDirs['MOOC'] = __DIR__ . '/i18n';
     $wgExtensionMessagesFiles['MOOCAlias'] = __DIR__ . '/MOOC.i18n.alias.php';
     $wgExtensionMessagesFiles['MOOCNamespaces'] = __DIR__ . '/MOOC.namespaces.php';
-    
+
+    // TODO remove this BUT FIRSTLY remove old, cached resource files
+    $wgResourceLoaderDebug = true;
+
     // TODO get out how to include jquery.ui.effects (includes easing) other than shipping
     
     $wgMOOCSectionConfig = [

@@ -80,8 +80,11 @@ class MoocContent extends JsonContent {
                 // MOOC item: let content renderer decide
                 $this->entity->setTitle( $title );
                 $output->setEnableOOUI( true );
-                $output->addModuleScripts( 'ext.mooc' );
+                // make styles and scripts apply immediately
                 $output->addModuleStyles( 'ext.mooc' );
+                $output->addModuleScripts( 'ext.mooc' );
+                // load messages
+                $output->addModules( 'ext.mooc' );
 
                 // add Bootstrap
                 $bootstrapManager = \Bootstrap\BootstrapManager::getInstance();

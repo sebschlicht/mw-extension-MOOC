@@ -68,7 +68,7 @@ class MoocLessonRenderer extends MoocContentRenderer {
             $this->out->addWikiText('[[File:' . $unit->video . '|frameless|300x170px|link=' . $unit->title . ']]');
         } else {
             // TODO make clickable without JS
-            $this->out->addHTML('<span>' . $this->loadMessage('units-no-video') . '</span>');
+            $this->out->addHTML('<span>' . $this->loadMessage('unit-no-video') . '</span>');
         }
         $this->out->addHTML('</div>');
         $this->out->addHTML('</div>');
@@ -131,7 +131,10 @@ class MoocLessonRenderer extends MoocContentRenderer {
         $icon = $wgMOOCImagePath . 'ic_download.svg';
         $title = $this->loadMessage("section-units-unit-link-download-video");
         $href = isset($unit->video) ? $this->resolveMediaUrl(Title::newFromText("Media:{$unit->video}")) : null;
-        $classes = ($href == null) ? ['disabled'] : null;
+        $classes = [ 'download-video' ];
+        if ( $href === null ) {
+            array_push( $classes, 'disabled' );
+        }
         $this->addChildLinkBarLink($icon, $href, $title, $classes);
     }
 
@@ -160,14 +163,14 @@ class MoocLessonRenderer extends MoocContentRenderer {
         $this->addChildLinkBarLink($icon, $href, $title);
     }
 
-    protected function addChildLinkBarLink($icon, $href, $title, $classes=null) {
+    protected function addChildLinkBarLink( $icon, $href, $title, $classes = null ) {
         $attrClass = '';
-        if (!empty($classes)) {
-            $attrClass = ' class="' . implode(' ', $classes) . '"';
+        if ( !empty( $classes ) ) {
+            $attrClass = ' class="' . implode( ' ', $classes ) . '"';
         }
-        $this->out->addHTML("<a href=\"$href\"$attrClass>");
-        $this->out->addHTML("<img src=\"$icon\" title=\"$title\" alt=\"$title\" />");
-        $this->out->addHTML("</a>");
+        $this->out->addHTML( "<a href='$href'$attrClass>" );
+        $this->out->addHTML( "<img src='$icon' title='$title' alt='$title' />" );
+        $this->out->addHTML( '</a>' );
     }
 
     protected function fillModalBoxForm( $sectionKey, $action ) {

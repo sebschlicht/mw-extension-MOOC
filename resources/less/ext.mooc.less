@@ -19,6 +19,7 @@
 
 // DIMENSIONS
 @hCollapsedSection: 200px; // warning: when altering this value, update ext.mooc.js:hCollapsedSection as well
+@hCollapsedSectionOverlay: 50px; // height of the 'Read more' overlay
 
 #mooc-sections {
   padding-bottom: 39px;
@@ -40,13 +41,19 @@
       .actions {
         float: right;
         .btn {
-          opacity: 0;
+          opacity: 1;
           .transition(.3s, ease-out 0s, opacity);
         }
       }
-      .actions.visible {
+      .actions.hidden-actions {
         .btn {
-          opacity: 1;
+          opacity: 0;
+          .transition(.3s, ease-in 0s, opacity);
+        }
+        .modal-box {
+          .btn {
+            opacity: 1;
+          }
         }
       }
 
@@ -80,23 +87,30 @@
       .box-shadow(0 0 0 1px rgba(0, 0, 0, .2));
       overflow: hidden;
     }
+    // 'Read more' button and overlay
     .expander {
-      display: none;
       position: absolute;
+      height: 0;
       right: 0;
       bottom: 0;
       left: 0;
-      height: 120px;
+      opacity: 0;
       cursor: pointer;
       .gradient(#FFF, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
       .transition(.3s, ease-in);
 
       text-align: center;
-      padding-top: 70px;
+      padding-top: 10px;
       font-size: 150%;
       color: grey;
       text-transform: uppercase;
       .user-select();
+    }
+    .expander.active {
+      display: block;
+      height: @hCollapsedSectionOverlay;
+      opacity: 1;
+      .transition(.3s, ease-out);
     }
     .modal-wrapper {
       display: none;
@@ -133,6 +147,7 @@
   .section:first-child {
     border-top: none;
   }
+  // TODO non-JS users can not see the full content by doing this
   .section.default-collapsed {
     .content {
       max-height: @hCollapsedSection; // just to avoid visual noise until JS loaded
@@ -153,7 +168,7 @@
 
 #mooc-navigation-bar {
   position: absolute;
-  right: 0;
+  right: -15px;
 
   #mooc-navigation {
     #mooc-sections .section;
@@ -215,21 +230,36 @@
 
 // #### CONTENT
 #mooc .section .content {
+  // empty section box
   .edit-link {
     cursor: pointer;
   }
+}
+
+/* Units (lesson.units, overview.lessons) */
+#mooc #units,
+#mooc #lessons {
   .unit {
     padding: 10px;
+    margin: 0 0 20px 0;
     border: 1px solid @cSectionBorder;
     .left {
       padding: 0;
     }
     .video-thumbnail {
-      display: inline-block;
+      display: table;
       border: 1px solid @cSectionBorder;
       max-width: 100%;
+      width: 300px;
+      height: 170px;
+      cursor: pointer;
+      text-align: center;
       .mediaContainer, video {
         max-width: 100%;
+      }
+      span {
+        display: table-cell;
+        vertical-align: middle;
       }
     }
     .links {
@@ -237,9 +267,11 @@
         display: inline-block;
         width: 32px;
         margin-right: 10px;
+        opacity: 0.4;
         img {
           max-width: 100%;
         }
+        .transition(.3s, ease-in 0s, opacity);
       }
     }
     .title {
@@ -253,8 +285,20 @@
       }
     }
   }
+  .unit:hover {
+    .links {
+      a {
+        opacity: 1;
+        .transition(.3s, ease-out 0s, opacity);
+      }
+      a.disabled {
+        opacity: 0.4;
+      }
+    }
+  }
 }
 
+/* Overview section: Lessons */
 #mooc #lessons {
   .lesson {
     > .title {
@@ -280,13 +324,6 @@
   > input {
     margin-top: 20px;
   }
-}
-
-/* disable TOC */
-// TODO figure out how to delete TOC!
-.toc,
-#toc {
-  display: none !important;
 }
 
 // fix CSS z-index BUG of MW
