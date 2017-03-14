@@ -68,18 +68,24 @@ class MoocLessonRenderer extends MoocContentRenderer {
 
         // left column: clickable video thumbnail
         $this->out->addHTML( '<div class="left col-xs-12 col-sm-5">' );
+
+        // load video
+        // TODO make thumb width configurable? what is the max-width here? possible to keep dynamic?
+        $hasVideo = $this->loadVideoData( $unit, 300 );
         $videoThumbClasses = 'video-thumbnail';
-        if ( !$unit->hasVideo() ) {
+        if ( !$hasVideo ) {
             $videoThumbClasses .= ' no-video';
         }
+
+        // add linked thumb or placeholder
         $this->out->addHTML( "<a href='{$unit->title->getLinkURL()}' class='$videoThumbClasses'>" );
-        if ( $unit->hasVideo() ) {
-            // TODO what is the max-width here? fine to use fixed width?
-            $this->out->addWikiText( "[[File:$unit->video|frameless|300x170px|link=$unit->title]]" );
+        if ( $hasVideo ) {
+            $this->out->addHTML( "<img src='{$unit->videoData['thumbUrl']}' />" );
         } else {
             $this->out->addHTML( "<span>{$this->loadMessage( 'unit-no-video' )}</span>" );
         }
         $this->out->addHTML( '</a>' );
+
         $this->out->addHTML( '</div>' );
 
         // right column: links, clickable title, learning goals
@@ -114,6 +120,50 @@ class MoocLessonRenderer extends MoocContentRenderer {
     }
 
     /**
+     * Loads the video data of an item into the item.
+     *
+     * @param MoocItem $item item
+     * @param int $thumbWidth targeted thumbnail width
+     * @return {bool} whether the video data has been successfully loaded or not
+     */
+    protected function loadVideoData( $item, $thumbWidth ) {
+        if ( $item->hasVideo() ) {
+            // TODO support more than File:?
+            $type = 'file';
+
+            switch ( $type ) {
+                case 'file':
+                    // load file
+                    $title = Title::newFromText( "File:$item->video" );
+                    $file = wfFindFile( $title, [ 'time' => false ] );
+                    if ( $file->exists() ) {
+                        // load thumb
+                        $thumbParams = [
+                           'width' => min( $thumbWidth, $file->getWidth( true ) )
+                        ];
+                        $thumb = $file->transform( $thumbParams );
+
+                        // register link to the file
+                        $this->parserOutput->addLink( $title );
+
+                        $item->videoData = [
+                            'url' => $file->getUrl(),
+                            'thumbUrl' => $thumb->getUrl()
+                        ];
+                        return true;
+                    }
+                    // file does not exist
+                    return false;
+                default:
+                    // unknown video type
+                    return false;
+            }
+        }
+        // no video
+        return false;
+    }
+
+    /**
      * Adds the link bar to the child unit output.
      *
      * @param MoocUnit $unit child unit the link bar should be added for
@@ -142,19 +192,7 @@ class MoocLessonRenderer extends MoocContentRenderer {
         global $wgMOOCImagePath;
         $icon = $wgMOOCImagePath . 'ic_download.svg';
         $title = $this->loadMessage( 'section-units-unit-link-download-video' );
-
-        // retrieve video file URL
-        $href = null;
-        if ( $unit->hasVideo() ) {
-            $videoTitle = Title::newFromText( "File:$unit->video" );
-            $file = wfFindFile( $videoTitle, [ 'time' => false ] );
-            if ( $file->exists() ) {
-                $href = $file->getUrl();
-
-                // register link to the file
-                $this->parserOutput->addLink( $videoTitle );
-            }
-        }
+        $href = ($unit->hasVideo() && $unit->videoData) ? $unit->videoData['url'] : null;
 
         $classes = ['download-video'];
         if ( $href === null ) {
