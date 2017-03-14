@@ -78,7 +78,7 @@ abstract class MoocItem extends MoocEntity {
     public $furtherReading;
 
     /**
-     * @var MoocItem[] child items
+     * @var MoocUnit[]|MoocLesson[] child items
      */
     public $children;
 

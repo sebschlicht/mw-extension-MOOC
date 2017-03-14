@@ -46,7 +46,7 @@
     if ( isEscape ) {
       closeModalBoxes();
     }
-  } );
+  });
 
   // show/hide actions if mouse is inside/outside the respective section
   $sections
@@ -108,7 +108,7 @@
       // filter by action if multiple modal boxes available
       $modal = $modal.filter( function( index, $el ) {
         return ( $el.find( 'form.' + action ).length > 1 );
-      } );
+      });
     }
 
     $modal.fadeIn( 200 );
@@ -179,7 +179,7 @@
    * @param $section section jQuery-element
    * @returns {boolean} whether the section is collapsable or not
    */
-  function isSectionCollapsable($section) {
+  function isSectionCollapsable( $section ) {
     if ( $section.hasClass( 'collapsed' ) ) {
       return true;
     }

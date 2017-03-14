@@ -19,6 +19,10 @@ class MoocLessonRenderer extends MoocContentRenderer {
      */
     const ACTION_ADD = 'add';
 
+    // ########################################################################
+    // # section content
+    // ########################################################################
+
     /**
      * Adds the MOOC lesson sections to the output.
      */
@@ -35,7 +39,6 @@ class MoocLessonRenderer extends MoocContentRenderer {
         $this->beginSection( self::SECTION_KEY_UNITS );
 
         $this->addUnitsSectionContent( $this->item );
-        // TODO add controls to add units somewhere
 
         $this->endSection();
     }
@@ -61,7 +64,7 @@ class MoocLessonRenderer extends MoocContentRenderer {
     /**
      * Adds an unit to the units section.
      *
-     * @param MoocItem $unit unit to add
+     * @param MoocUnit $unit unit to add
      */
     protected function addChildUnit( $unit ) {
         $this->out->addHTML( '<div class="child unit col-xs-12">' );
@@ -101,7 +104,7 @@ class MoocLessonRenderer extends MoocContentRenderer {
 
         // learning goals
         $this->out->addHTML( '<div class="learning-goals">' );
-        $learningGoals = $this->generateLearningGoalsWikiText( $unit );
+        $learningGoals = self::generateUnorderedList( $unit->learningGoals );
         if ( $learningGoals !== null ) {
             $this->out->addWikiText( $learningGoals );
         } else {
@@ -124,7 +127,7 @@ class MoocLessonRenderer extends MoocContentRenderer {
      *
      * @param MoocItem $item item
      * @param int $thumbWidth targeted thumbnail width
-     * @return {bool} whether the video data has been successfully loaded or not
+     * @return bool whether the video data has been successfully loaded or not
      */
     protected function loadVideoData( $item, $thumbWidth ) {
         if ( $item->hasVideo() ) {
@@ -162,6 +165,10 @@ class MoocLessonRenderer extends MoocContentRenderer {
         // no video
         return false;
     }
+
+    // ########################################################################
+    // # section content.links
+    // ########################################################################
 
     /**
      * Adds the link bar to the child unit output.
@@ -202,17 +209,6 @@ class MoocLessonRenderer extends MoocContentRenderer {
     }
 
     /**
-     * Resolves the full URL to the original file of a media.
-     *
-     * @param Title $title page title of the media file
-     * @return string full URL to the original media file
-     */
-    protected function resolveMediaUrl( $title ) {
-        // TODO resolve media file title to full URL to original file
-        return $title->getLinkURL();
-    }
-
-    /**
      * Adds the link to a unit's section to the child unit link bar.
      *
      * @param MoocUnit $unit child unit
@@ -226,32 +222,49 @@ class MoocLessonRenderer extends MoocContentRenderer {
         $this->addChildLinkBarLink( $icon, $href, $title );
     }
 
+    /**
+     * Adds a link to the child unit link bar.
+     *
+     * @param string $icon icon file path
+     * @param string $href link target
+     * @param string $title link title
+     * @param array $classes CSS classes to apply to the link
+     */
     protected function addChildLinkBarLink( $icon, $href, $title, $classes = null ) {
         $attrClass = '';
         if ( !empty( $classes ) ) {
-            $attrClass = ' class="' . implode( ' ', $classes ) . '"';
+            $attrClass = 'class="' . implode( ' ', $classes ) . '"';
         }
-        $this->out->addHTML( "<a href='$href'$attrClass>" );
+        $this->out->addHTML( "<a href='$href' $attrClass>" );
         $this->out->addHTML( "<img src='$icon' title='$title' alt='$title' />" );
         $this->out->addHTML( '</a>' );
     }
 
-    protected function fillModalBoxForm( $sectionKey, $action ) {
-        if ( $sectionKey == self::SECTION_KEY_UNITS && $action == self::ACTION_ADD ) {
-            $this->out->addHTML( '<input type="text" class="value form-control" />' );
-        } else {
-            parent::fillModalBoxForm( $sectionKey, $action );
+    // ########################################################################
+    // # section header
+    // ########################################################################
+
+    protected function getSectionIconFilename( $sectionKey ) {
+        switch ( $sectionKey ) {
+            case self::SECTION_KEY_UNITS:
+                return parent::getSectionIconFilename( 'children' );
+
+            default:
+                return parent::getSectionIconFilename( $sectionKey );
         }
     }
 
-    protected function addModalBoxActions( $sectionKey, $action ) {
-        if ( $sectionKey == self::SECTION_KEY_UNITS && $action == self::ACTION_ADD ) {
-            $titleAdd = $this->loadMessage( 'modal-button-title-add' );
-            $this->out->addHTML( "<input type='submit' class='btn btn-add btn-submit' value='$titleAdd' />" );
-            $titleCancel = $this->loadMessage( 'modal-button-title-cancel' );
-            $this->out->addHTML( "<input type='button' class='btn btn-cancel' value='$titleCancel' />" );
+    // ########################################################################
+    // # section header.actions
+    // ########################################################################
+
+    protected function addSectionActions( $sectionKey ) {
+        if ( $sectionKey == self::SECTION_KEY_UNITS ) {
+            // add unit
+            $this->addSectionActionAdd( $sectionKey );
+            // TODO edit units?
         } else {
-            parent::addModalBoxActions( $sectionKey, $action );
+            parent::addSectionActions( $sectionKey );
         }
     }
 
@@ -269,31 +282,36 @@ class MoocLessonRenderer extends MoocContentRenderer {
         $this->addModalBox( $sectionKey, self::ACTION_ADD );
     }
 
-    protected function addSectionActions( $sectionKey ) {
-        if ( $sectionKey == self::SECTION_KEY_UNITS ) {
-            // add unit
-            $this->addSectionActionAdd( $sectionKey );
-        } else {
-            // TODO always add edit button?
-            parent::addSectionActions( $sectionKey );
-        }
-    }
-
-    protected function getSectionActionIconFilename( $action ) {
+    protected function getActionIconFilename( $action ) {
         if ( $action == self::ACTION_ADD ) {
             return "ic_$action.png";
         } else {
-            return "ic_$action.svg";
+            return parent::getActionIconFilename( $action );
         }
     }
 
-    protected function getSectionIconFilename( $sectionKey ) {
-        switch ( $sectionKey ) {
-            case self::SECTION_KEY_UNITS:
-                return parent::getSectionIconFilename( 'children' );
+    // ########################################################################
+    // # modal box
+    // ########################################################################
 
-            default:
-                return parent::getSectionIconFilename( $sectionKey );
+    protected function fillModalBoxForm( $sectionKey, $action ) {
+        if ( $sectionKey == self::SECTION_KEY_UNITS && $action == self::ACTION_ADD ) {
+            $this->out->addHTML( '<input type="text" class="value form-control" />' );
+        } else {
+            parent::fillModalBoxForm( $sectionKey, $action );
+        }
+    }
+
+    protected function addModalBoxActions( $sectionKey, $action ) {
+        if ( $sectionKey == self::SECTION_KEY_UNITS && $action == self::ACTION_ADD ) {
+            // add button
+            $titleAdd = $this->loadMessage( 'modal-button-title-add' );
+            $this->out->addHTML( "<input type='submit' class='btn btn-add btn-submit' value='$titleAdd' />" );
+            // cancel button
+            $titleCancel = $this->loadMessage( 'modal-button-title-cancel' );
+            $this->out->addHTML( "<input type='button' class='btn btn-cancel' value='$titleCancel' />" );
+        } else {
+            parent::addModalBoxActions( $sectionKey, $action );
         }
     }
 }

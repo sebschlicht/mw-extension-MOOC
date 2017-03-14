@@ -123,6 +123,6 @@
     resetNavBarHeader( $navigationHeader );
     resetNavBar( $navigation );
     updateNavigationBar();
-  } );
+  });
 
 }( mediaWiki, jQuery ) );

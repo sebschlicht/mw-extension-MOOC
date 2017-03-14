@@ -19,6 +19,10 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
      */
     const ACTION_ADD = 'add';
 
+    // ########################################################################
+    // # section content
+    // ########################################################################
+
     /**
      * Adds the MOOC overview sections to the output.
      */
@@ -55,7 +59,7 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
 
         // header
         $this->out->addHTML( '<div class="title">' );
-        $this->out->addWikiText( sprintf( '[[%s|%d. %s]]', $lesson->title, $iLesson, $lesson->getName() ) );
+        $this->out->addWikiText( "[[$lesson->title|$iLesson. {$lesson->getName()}]]" );
         $this->out->addHTML( '</div>' );
 
         // units
@@ -63,6 +67,60 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
 
         $this->out->addHTML( '</div>' );
     }
+
+    // ########################################################################
+    // # section header
+    // ########################################################################
+
+    protected function getSectionIconFilename( $sectionKey ) {
+        switch ( $sectionKey ) {
+            case self::SECTION_KEY_LESSONS:
+                return parent::getSectionIconFilename( 'children' );
+
+            default:
+                return parent::getSectionIconFilename( $sectionKey );
+        }
+    }
+
+    // ########################################################################
+    // # section header.actions
+    // ########################################################################
+
+    protected function addSectionActions( $sectionKey ) {
+        if ( $sectionKey == self::SECTION_KEY_LESSONS ) {
+            // add lesson
+            $this->addSectionActionAddLesson( $sectionKey );
+            // TODO edit lessons?
+        } else {
+            parent::addSectionActions( $sectionKey );
+        }
+    }
+
+    /**
+     * Adds the UI elements to the lessons section header that allow to add a lesson.
+     *
+     * @param string $sectionKey section key
+     */
+    protected function addSectionActionAddLesson( $sectionKey ) {
+        // TODO link to add lesson function instead
+        $btnHref = "/SpecialPage:MoocEdit?title={$this->item->title}&section=$sectionKey";
+        $btnTitle = $this->loadMessage( "section-$sectionKey-add-title" );
+
+        $this->addSectionActionButton( self::ACTION_ADD, $btnTitle, $btnHref );
+        $this->addModalBox( $sectionKey, self::ACTION_ADD );
+    }
+
+    protected function getActionIconFilename( $action ) {
+        if ( $action == self::ACTION_ADD ) {
+            return "ic_$action.png";
+        } else {
+            return parent::getActionIconFilename( $action );
+        }
+    }
+
+    // ########################################################################
+    // # modal box
+    // ########################################################################
 
     protected function fillModalBoxForm( $sectionKey, $action ) {
         if ( $sectionKey == self::SECTION_KEY_LESSONS && $action == self::ACTION_ADD ) {
@@ -74,54 +132,13 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
 
     protected function addModalBoxActions( $sectionKey, $action ) {
         if ( $sectionKey == self::SECTION_KEY_LESSONS && $action == self::ACTION_ADD ) {
+            // add button
             $titleAdd = $this->loadMessage( 'modal-button-title-add' );
-            $this->out->addHTML( "<input type=\"submit\" class=\"btn btn-add btn-submit\" value=\"$titleAdd\" />" );
+            $this->out->addHTML( "<input type='submit' class='btn btn-add btn-submit' value='$titleAdd'/>" );
             $titleCancel = $this->loadMessage( 'modal-button-title-cancel' );
-            $this->out->addHTML( "<input type=\"button\" class=\"btn btn-cancel\" value=\"$titleCancel\" />" );
+            $this->out->addHTML( "<input type='button' class='btn btn-cancel' value='$titleCancel'/>" );
         } else {
             parent::addModalBoxActions( $sectionKey, $action );
-        }
-    }
-
-    /**
-     * Adds the UI elements to the lessons section header that allow to add a lesson.
-     *
-     * @param string $sectionKey section key
-     */
-    protected function addSectionActionAddLesson( $sectionKey ) {
-        // TODO link to add lesson function instead
-        $btnHref = '/SpecialPage:MoocEdit?title=' . $this->item->title . '&section=' . $sectionKey;
-        $btnTitle = $this->loadMessage( "section-$sectionKey-add-title" );
-
-        $this->addSectionActionButton( 'add', $btnTitle, $btnHref );
-        $this->addModalBox( $sectionKey, 'add' );
-    }
-
-    protected function addSectionActions( $sectionKey ) {
-        if ( $sectionKey == self::SECTION_KEY_LESSONS ) {
-            // add lesson
-            $this->addSectionActionAddLesson( $sectionKey );
-        } else {
-            // TODO always add edit button
-            parent::addSectionActions( $sectionKey );
-        }
-    }
-
-    protected function getSectionActionIconFilename( $action ) {
-        if ( $action == 'add' ) {
-            return "ic_$action.png";
-        } else {
-            return "ic_$action.svg";
-        }
-    }
-
-    protected function getSectionIconFilename( $sectionKey ) {
-        switch ( $sectionKey ) {
-            case self::SECTION_KEY_LESSONS:
-                return parent::getSectionIconFilename( 'children' );
-
-            default:
-                return parent::getSectionIconFilename( $sectionKey );
         }
     }
 }

@@ -24,8 +24,8 @@ class MoocContent extends JsonContent {
      * @param string $text MOOC entity JSON
      * @param string $modelId identifier of the page's content model
      */
-    public function __construct($text, $modelId = self::CONTENT_MODEL_MOOC_ITEM) {
-        parent::__construct($text, $modelId);
+    public function __construct( $text, $modelId = self::CONTENT_MODEL_MOOC_ITEM ) {
+        parent::__construct( $text, $modelId );
     }
 
     /**
@@ -45,9 +45,9 @@ class MoocContent extends JsonContent {
      */
     public function isValid() {
         // check for valid JSON
-        if (parent::isValid()) {
+        if ( parent::isValid() ) {
             // load MOOC entity if not loaded yet
-            if (!isset($this->entity)) {
+            if ( !isset( $this->entity ) ) {
                 $this->entity = $this->loadItem();
             }
             return ( $this->entity != null );
@@ -64,8 +64,8 @@ class MoocContent extends JsonContent {
      * @param bool $generateHtml            
      * @param ParserOutput $output            
      */
-    protected function fillParserOutput(Title $title, $revId, ParserOptions $options, $generateHtml, 
-        ParserOutput &$output) {
+    protected function fillParserOutput( Title $title, $revId, ParserOptions $options, $generateHtml,
+        ParserOutput &$output ) {
         // FIXME: WikiPage::doEditContent generates parser output before validation.
         // As such, native data may be invalid (though output is discarded later in that case).
         if ( $generateHtml && $this->isValid() ) {
@@ -91,7 +91,7 @@ class MoocContent extends JsonContent {
                 $bootstrapManager->addAllBootstrapModules();
                 $output->addModuleStyles( 'ext.bootstrap.styles' );
 
-                $output->setText( MoocContentRenderer::renderItem( $output, $this->entity ) );
+                MoocContentRenderer::renderItem( $output, $this->entity );
 
                 // pass data to JS
                 $output->addJsConfigVars( [

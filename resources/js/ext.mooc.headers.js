@@ -12,7 +12,7 @@
     var $sectionHeader = $section.children( '.header' );
     $sectionHeader.css( 'position', 'absolute' ).css( 'top', 0 ).css( 'width', '100%' );
     $section.css( 'padding-top', $sectionHeader.outerHeight() );
-  } );
+  });
 
   // update section headers on scroll
   $window.scroll( updateSectionHeaders );

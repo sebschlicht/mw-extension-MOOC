@@ -112,15 +112,15 @@ class MoocContentStructureProvider {
 
         // inject values of the rendered item
         $queue = [$rootItem];
-        while ( !empty($queue) ) {
+        while ( !empty( $queue ) ) {
             $crr = array_pop( $queue ); // LIFO until reversing array
             // check if item is what we are searching for
             if ( $renderedItem->title->equals( $crr->title ) ) {
                 $renderedItem->children = $crr->children;
                 return;
-            } elseif ($crr->hasChildren()) {
-                foreach ($crr->children as $child) {
-                    array_push($queue, $child);
+            } elseif ( $crr->hasChildren() ) {
+                foreach ( $crr->children as $child ) {
+                    array_push( $queue, $child );
                 }
             }
         }

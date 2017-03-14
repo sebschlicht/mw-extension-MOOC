@@ -13,23 +13,25 @@
   });
 
   // register API calls when resources ready
-  mw.loader.using( [ 'mediawiki.api.messages', 'mediawiki.jqueryMsg', 'mediawiki.api.edit' ], registerApiCalls, function () {
-    mw.log.error( 'Failed to load MediaWiki modules to initialize MOOC extension!' );
-  } );
+  mw.loader.using([
+      'mediawiki.api.messages', 'mediawiki.jqueryMsg', 'mediawiki.api.edit'
+    ], registerApiCalls, function () {
+      mw.log.error( 'Failed to load MediaWiki modules to initialize MOOC extension!' );
+  });
 
   /**
    * Registers the API calls with the corresponding UI elements.
    */
   function registerApiCalls() {
-    new mw.Api().loadMessagesIfMissing( [
+    new mw.Api().loadMessagesIfMissing([
       'mooc-overview-add-lesson-summary', 'mooc-lesson-add-unit-summary'
-    ] ).then( function () {
+    ]).then( function () {
       // initialize modal edit boxes
       initModalEditBoxes( item );
       // initialize modal add boxes
       $( '#lessons' ).find( '.header form.add .btn-submit' ).on( 'click', addLessonToCurrentMooc );
       $( '#units' ).find( '.header form.add .btn-submit' ).on( 'click', addUnitToCurrentLesson );
-    } );
+    });
   }
 
   /**
@@ -47,7 +49,7 @@
     apiAddUnitToLesson( mw.config.get( 'wgPageName' ), unitName ).then( function () {
       // reload page on success
       reloadPage();
-    } );
+    });
     return false;
   }
 
@@ -66,7 +68,7 @@
     apiAddLessonToMooc( mw.config.get( 'wgPageName' ), lessonName ).then( function () {
       // reload page on success
       reloadPage();
-    } );
+    });
     return false;
   }
 
@@ -101,7 +103,7 @@
         mw.log.warn( "HTTP error: " + response.textStatus ); // result.xhr contains the jqXHR object
       }
       //TODO show the user that the process has failed!
-    } );
+    });
   }
 
   /**
@@ -119,10 +121,10 @@
         'summary': summary,
         'text': content
       };
-    } ).then( function( json ) {
+    }).then( function( json ) {
       mw.log( 'The page has been saved successfully. Response:' );
       mw.log( json );
-    } ).fail( function ( code, response ) {
+    }).fail( function ( code, response ) {
       mw.log.warn( 'Failed to save the page!' );
       mw.log( response );
       mw.log.warn( 'Cause: ' + response.error );
@@ -131,7 +133,7 @@
         mw.log.warn( "HTTP error: " + response.textStatus ); // result.xhr contains the jqXHR object
       }
       //TODO show the user that the process has failed!
-    } );
+    });
   }
 
   /**
@@ -257,7 +259,7 @@
     $autoGrowingTextarea.each ( function( index, ele ) {
       var $textarea = $( ele );
       resizeTextarea( $textarea );
-    } );
+    });
   }
 
   /**
@@ -336,7 +338,7 @@
           !resourcePageExists, section ).then( function ( ) {
           // reload page on success
           reloadPage();
-        } );
+        });
         break;
     }
 
@@ -346,7 +348,7 @@
       apiSaveItem( mw.config.get( 'wgPageName' ), item, editSummary ).then( function ( ) {
         // reload page on success
         reloadPage();
-      } );
+      });
     }
     return false;
   }
@@ -384,7 +386,7 @@
       if ( value.length > 0 ) {
         list.push( value );
       }
-    } );
+    });
     return list;
   }
 
@@ -424,13 +426,13 @@
       'type': 'text',
       'value': value
     } );
-    $input.on( 'keydown', onListItemInputKeyDown);
+    $input.on( 'keydown', onListItemInputKeyDown );
 
-    var $listItem = $( '<li>' ).append($input);
+    var $listItem = $( '<li>' ).append( $input );
     if ( $prev === undefined ) {
-      $list.append($listItem);
+      $list.append( $listItem );
     } else {
-      $prev.after($listItem);
+      $prev.after( $listItem );
     }
     $input.focus();
 
@@ -491,7 +493,7 @@
       // Enter
       case 13:
         var $listItem = getListItem( $( this ) );
-        addListItem( $listItem.parent(), '', $listItem);
+        addListItem( $listItem.parent(), '', $listItem );
         e.preventDefault();
         return false;
 
