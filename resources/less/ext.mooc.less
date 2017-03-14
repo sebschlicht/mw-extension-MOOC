@@ -6,6 +6,7 @@
 @import "elements.less";
 
 // COLORS
+@cText: #000;
 @cContentBg: #FFF;
 @cSectionBg: #CCC;
 @cNavigationBarBg: #FFF;
@@ -20,6 +21,14 @@
 // DIMENSIONS
 @hCollapsedSection: 200px; // warning: when altering this value, update ext.mooc.js:hCollapsedSection as well
 @hCollapsedSectionOverlay: 50px; // height of the 'Read more' overlay
+
+#mooc {
+  // make images responsive
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
 
 #mooc-sections {
   padding-bottom: 39px;
@@ -246,21 +255,31 @@
     .left {
       padding: 0;
     }
+    // video thumbnail
     .video-thumbnail {
-      display: table;
+      display: block;
       border: 1px solid @cSectionBorder;
       max-width: 100%;
       width: 300px;
       height: 170px;
-      cursor: pointer;
       text-align: center;
       .mediaContainer, video {
         max-width: 100%;
       }
+    }
+    // no video available
+    .no-video {
+      display: table;
       span {
         display: table-cell;
         vertical-align: middle;
+        color: @cText;
       }
+    }
+    a.video-thumbnail:hover,
+    a.video-thumbnail:focus {
+      color: @cText;
+      text-decoration: none;
     }
     .links {
       a {
