@@ -40,7 +40,6 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
             // show info box if no child lessons added yet
             $this->addEmptySectionBox( self::SECTION_KEY_LESSONS );
         }
-        // TODO add controls to add lessons somewhere
 
         $this->endSection();
     }
@@ -60,7 +59,7 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
         $this->out->addHTML( '</div>' );
 
         // units
-        $this->addUnitsSectionContent( $lesson );
+        $this->addUnitsSectionContent( $lesson, false );
 
         $this->out->addHTML( '</div>' );
     }

@@ -235,23 +235,27 @@ abstract class MoocContentRenderer {
      * Adds an info box emphasising users to contribute to a currently empty section to the output.
      *
      * @param string $sectionKey key of the empty section
+     * @param bool $showActionAddContent whether to show controls to add content
      * @param string $editHref edit link
      */
-    protected function addEmptySectionBox( $sectionKey, $editHref = null ) {
-        // TODO can we automatically prefix classes/ids? at least in LESS?
-        $this->out->addHTML('<div class="section-empty-box">');
+    protected function addEmptySectionBox( $sectionKey, $showActionAddContent = true, $editHref = null ) {
+        $this->out->addHTML( '<div class="section-empty-box">' );
 
-        $this->out->addHTML('<span class="description">');
-        $this->out->addHTML( $this->loadMessage( 'section-' . $sectionKey . '-empty-description' ) );
-        $this->out->addHTML('</span> ');
+        // inform about missing content
+        $this->out->addHTML( "<span class='description'>{$this->loadMessage( "section-$sectionKey-empty-description" )}</span>" );
 
-        $editHrefAttr = ( $editHref === null ) ? '' : 'href="' . $editHref . '"';
-        $this->out->addHTML( '<a class="edit-link"' . $editHrefAttr . '>' );
-        $this->out->addHTML($this->loadMessage('section-' . $sectionKey . '-empty-edit-link'));
-        $this->out->addHTML('</a>');
-        // TODO do we need an additional text to point at external resources such as /script or general hints?
-        
-        $this->out->addHTML('</div>');
+        // add controls to add content
+        if ( $showActionAddContent ) {
+            // build edit link
+            $editHrefAttr = ( $editHref === null ) ? '' : " href='$editHref'";
+
+            // TODO do we need an additional text to point at external resources such as /script or general hints?
+            $this->out->addHTML( " <a class='edit-link'$editHrefAttr>" );
+            $this->out->addHTML( $this->loadMessage( "section-$sectionKey-empty-edit-link" ) );
+            $this->out->addHTML( '</a>' );
+        }
+
+        $this->out->addHTML( '</div>' );
     }
 
     /**

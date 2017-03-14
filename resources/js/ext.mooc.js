@@ -38,68 +38,15 @@
   $sections.find( '.child.unit' ).each( function ( index, ele ) {
     var $unit = $( ele );
     var $videoThumbnail = $unit.find( '.video-thumbnail' );
-    $videoThumbnail.on( 'click', browseToClickedUnit );
-
-    var $unitVideoDownloadLink = $unit.find( '.links .download-video' );
-    if ( !$unitVideoDownloadLink.hasClass( 'disabled' ) ) {
-      // extract link of source video
-      var $unitVideo = $videoThumbnail.find( 'video' );
-      var sourceVideoLink = extractSourceVideoLink( $unitVideo );
-      if ( sourceVideoLink !== null ) {
-        // inject video link
-        $unitVideoDownloadLink.attr( 'href', sourceVideoLink );
-      }
-
+    if ( !$videoThumbnail.hasClass( 'no-video' ) ) {
       // make video a thumb
+      var $unitVideo = $videoThumbnail.find( 'video' );
       var $unitVideoThumb = $( '<img>', {
         'src': $unitVideo.attr( 'poster' )
       } );
       $unitVideo.replaceWith( $unitVideoThumb );
     }
   } );
-
-  /**
-   * Extracts the source video link via its 'src' attribute.
-   *
-   * @param $video video object
-   * @returns {*} link to the source video or null
-   */
-  function extractSourceVideoLink( $video ) {
-    var sourceVideoLink = null;
-    $video.children( 'source' ).each( function ( index, ele ) {
-      var $source = $( ele );
-      if ( $source.attr( 'data-shorttitle' ).endsWith( 'source' ) ) {
-        sourceVideoLink = $source.attr( 'src' );
-      }
-    } );
-    return sourceVideoLink;
-  }
-
-  /**
-   * Browses to a unit that contains the element that has been clicked.
-   */
-  function browseToClickedUnit() {
-    var $unit = $( this ).parents( '.unit' );
-    var unitUrl = getUnitLinkHref( $unit );
-    if ( unitUrl !== null ) {
-      window.location.href = unitUrl;
-    }
-  }
-
-  /**
-   * Extracts the URL of a unit via its title.
-   *
-   * @param $unit unit
-   * @returns {string} URL of the unit or null on error
-   */
-  function getUnitLinkHref( $unit ) {
-    var $unitLink = $unit.find( '.title a' );
-    if ( $unitLink.length === 1 ) {
-      return $unitLink.attr( 'href' );
-    }
-    mw.log.warn( 'Failed to retrieve the URL of the unit specified!' );
-    return null;
-  }
 
   // close modal box on key ESC down
   $( document ).keydown( function ( e ) {
