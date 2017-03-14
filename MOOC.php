@@ -15,7 +15,8 @@ if (function_exists('wfLoadExtension')) {
     $wgResourceLoaderDebug = true;
 
     // TODO get out how to include jquery.ui.effects (includes easing) other than shipping
-    
+    // TODO can we automatically prefix classes/ids? at least in LESS?
+
     $wgMOOCSectionConfig = [
         'learning-goals' => [
             'collapsed' => false
