@@ -49,5 +49,13 @@
   "mooc-section-units-empty-description": "No units have been added to this lesson yet.",
   "mooc-section-units-empty-edit-link": "Use the button \"Add Unit\" to add a unit.",
   "_mooc-comment-button-...": "// Labels for general UI buttons.",
-  "mooc-button-expand-section": "Click to expand"
+  "mooc-button-expand-section": "Click to expand",
+
+  "mooc-overview-add-lesson-modal-placeholder-name": "Name of the new lesson",
+  "mooc-lesson-add-unit-modal-placeholder-name": "Name of the new unit",
+  "mooc-unit-edit-learning-goals-modal-placeholder-value": "New learning goal",
+  "mooc-unit-edit-video-modal-placeholder-value": "Video file name",
+  "mooc-unit-edit-script-modal-placeholder-value": "Script content (Wikitext)",
+  "mooc-unit-edit-quiz-modal-placeholder-value": "Quiz content (Wikitext)",
+  "mooc-unit-edit-further-reading-modal-placeholder-value": "New further reading entry"
 }

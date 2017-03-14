@@ -296,7 +296,8 @@ class MoocLessonRenderer extends MoocContentRenderer {
 
     protected function fillModalBoxForm( $sectionKey, $action ) {
         if ( $sectionKey == self::SECTION_KEY_UNITS && $action == self::ACTION_ADD ) {
-            $this->out->addHTML( '<input type="text" class="value form-control" />' );
+            $placeholderUnitName = $this->loadMessage( 'lesson-add-unit-modal-placeholder-name' );
+            $this->out->addHTML( "<input type='text' class='value form-control' placeholder='$placeholderUnitName' />" );
         } else {
             parent::fillModalBoxForm( $sectionKey, $action );
         }

@@ -407,11 +407,10 @@
     } else {
       addListItem( $list, '' );
     }
-    // TODO focus last input field and set cursor to end on showModal
   }
 
   /**
-   * Adds an item to a list.
+   * Adds an input field item to a list.
    * If there is a previous item specified, it will be inserted hereafter.
    * Otherwise it will be added to the end of the list.
    *
@@ -421,10 +420,12 @@
    * @returns {*} input field jQuery-element
    */
   function addListItem( $list, value, $prev ) {
+    var placeholder = $list.attr( 'data-placeholder' );
     var $input = $( '<input>', {
       'class': 'form-control value',
       'type': 'text',
-      'value': value
+      'value': value,
+      'placeholder': placeholder
     } );
     $input.on( 'keydown', onListItemInputKeyDown );
 

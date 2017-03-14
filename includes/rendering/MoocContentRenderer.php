@@ -468,22 +468,28 @@ abstract class MoocContentRenderer {
             // video
             case self::SECTION_KEY_VIDEO:
                 // simple text input field
-                $this->out->addHTML( "<input type='text' class='value form-control' value='{$this->item->video}'/>" );
+                $this->out->addHTML( '<div class="input-group">' );
+                $this->out->addHTML( '<div class="input-group-addon">File:</div>' );
+                $placeholderVideoFile = $this->loadMessage( 'unit-edit-video-modal-placeholder-value' );
+                $this->out->addHTML( "<input type='text' class='value form-control' value='{$this->item->video}' placeholder='$placeholderVideoFile'/>" );
+                $this->out->addHTML( '</div>' );
                 break;
 
             // ordered lists
             case self::SECTION_KEY_LEARNING_GOALS:
             case self::SECTION_KEY_FURTHER_READING:
-                $this->out->addHTML( '<ol class="value"></ol>' );
+                $placeholderList = $this->loadMessage( "unit-edit-$sectionKey-modal-placeholder-value" );
+                $this->out->addHTML( "<ol class='value' data-placeholder='$placeholderList'></ol>" );
                 break;
 
             // external resources
             case self::SECTION_KEY_SCRIPT:
             case self::SECTION_KEY_QUIZ:
                 // auto-growing textarea
+                $placeholderResourceContent = $this->loadMessage( "unit-edit-$sectionKey-modal-placeholder-value" );
                 $entity = ( $sectionKey === self::SECTION_KEY_SCRIPT ) ? $this->item->script : $this->item->quiz;
                 $textareaValue = ( $entity === null ) ? '' : $entity->content;
-                $this->out->addHTML( "<textarea class='value auto-grow form-control' rows='1'>$textareaValue</textarea>" );
+                $this->out->addHTML( "<textarea class='value auto-grow form-control' rows='1' placeholder='$placeholderResourceContent'>$textareaValue</textarea>" );
                 break;
 
             default:

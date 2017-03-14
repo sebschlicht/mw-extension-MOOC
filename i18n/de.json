@@ -49,5 +49,13 @@
   "mooc-section-units-empty-description": "Dieser Lektion wurden noch keine Lerneinheiten hinzugefügt.",
   "mooc-section-units-empty-edit-link": "Klicken Sie auf \"Lerneinheit hinzufügen\", um eine Lerneinheit hinzuzufügen.",
   "_mooc-comment-button-...": "// Label für allgemeine Schaltflächen der Benutzeroberfläche.",
-  "mooc-button-expand-section": "Hier klicken zum Ausklappen"
+  "mooc-button-expand-section": "Hier klicken zum Ausklappen",
+
+  "mooc-overview-add-lesson-modal-placeholder-name": "Name der neuen Lektion",
+  "mooc-lesson-add-unit-modal-placeholder-name": "Name der neuen Lerneinheit",
+  "mooc-unit-edit-learning-goals-modal-placeholder-value": "Neues Lernziel",
+  "mooc-unit-edit-video-modal-placeholder-value": "Dateiname des Videos",
+  "mooc-unit-edit-script-modal-placeholder-value": "Skript-Inhalt (Wikitext)",
+  "mooc-unit-edit-quiz-modal-placeholder-value": "Quiz-Inhalt (Wikitext)",
+  "mooc-unit-edit-further-reading-modal-placeholder-value": "Neuer Literatureintrag"
 }
