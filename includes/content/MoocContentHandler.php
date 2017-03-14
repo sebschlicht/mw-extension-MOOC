@@ -13,10 +13,10 @@ class MoocContentHandler extends CodeContentHandler {
     /**
      * @param string $modelId identifier of the page's content model
      */
-    public function __construct($modelId = MoocContent::CONTENT_MODEL_MOOC_ITEM) {
-        parent::__construct($modelId, [
+    public function __construct( $modelId = MoocContent::CONTENT_MODEL_MOOC_ITEM ) {
+        parent::__construct( $modelId, [
             'CONTENT_FORMAT_JSON'
-        ]);
+        ] );
     }
 
     /**
