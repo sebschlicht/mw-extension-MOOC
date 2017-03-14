@@ -34,20 +34,6 @@
     mw.log.error( 'Failed to load MediaWiki modules to initialize MOOC extension!' );
   } );
 
-  // make units and their video download buttons clickable
-  $sections.find( '.child.unit' ).each( function ( index, ele ) {
-    var $unit = $( ele );
-    var $videoThumbnail = $unit.find( '.video-thumbnail' );
-    if ( !$videoThumbnail.hasClass( 'no-video' ) ) {
-      // make video a thumb
-      var $unitVideo = $videoThumbnail.find( 'video' );
-      var $unitVideoThumb = $( '<img>', {
-        'src': $unitVideo.attr( 'poster' )
-      } );
-      $unitVideo.replaceWith( $unitVideoThumb );
-    }
-  } );
-
   // close modal box on key ESC down
   $( document ).keydown( function ( e ) {
     e = e || window.event;

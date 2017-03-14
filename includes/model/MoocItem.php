@@ -54,6 +54,15 @@ abstract class MoocItem extends MoocEntity {
     public $video;
 
     /**
+     * @var array video data array containing
+     * <ul>
+     * <li>url: URL of the video</li>
+     * <li>thumbUrl: URL to the video thumbnail</li>
+     * </ul>
+     */
+    public $videoData;
+
+    /**
      * @var MoocResource|null script associated with this item
      */
     public $script;
