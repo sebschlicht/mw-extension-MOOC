@@ -124,7 +124,8 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
 
     protected function fillModalBoxForm( $sectionKey, $action ) {
         if ( $sectionKey == self::SECTION_KEY_LESSONS && $action == self::ACTION_ADD ) {
-            $this->out->addHTML( '<input type="text" class="value form-control" />' );
+            $placeholderLessonName = $this->loadMessage( 'overview-add-lesson-modal-placeholder-name' );
+            $this->out->addHTML( "<input type='text' class='value form-control' placeholder='$placeholderLessonName'/>" );
         } else {
             parent::fillModalBoxForm( $sectionKey, $action );
         }
@@ -135,6 +136,7 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
             // add button
             $titleAdd = $this->loadMessage( 'modal-button-title-add' );
             $this->out->addHTML( "<input type='submit' class='btn btn-add btn-submit' value='$titleAdd'/>" );
+            // cancel button
             $titleCancel = $this->loadMessage( 'modal-button-title-cancel' );
             $this->out->addHTML( "<input type='button' class='btn btn-cancel' value='$titleCancel'/>" );
         } else {
