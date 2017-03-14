@@ -103,7 +103,14 @@ abstract class MoocItem extends MoocEntity {
     }
 
     /**
-     * @return boolean whether the item has children
+     * @return bool whether the item has a video
+     */
+    public function hasVideo() {
+        return isset( $this->video );
+    }
+
+    /**
+     * @return bool whether the item has children
      */
     public function hasChildren() {
         return !empty( $this->children );

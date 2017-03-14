@@ -51,15 +51,10 @@
       }
 
       // make video a thumb
-      var unitVideoThumbSrc = $unitVideo.attr( 'poster' );
-      var $unitVideoThumbLink = $( '<a>', {
-        'href': getUnitLinkHref( $unit )
-      } );
       var $unitVideoThumb = $( '<img>', {
-        'src': unitVideoThumbSrc
+        'src': $unitVideo.attr( 'poster' )
       } );
-      $unitVideoThumbLink.append( $unitVideoThumb );
-      $unitVideo.replaceWith( $unitVideoThumbLink );
+      $unitVideo.replaceWith( $unitVideoThumb );
     }
   } );
 
@@ -373,7 +368,7 @@
   $mwNavButton.attr( 'src', '/mediawiki-vagrant.png' );
   $mwNavButton.on( 'click', mwNavigationButtonClicked );
   //$mwNavButton.insertBefore( $mwNavigation );
-  hideMwNavigation( $mwNavigation );
+  //hideMwNavigation( $mwNavigation );
   
   function mwNavigationButtonClicked() {
     if ( $mwNavigation.hasClass( 'hidden' ) ) {

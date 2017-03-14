@@ -57,48 +57,54 @@ class MoocLessonRenderer extends MoocContentRenderer {
      *
      * @param MoocItem $unit unit to add
      */
-    protected function addChildUnit($unit) {
-        $this->out->addHTML('<div class="child unit col-xs-12">');
+    protected function addChildUnit( $unit ) {
+        $this->out->addHTML( '<div class="child unit col-xs-12">' );
 
-        $this->out->addHTML('<div class="left col-xs-12 col-sm-5">');
-        // video thumbnail
-        $this->out->addHTML('<div class="video-thumbnail">');
-        if (isset($unit->video)) {
-            // TODO re-calc max width
-            $this->out->addWikiText('[[File:' . $unit->video . '|frameless|300x170px|link=' . $unit->title . ']]');
-        } else {
-            // TODO make clickable without JS
-            $this->out->addHTML('<span>' . $this->loadMessage('unit-no-video') . '</span>');
+        // left column: clickable video thumbnail
+        $this->out->addHTML( '<div class="left col-xs-12 col-sm-5">' );
+        $videoThumbClasses = 'video-thumbnail';
+        if ( !$unit->hasVideo() ) {
+            $videoThumbClasses .= ' no-video';
         }
-        $this->out->addHTML('</div>');
-        $this->out->addHTML('</div>');
-        $this->parserOutput->addLink($unit->title);
+        $this->out->addHTML( "<a href='{$unit->title->getLinkURL()}' class='$videoThumbClasses'>" );
+        if ( $unit->hasVideo() ) {
+            // TODO what is the max-width here? fine to use fixed width?
+            $this->out->addWikiText( "[[File:$unit->video|frameless|300x170px|link=$unit->title]]" );
+        } else {
+            $this->out->addHTML( "<span>{$this->loadMessage( 'unit-no-video' )}</span>" );
+        }
+        $this->out->addHTML( '</a>' );
+        $this->out->addHTML( '</div>' );
 
-        $this->out->addHTML('<div class="col-xs-12 col-sm-7">');
+        // right column: links, clickable title, learning goals
+        $this->out->addHTML( '<div class="col-xs-12 col-sm-7">' );
 
         // links
-        $this->addChildLinkBar($unit);
+        $this->addChildLinkBar( $unit );
 
         // title
-        $this->out->addHTML('<div class="title">');
-        $this->out->addWikiText('[[' . $unit->title . '|'. $unit->title->getSubpageText() . ']]');
-        $this->out->addHTML('</div>');
+        $this->out->addHTML( '<div class="title">' );
+        $this->out->addWikiText( "[[$unit->title|{$unit->title->getSubpageText()}]]" );
+        $this->out->addHTML( '</div>' );
 
         // learning goals
-        $this->out->addHTML('<div class="learning-goals">');
-        $learningGoals = $this->generateLearningGoalsWikiText($unit);
-        if ($learningGoals != null) {
-            $this->out->addWikiText($learningGoals);
+        $this->out->addHTML( '<div class="learning-goals">' );
+        $learningGoals = $this->generateLearningGoalsWikiText( $unit );
+        if ( $learningGoals !== null ) {
+            $this->out->addWikiText( $learningGoals );
         } else {
-            $this->out->addHTML($this->loadMessage('section-' . 'learning-goals' . '-empty-description'));
+            $this->out->addHTML( $this->loadMessage( 'section-' . 'learning-goals' . '-empty-description' ) );
         }
-        $this->out->addHTML('</div>');
+        $this->out->addHTML( '</div>' );
 
-        // meta TODO add discussion meta data overlay
+        // meta TODO add discussion meta data overlay?
 
-        $this->out->addHTML('</div>');
+        $this->out->addHTML( '</div>' );
 
-        $this->out->addHTML('</div>');
+        $this->out->addHTML( '</div>' );
+
+        // register external link to unit
+        $this->parserOutput->addLink( $unit->title );
     }
 
     /**
