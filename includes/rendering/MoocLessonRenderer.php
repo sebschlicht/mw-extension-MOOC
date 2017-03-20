@@ -23,24 +23,31 @@ class MoocLessonRenderer extends MoocContentRenderer {
     // # section content
     // ########################################################################
 
-    /**
-     * Adds the MOOC lesson sections to the output.
-     */
-    protected function addSections() {
-        $this->addLearningGoalsSection();
-        $this->addVideoSection();
-        $this->addScriptSection();
-        $this->addQuizSection();
-        $this->addChildrenSection();
-        $this->addFurtherReadingSection();
+    protected function getSections() {
+        return [
+            self::SECTION_KEY_LEARNING_GOALS,
+            self::SECTION_KEY_VIDEO,
+            self::SECTION_KEY_SCRIPT,
+            self::SECTION_KEY_QUIZ,
+            self::SECTION_KEY_UNITS,
+            self::SECTION_KEY_FURTHER_READING
+        ];
+    }
+
+    protected function addSection( $sectionId ) {
+        switch ( $sectionId ) {
+            case self::SECTION_KEY_UNITS:
+                $this->addChildrenSection();
+                break;
+
+            default:
+                parent::addSection( $sectionId );
+                break;
+        }
     }
 
     protected function addChildrenSection() {
-        $this->beginSection( self::SECTION_KEY_UNITS );
-
         $this->addUnitsSectionContent( $this->item );
-
-        $this->endSection();
     }
 
     /**

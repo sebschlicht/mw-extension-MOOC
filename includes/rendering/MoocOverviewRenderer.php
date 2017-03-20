@@ -23,16 +23,25 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
     // # section content
     // ########################################################################
 
-    /**
-     * Adds the MOOC overview sections to the output.
-     */
-    protected function addSections() {
-        $this->addLessonsSection();
+    protected function getSections() {
+        return [
+            self::SECTION_KEY_LESSONS
+        ];
+    }
+
+    protected function addSection( $sectionId ) {
+        switch ( $sectionId ) {
+            case self::SECTION_KEY_LESSONS:
+                $this->addLessonsSection();
+                break;
+
+            default:
+                parent::addSection( $sectionId );
+                break;
+        }
     }
 
     protected function addLessonsSection() {
-        $this->beginSection( self::SECTION_KEY_LESSONS );
-
         if ( $this->item->hasChildren() ) {
             // list child lessons if any
             $i = 1;
@@ -44,8 +53,6 @@ class MoocOverviewRenderer extends MoocLessonRenderer {
             // show info box if no child lessons added yet
             $this->addEmptySectionBox( self::SECTION_KEY_LESSONS );
         }
-
-        $this->endSection();
     }
 
     /**

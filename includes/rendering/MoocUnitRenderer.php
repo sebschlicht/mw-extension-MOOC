@@ -9,14 +9,13 @@
  */
 class MoocUnitRenderer extends MoocContentRenderer {
 
-    /**
-     * Adds the MOOC unit sections to the output.
-     */
-    protected function addSections() {
-        $this->addLearningGoalsSection();
-        $this->addVideoSection();
-        $this->addScriptSection();
-        $this->addQuizSection();
-        $this->addFurtherReadingSection();
+    protected function getSections() {
+        return [
+            self::SECTION_KEY_LEARNING_GOALS,
+            self::SECTION_KEY_VIDEO,
+            self::SECTION_KEY_SCRIPT,
+            self::SECTION_KEY_QUIZ,
+            self::SECTION_KEY_FURTHER_READING
+        ];
     }
 }

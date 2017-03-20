@@ -5,17 +5,21 @@
   var $sections = $( '#mooc-sections' ).find( '.section' );
   var $activeSection = null;
 
-  // make section headers absolute for stickyness
+  // prepare sections for stickyness
   //TODO make this a separate LESS file and pack JS and LESS to an own module
   $sections.each( function () {
     var $section = $( this );
     var $sectionHeader = $section.children( '.header' );
-    $sectionHeader.css( 'position', 'absolute' ).css( 'top', 0 ).css( 'width', '100%' );
-    $section.css( 'padding-top', $sectionHeader.outerHeight() );
+    $sectionHeader.addClass( 'enabled' );
+    var $sectionContent = $section.children( '.content' );
+    $sectionContent.css( 'margin-top', $sectionHeader.outerHeight() );
   });
 
   // update section headers on scroll
+  var $itemNavigation = $( '#itemnav' );
   $window.scroll( updateSectionHeaders );
+  $window.scroll();
+  // TODO recalc width of fixed section headers on resize
 
   /**
    * Updates the headers of all sections:
@@ -26,10 +30,14 @@
   function updateSectionHeaders() {
     var y = $window.scrollTop();
     var marginTop = 0;
+    if ( $itemNavigation.hasClass( 'fixed' ) ) {// correct scroll position
+      marginTop = $itemNavigation.outerHeight();
+      y += marginTop;
+    }
 
     var $crrActiveSection = null;
-    $sections.each( function () {
-      var $section = $( this );
+    $sections.each( function ( i, ele ) {
+      var $section = $( ele );
       var $sectionHeader = $section.children( '.header' );
       var sectionTop = $section.offset().top;
       var sectionHeight = $section.outerHeight();
@@ -47,12 +55,12 @@
           }
         } else {// header reached section bottom
           if ( !$sectionHeader.hasClass( 'trailing' ) ) {
-            trailSectionHeader( $sectionHeader, sectionHeight, isFixed );
+            trailSectionHeader( $sectionHeader, sectionHeight );
           }
         }
       } else { // inactive section
         if ( isActive ) {
-          resetSectionHeader( $sectionHeader, isFixed );
+          resetSectionHeader( $sectionHeader );
         }
       }
     } );
@@ -93,6 +101,16 @@
     } else {
       $section.removeClass( 'active' );
     }
+    // toggle item navigation link
+    if ( $itemNavigation.length !== 0 ) {
+      var sectionId = $section.attr( 'id' );
+      var $sectionLink = $itemNavigation.find( '.' + sectionId );
+      if ( isActive ) {
+        $sectionLink.addClass( 'active' );
+      } else {
+        $sectionLink.removeClass( 'active' );
+      }
+    }
   }
 
   /**
@@ -103,7 +121,6 @@
    * @param width section width to adopt
    */
   function fixSectionHeader( $header, top, width ) {
-    $header.css( 'position', 'fixed' );
     $header.css( 'top', top );
     $header.css( 'width', width );
     $header.removeClass( 'trailing' );
@@ -115,10 +132,9 @@
    *
    * @param $header section header jQuery-element
    * @param sectionHeight section height
-   * @param isFixed flag whether the section header is currently fixed
    */
-  function trailSectionHeader( $header, sectionHeight, isFixed ) {
-    resetSectionHeader( $header, isFixed );
+  function trailSectionHeader( $header, sectionHeight ) {
+    resetSectionHeader( $header );
     $header.css( 'top', sectionHeight - $header.outerHeight() );
     $header.addClass( 'trailing' );
   }
@@ -127,15 +143,13 @@
    * Resets a section header to its default position on top of its section.
    *
    * @param $header section header jQuery-element
-   * @param isFixed (optional) flag whether the section header is currently fixed
    */
-  function resetSectionHeader( $header, isFixed ) {
-    if ( isFixed || ( isFixed === undefined && $header.hasClass( 'fixed' ) ) ) {
-      $header.css( 'position', 'absolute' );
-      $header.css( 'width', '100%' );
+  function resetSectionHeader( $header ) {
+    if ( $header.hasClass( 'fixed' ) ) {
+      $header.css( 'top', '' );
+      $header.css( 'width', '' );
       $header.removeClass( 'fixed' );
     }
-    $header.css( 'top', 0 );
     $header.removeClass( 'trailing' );
   }
 

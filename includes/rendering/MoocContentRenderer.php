@@ -123,6 +123,8 @@ abstract class MoocContentRenderer {
         
         // ## sections
         $this->out->addHTML( '<div id="mooc-sections" class="row">' );
+        // ### item navigation
+        $this->addItemNavigation();
         $this->addSections();
         $this->out->addHTML( '</div>' );
         
@@ -146,13 +148,69 @@ abstract class MoocContentRenderer {
     // ########################################################################
 
     /**
+     * Identifies the active sections of a certain item (type).
+     *
+     * @return array identifiers of the item's sections
+     */
+    abstract protected function getSections();
+
+    protected function addItemNavigation() {
+        $this->out->addHTML( '<div id="itemnav-wrapper">' );
+        $this->out->addHTML( '<div id="itemnav">' );
+        foreach ( $this->getSections() as $sectionId ) {
+            $sectionTitle = $this->loadMessage( "section-$sectionId-title" );
+            $this->out->addHTML( "<a href='#$sectionId' class='$sectionId' data-section='$sectionId'>" );
+            $this->addSectionIcon( $sectionId );
+            $this->out->addHTML( "<span class='text'>$sectionTitle</span>" );
+            $this->out->addHTML( '</a>' );
+        }
+        $this->out->addHTML( '</div>' );
+        $this->out->addHTML( '</div>' );
+    }
+
+    /**
      * Adds the sections of the MOOC item to the current output.
      */
-    abstract protected function addSections();
+    protected function addSections() {
+        foreach ( $this->getSections() as $sectionId ) {
+            $this->beginSection( $sectionId );
+            $this->addSection( $sectionId );
+            $this->endSection();
+        }
+    }
+
+    /**
+     * @param $sectionId string section identifier
+     */
+    protected function addSection( $sectionId ) {
+        switch ( $sectionId ) {
+            case self::SECTION_KEY_LEARNING_GOALS:
+                $this->addLearningGoalsSection();
+                break;
+
+            case self::SECTION_KEY_VIDEO:
+                $this->addVideoSection();
+                break;
+
+            case self::SECTION_KEY_SCRIPT:
+                $this->addScriptSection();
+                break;
+
+            case self::SECTION_KEY_QUIZ:
+                $this->addQuizSection();
+                break;
+
+            case self::SECTION_KEY_FURTHER_READING:
+                $this->addFurtherReadingSection();
+                break;
+
+            default:
+                // unknown section identifier
+                break;
+        }
+    }
 
     protected function addLearningGoalsSection() {
-        $this->beginSection( self::SECTION_KEY_LEARNING_GOALS );
-
         // add learning goals as unordered list, if any
         $learningGoals = self::generateUnorderedList( $this->item->learningGoals );
         if ( $learningGoals !== null ) {
@@ -161,13 +219,9 @@ abstract class MoocContentRenderer {
             // show info box if no learning goal added yet
             $this->addEmptySectionBox( self::SECTION_KEY_LEARNING_GOALS );
         }
-        
-        $this->endSection();
     }
 
     protected function addVideoSection() {
-        $this->beginSection( self::SECTION_KEY_VIDEO );
-        
         if ( $this->item->hasVideo() ) {
             // show video player if video set
             $this->out->addWikiText( '[[File:' . $this->item->video. '|800px]]' );
@@ -175,13 +229,9 @@ abstract class MoocContentRenderer {
             // show info box if video not set yet
             $this->addEmptySectionBox( self::SECTION_KEY_VIDEO );
         }
-        
-        $this->endSection();
     }
 
     protected function addScriptSection() {
-        $this->beginSection( self::SECTION_KEY_SCRIPT );
-
         // add script content if existing
         if ( $this->item->script !== null ) {
             $this->out->addWikiText( $this->item->script->content );
@@ -190,13 +240,9 @@ abstract class MoocContentRenderer {
             // TODO pass link to edit script resource page
             $this->addEmptySectionBox( self::SECTION_KEY_SCRIPT );
         }
-        
-        $this->endSection();
     }
 
     protected function addQuizSection() {
-        $this->beginSection( self::SECTION_KEY_QUIZ );
-
         // add quiz content if existing
         if ( $this->item->quiz !== null ) {
             $this->out->addWikiText( $this->item->quiz->content );
@@ -205,13 +251,9 @@ abstract class MoocContentRenderer {
             // TODO pass link to edit quiz resource page
             $this->addEmptySectionBox( self::SECTION_KEY_QUIZ );
         }
-        
-        $this->endSection();
     }
 
     protected function addFurtherReadingSection() {
-        $this->beginSection( self::SECTION_KEY_FURTHER_READING );
-
         // add further readings as unordered list, if any
         $furtherReading = self::generateUnorderedList( $this->item->furtherReading );
         if ( $furtherReading !== null ) {
@@ -220,8 +262,6 @@ abstract class MoocContentRenderer {
             // show info box when no further readings have been added yet
             $this->addEmptySectionBox( self::SECTION_KEY_FURTHER_READING );
         }
-
-        $this->endSection();
     }
 
     // ########################################################################

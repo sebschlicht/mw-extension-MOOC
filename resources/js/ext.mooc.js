@@ -301,7 +301,7 @@
   $mwNavButton.attr( 'src', '/mediawiki-vagrant.png' );
   $mwNavButton.on( 'click', mwNavigationButtonClicked );
   //$mwNavButton.insertBefore( $mwNavigation );
-  //hideMwNavigation( $mwNavigation );
+  // hideMwNavigation( $mwNavigation );
   
   function mwNavigationButtonClicked() {
     if ( $mwNavigation.hasClass( 'hidden' ) ) {
