@@ -41,3 +41,7 @@ Technically, this extension mainly consists of the following files:
 * [Project on Gerrit](https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC)
 * [Extension Prototype (Wikiversity)](https://en.wikiversity.org/wiki/Wikiversity:MOOC_Interface)
 * [Extension Prototype Demo (Wikiversity)](https://en.wikiversity.org/wiki/Web_Science/Part1:_Foundations_of_the_web/Ethernet)
+
+
+## Credits
+The extension was partly founded by the [Medienanstalt Berlin-Brandenburg](http://www.mabb.de/) as the winner of the [fOERder award 2016](http://open-educational-resources.de/tag/foerder-award-2016/) and by the [University of Koblenz Landau](https://www.uni-koblenz-landau.de/)

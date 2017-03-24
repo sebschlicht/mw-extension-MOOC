@@ -1,107 +1,107 @@
 {
-  "name": "MOOC",
-  "version": "0.1.0",
-  "author": [
-    "Rene Pickhardt",
-    "Sebastian Schlicht"
-  ],
-  "url": "https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC",
-  "descriptionmsg": "mooc-desc",
-  "license-name": "GPL-3.0+",
-  "type": "other",
-  "AutoloadClasses": {
-    "MOOCHooks": "MOOC.hooks.php",
-    "MoocContent": "includes/content/MoocContent.php",
-    "MoocContentHandler": "includes/content/MoocContentHandler.php",
-    "MoocEntity": "includes/model/MoocEntity.php",
-    "MoocResource": "includes/model/MoocResource.php",
-    "MoocScript": "includes/model/MoocScript.php",
-    "MoocQuiz": "includes/model/MoocQuiz.php",
-    "MoocItem": "includes/model/MoocItem.php",
-    "MoocOverview": "includes/model/MoocOverview.php",
-    "MoocLesson": "includes/model/MoocLesson.php",
-    "MoocUnit": "includes/model/MoocUnit.php",
-    "MoocContentRenderer": "includes/rendering/MoocContentRenderer.php",
-    "MoocOverviewRenderer": "includes/rendering/MoocOverviewRenderer.php",
-    "MoocLessonRenderer": "includes/rendering/MoocLessonRenderer.php",
-    "MoocUnitRenderer": "includes/rendering/MoocUnitRenderer.php",
-    "MoocContentStructureProvider": "includes/structure/MoocContentStructureProvider.php",
-    "SpecialHelloWorld": "specials/SpecialHelloWorld.php"
-  },
-  "config": {
-    "MOOCEnableFoo": true
-  },
-  "MessagesDirs": {
-    "MOOC": [
-      "i18n"
-    ]
-  },
-  "ExtensionMessagesFiles": {
-    "MOOCAlias": "MOOC.i18n.alias.php",
-    "MOOCNamespaces": "MOOC.namespaces.php"
-  },
-  "Hooks": {
-    "EditFormInitialText": [
-      "MOOCHooks::onEditFormInitialText"
-    ],
-    "EditFormPreloadText": [
-      "MOOCHooks::onEditFormPreloadText"
-    ],
-    "EditPageGetPreviewContent": [
-      "MOOCHooks::onEditPageGetPreviewContent"
-    ],
-    "PageContentSave": [
-      "MOOCHooks::onPageContentSave"
-    ]
-  },
-  "namespaces": [
-    {
-      "id": 350,
-      "constant": "NS_MOOC",
-      "name": "Mooc",
-      "subpages": true,
-      "content": true,
-      "defaultcontentmodel": "mooc-item"
-    },
-    {
-      "id": 351,
-      "constant": "NS_MOOC_TALK",
-      "name": "Mooc_talk"
-    }
-  ],
-  "ContentHandlers": {
-    "mooc-item": "MoocContentHandler"
-  },
-  "ResourceModules": {
-    "ext.mooc": {
-      "position": "top",
-      "scripts": [
-        "resources/js/ext.mooc.js",
-        "resources/js/ext.mooc.navigation.js",
-        "resources/js/ext.mooc.itemnav.js",
-        "resources/js/ext.mooc.headers.js",
-        "resources/js/ext.mooc.edit.js",
-        "resources/js/jquery-ui.min.js"
-      ],
-      "styles": [
-        "resources/less/ext.mooc.less"
-      ],
-      "messages": [
-        "mooc-overview-add-lesson-summary",
-        "mooc-lesson-add-unit-summary"
-      ],
-      "dependencies": [
-        "mediawiki.jqueryMsg",
-        "oojs-ui-core"
-      ]
-    }
-  },
-  "ResourceFileModulePaths": {
-    "localBasePath": "",
-    "remoteExtPath": "MOOC"
-  },
-  "SpecialPages": {
-    "HelloWorld": "SpecialHelloWorld"
-  },
-  "manifest_version": 1
+	"name": "MOOC",
+	"version": "0.1.0",
+	"author": [
+		"Rene Pickhardt",
+		"Sebastian Schlicht"
+	],
+	"url": "https://gerrit.wikimedia.org/r/#/admin/projects/mediawiki/extensions/MOOC",
+	"descriptionmsg": "mooc-desc",
+	"license-name": "GPL-3.0+",
+	"type": "other",
+	"AutoloadClasses": {
+		"MOOCHooks": "MOOC.hooks.php",
+		"MoocContent": "includes/content/MoocContent.php",
+		"MoocContentHandler": "includes/content/MoocContentHandler.php",
+		"MoocEntity": "includes/model/MoocEntity.php",
+		"MoocResource": "includes/model/MoocResource.php",
+		"MoocScript": "includes/model/MoocScript.php",
+		"MoocQuiz": "includes/model/MoocQuiz.php",
+		"MoocItem": "includes/model/MoocItem.php",
+		"MoocOverview": "includes/model/MoocOverview.php",
+		"MoocLesson": "includes/model/MoocLesson.php",
+		"MoocUnit": "includes/model/MoocUnit.php",
+		"MoocContentRenderer": "includes/rendering/MoocContentRenderer.php",
+		"MoocOverviewRenderer": "includes/rendering/MoocOverviewRenderer.php",
+		"MoocLessonRenderer": "includes/rendering/MoocLessonRenderer.php",
+		"MoocUnitRenderer": "includes/rendering/MoocUnitRenderer.php",
+		"MoocContentStructureProvider": "includes/structure/MoocContentStructureProvider.php",
+		"SpecialHelloWorld": "specials/SpecialHelloWorld.php"
+	},
+	"config": {
+		"MOOCEnableFoo": true
+	},
+	"MessagesDirs": {
+		"MOOC": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"MOOCAlias": "MOOC.i18n.alias.php",
+		"MOOCNamespaces": "MOOC.namespaces.php"
+	},
+	"Hooks": {
+		"EditFormInitialText": [
+			"MOOCHooks::onEditFormInitialText"
+		],
+		"EditFormPreloadText": [
+			"MOOCHooks::onEditFormPreloadText"
+		],
+		"EditPageGetPreviewContent": [
+			"MOOCHooks::onEditPageGetPreviewContent"
+		],
+		"PageContentSave": [
+			"MOOCHooks::onPageContentSave"
+		]
+	},
+	"namespaces": [
+		{
+			"id": 350,
+			"constant": "NS_MOOC",
+			"name": "Mooc",
+			"subpages": true,
+			"content": true,
+			"defaultcontentmodel": "mooc-item"
+		},
+		{
+			"id": 351,
+			"constant": "NS_MOOC_TALK",
+			"name": "Mooc_talk"
+		}
+	],
+	"ContentHandlers": {
+		"mooc-item": "MoocContentHandler"
+	},
+	"ResourceModules": {
+		"ext.mooc": {
+			"position": "top",
+			"scripts": [
+				"resources/js/ext.mooc.js",
+				"resources/js/ext.mooc.navigation.js",
+				"resources/js/ext.mooc.itemnav.js",
+				"resources/js/ext.mooc.headers.js",
+				"resources/js/ext.mooc.edit.js",
+				"resources/js/jquery-ui.min.js"
+			],
+			"styles": [
+				"resources/less/ext.mooc.less"
+			],
+			"messages": [
+				"mooc-overview-add-lesson-summary",
+				"mooc-lesson-add-unit-summary"
+			],
+			"dependencies": [
+				"mediawiki.jqueryMsg",
+				"oojs-ui-core"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteExtPath": "MOOC"
+	},
+	"SpecialPages": {
+		"HelloWorld": "SpecialHelloWorld"
+	},
+	"manifest_version": 1
 }
