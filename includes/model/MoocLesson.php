@@ -17,13 +17,4 @@ class MoocLesson extends MoocItem {
     public function __construct( $title = null ) {
         parent::__construct( self::ENTITY_TYPE_LESSON, $title );
     }
-
-    protected function loadJson( $jsonArray ) {
-        parent::loadJson( $jsonArray );
-
-        // child units
-        if ( array_key_exists( self::JFIELD_CHILDREN, $jsonArray ) ) {
-            $this->childNames = $jsonArray[self::JFIELD_CHILDREN];
-        }
-    }
 }

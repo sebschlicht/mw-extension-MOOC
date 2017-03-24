@@ -10,6 +10,9 @@
   // make navigation bar sticky+
   //TODO make navigation bar unsticky when screen width too low
   $window.scroll( updateNavigationBar );
+  // resize navigation bar when the window is resized
+  $window.resize( updateNavigationBarSize );
+  mw.log( 'Navigation activated.' );
 
   /**
    * Updates the navigation bar:
@@ -118,11 +121,20 @@
     $navigation.css( 'bottom', '' );
   }
 
-  // repair navigation bar when window is resized
-  $window.resize( function () {
-    resetNavBarHeader( $navigationHeader );
-    resetNavBar( $navigation );
+  /**
+   * Resizes the navigation bar to fit its container.
+   */
+  function updateNavigationBarSize() {
+    var isNavigationWidthSet = $navigation.hasClass( 'fixed' ) || $navigation.hasClass( 'trailing' );
+    var isNavigationHeaderWidthSet = $navigationHeader.hasClass( 'fixed' );
+
+    if ( isNavigationWidthSet ) {
+      resetNavBar( $navigation );
+    }
+    if ( isNavigationHeaderWidthSet ) {
+      resetNavBarHeader( $navigationHeader );
+    }
     updateNavigationBar();
-  });
+  }
 
 }( mediaWiki, jQuery ) );

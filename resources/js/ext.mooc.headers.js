@@ -19,7 +19,7 @@
   var $itemNavigation = $( '#itemnav' );
   $window.scroll( updateSectionHeaders );
   $window.scroll();
-  // TODO recalc width of fixed section headers on resize
+  $window.resize( resizeSectionHeader );
 
   /**
    * Updates the headers of all sections:
@@ -151,6 +151,20 @@
       $header.removeClass( 'fixed' );
     }
     $header.removeClass( 'trailing' );
+  }
+
+  /**
+   * Resizes the active section header to fit its container.
+   */
+  function resizeSectionHeader() {
+    if ( $activeSection !== null ) {
+      var $sectionHeader = $activeSection.children( '.header' );
+      var isSectionHeaderFixed = $sectionHeader.hasClass( 'fixed' );
+      if ( isSectionHeaderFixed ) {
+        resetSectionHeader( $sectionHeader );
+      }
+    }
+    updateSectionHeaders();
   }
 
 }( mediaWiki, jQuery ) );

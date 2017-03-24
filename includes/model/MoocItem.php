@@ -34,11 +34,6 @@ abstract class MoocItem extends MoocEntity {
     const JFIELD_FURTHER_READING = 'further-reading';
 
     /**
-     * JSON field identifier for child items
-     */
-    const JFIELD_CHILDREN = 'children';
-
-    /**
      * @var MoocItem base item of the MOOC this item belongs to
      */
     public $baseItem;
@@ -96,12 +91,6 @@ abstract class MoocItem extends MoocEntity {
         if ( array_key_exists( self::JFIELD_FURTHER_READING, $jsonArray ) ) {
             $this->furtherReading = $jsonArray[self::JFIELD_FURTHER_READING];
         }
-    }
-
-    public function setTitle( $title ) {
-        parent::setTitle( $title );
-        $this->scriptTitle = ( $title === null ) ? null : Title::newFromText( $title . '/script' );
-        $this->quizTitle = ( $title === null ) ? null : Title::newFromText( $title . '/quiz' );
     }
 
     /**

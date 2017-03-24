@@ -13,7 +13,7 @@
   var $itemNavigation = $itemNavigationWrapper.find( '#itemnav' );
   $itemNavigation.find( 'a' ).on( 'click', onItemNavigationLinkClick );
   $window.scroll( updateItemNavigation );
-  $window.scroll();
+  $window.resize( resizeItemNavigation );
   mw.log( 'Item Navigation activated.' );
 
   /**
@@ -61,7 +61,20 @@
    */
   function resetItemNavigation( $itemNavigation ) {
     $itemNavigation.next( '#qn-replace' ).remove();
+    $itemNavigation.css( 'top', '' );
+    $itemNavigation.css( 'width', '' );
     $itemNavigation.removeClass( 'fixed' );
+  }
+
+  /**
+   * Resizes the item navigation to fit its container.
+   */
+  function resizeItemNavigation() {
+    var itemNavigationFixed = $itemNavigation.hasClass( 'fixed' );
+    if ( itemNavigationFixed ) {
+      resetItemNavigation( $itemNavigation );
+    }
+    updateItemNavigation();
   }
 
   /**
